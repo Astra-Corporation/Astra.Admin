@@ -1,0 +1,30 @@
+{
+  "name": "Astra",
+  "tree": {
+    "$className": "DataModel",
+
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+
+      "Astra_Rojo": {
+        "$className": "Folder",
+        "MainModule": {
+          "$path": "MainModule"
+        },
+
+        "LICENSE": {
+          "$path": "LICENSE.lua"
+        },
+        
+        "Astra_Loader": {
+          "$className": "Model",
+          "$path": "Loader",
+
+          "LICENSE": {
+            "$path": "LICENSE.lua"
+          }
+        }
+      }
+    }
+  }
+}

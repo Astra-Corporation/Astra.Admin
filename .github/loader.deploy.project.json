@@ -1,0 +1,7 @@
+{
+	"name": "Astra_Loader",
+	"tree": {
+		"$className": "Folder",
+		"$path": "../Loader"
+	}
+}

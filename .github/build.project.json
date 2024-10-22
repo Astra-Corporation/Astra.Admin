@@ -1,0 +1,13 @@
+{
+    "name": "Astra",
+    "tree": {
+        "$className": "Folder",
+        "MainModule": {
+            "$path": "../MainModule"
+        },
+        "Adonis_Loader": {
+            "$className": "Model",
+            "$path": "../Loader"
+        }
+    }
+}
