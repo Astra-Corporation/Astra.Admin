@@ -15,7 +15,7 @@ return function(Vargs)
 		Moderator = {Name = "SERVER"};
 		Reason = "The maze wasn't meant for you."
 	};
-	server.Variables.Version = script.Parent.Parent.Version.Value;
+	server.Variables.Version = "v3.0.1"
 	server.Variables.Messages = {
 		Ban = "";
 		TrelloBan = "";
@@ -31,14 +31,4 @@ return function(Vargs)
 	
 	server.Variables.DonorPass = {658237163,3497976,721481162};
 	server.Variables.CustomDeps = server.Deps.Kronos;
-	--TODO: MAKE THIS A TABLE IN SETTINGS AND FETCH IT FROM THERE
- --   server.Variables.Messages.Ban = table.concat(server.Settings.BanMessage, "\n")
- --   server.Variables.Messages.TrelloBan = table.concat(server.Settings.TrelloBanMessage, "\n")
- --   server.Variables.Messages.TimeBan = table.concat(server.Settings.TimeBanMessage, "\n")
- --   server.Variables.Messages.GameBan = table.concat(server.Settings.GameBanMessage, "\n")
- --   server.Variables.Messages.Lock = table.concat(server.Settings.LockMessage, "\n")
-	--server.Variables.Messages.Whitelist = table.concat(server.Settings.NotWhitelistedMessage, "\n")
-	--server.Variables.Messages.FailedJoinFilter = table.concat(server.Settings.FailedJoinFilter, "\n")
-	
-    --// WIll just handle it here....
 end

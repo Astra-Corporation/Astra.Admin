@@ -5,7 +5,7 @@
         "MainModule": {
             "$path": "../MainModule"
         },
-        "Adonis_Loader": {
+        "Astra_Loader": {
             "$className": "Model",
             "$path": "../Loader"
         }
