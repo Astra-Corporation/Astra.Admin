@@ -1,12 +1,5 @@
 <div align="center">
     <img src="https://tr.rbxcdn.com/180DAY-e4b804cb89bad124798ba1d4acc01cd6/150/150/Image/Webp/noFilter"/>
-    <div>&nbsp;</div>
-    <a href="https://github.com/Astra-Corporation/Astra.Admin/blob/master/LICENSE">
-        <img src="https://img.shields.io/github/license/Astra-Corporation/Astra.Admin/"/>
-    </a>
-    <a href="https://github.com/Astra-Corporation/Astra.Admin/releases">
-        <img src="https://img.shields.io/github/v/release/Sceleratis/Adonis?label=version"/>
-    </a>
 </div>
 <hr/> 
 
