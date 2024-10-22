@@ -2,9 +2,9 @@ name: rojo
 
 on:
   push:
-    branches: [master,dev,Ender/Rewrite-1,version-2.5.0]
+    branches: [master,main]
   pull_request:
-    branches: [master,dev,Ender/Rewrite-1,version-2.5.0]
+    branches: [master,main]
 
 jobs:
   build:
@@ -30,11 +30,11 @@ jobs:
           path: Astra_Nightly_${{ steps.date.outputs.date }}.rbxm
           
       - name: Build Nightly MainModule
-        if: github.repository == 'Astra-Corporation/ARIDe' && github.event_name == 'push'
+        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push'
         run: rojo build -o module.rbxm .github/module.deploy.project.json
       - name: Send file nightly build to Discord channel
         uses: tsickert/discord-webhook@v3.0.0
-        if: github.repository == 'Astra-Corporation/ARIDe' && github.event_name == 'push'
+        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push'
         with:
           webhook-url: ${{ secrets.NIGHTLY_WEBHOOK }}
           filename: Astra_Nightly_${{ steps.date.outputs.date }}.rbxm

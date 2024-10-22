@@ -36,6 +36,6 @@ Once I finish merging changes, I'll do some quick minor testing to make sure eve
 
 ## How do I get the "GitHub Contributor" roles?
 
-After your contribution is accepted, post your Discord & Roblox usernames in the discussion thread (<https://github.com/Astra-Corporation/Admin/discussions/433>) and message me on Discord (EasternBloxxer#6252) and I'll give you the roles. Group: <https://www.roblox.com/groups/886423/Epix-Incorporated#!/about>
+After your contribution is accepted, post your Discord & Roblox usernames in the discussion thread (<https://github.com/Astra-Corporation/Astra.Admin/discussions/433>) and message me on Discord (EasternBloxxer#6252) and I'll give you the roles. Group: <https://www.roblox.com/groups/886423/Epix-Incorporated#!/about>
 
 ### That's all, folks

@@ -16,7 +16,7 @@ Astra is a modified version of Adonis by Sceleratis with edits, patches, and mor
 
 ### Method 2: GitHub Releases
 
-* Download the `rbxm` file snapshot from the [latest release](https://github.com/Astra-Corporation/Admin/releases/latest)
+* Download the `rbxm` file snapshot from the [latest release](https://github.com/Astra-Corporation/Astra.Admin/releases/latest)
 * Import the model file into Studio
   * Note: By default, snapshots included in releases have <a href="#debug-mode">`DebugMode`</a> enabled.
 
@@ -40,14 +40,14 @@ The Adonis loader provides a `DebugMode` option which will load a local copy of 
 ## Links
 * Official Adonis Loader: https://www.roblox.com/library/7510622625/Adonis-Loader
 * Official MainModule: https://www.roblox.com/library/7510592873/Adonis-MainModule
-* Documentation: https://github.com/Astra-Corporation/Admin/wiki
+* Documentation: https://github.com/Astra-Corporation/Astra.Admin/wiki
 * Discord Server: https://discord.gg/5XYP5B9YHB
-* Plugins Repository: https://github.com/Astra-Corporation/Admin-Plugins
+* Plugins Repository: https://github.com/Astra-Corporation/Astra.Admin-Plugins
 
 ## Contributing
 
 The purpose of this repository is to allow others to contribute and make improvements to Adonis. Even if you've never contributed on GitHub before, we would appreciate any contributions that you can provide.
 
-### [Contributing Guide](https://github.com/Astra-Corporation/Admin/blob/master/CONTRIBUTING.md)
+### [Contributing Guide](https://github.com/Astra-Corporation/Astra.Admin/blob/master/CONTRIBUTING.md)
 
 Read the [contributing guide](https://github.com/Astra-Corporation/Astra.Admin/blob/master/CONTRIBUTING.md) to get a better understanding of our development process and workflow, along with answers to common questions related to contributing to Adonis.
