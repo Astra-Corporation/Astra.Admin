@@ -64,12 +64,12 @@ jobs:
     # The following commands are run for pushes only.
           
       - name: Build Nightly MainModule
-        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push' && github.ref_name == 'master'
+        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push' && github.ref_name == 'main'
         run: rojo build -o module.rbxm .github/module.deploy.project.json
 
       - name: Send file nightly build to Discord channel
         uses: tsickert/discord-webhook@v6.0.0
-        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push' && github.ref_name == 'master'
+        if: github.repository == 'Astra-Corporation/Astra.Admin' && github.event_name == 'push' && github.ref_name == 'main'
         with:
           webhook-url: ${{ secrets.NIGHTLY_WEBHOOK }}
           filename: ${{ steps.naming.outputs.output_name }}.rbxm
