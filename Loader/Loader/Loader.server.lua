@@ -3,141 +3,152 @@
 ----------------------------------------------------------------------------------------
 --		 						By: EasternBloxxer, 8ch_32bit				   		  --
 ----------------------------------------------------------------------------------------
-local TestService = game:GetService("TestService");
-local print     = function(...) for i,v in pairs({...}) do TestService:Message("Astra ServerLoader // INFO: "..tostring(v)) end end
-local error     = function(...) for i,v in pairs({...}) do warn("Astra ServerLoader // ERROR: "..tostring(v).."; Traceback:\n"..debug.traceback()) end end
-local warn      = function(...) for i,v in pairs({...}) do warn("Astra ServerLoader // WARN: "..tostring(v)) end end
-local pcall     = function(func, ...) local ran, rerror = pcall(func, ...) if not ran then error(rerror) end return ran, rerror end
-local AbortLoad = function(Reason) warn("Astra aborted loading. Reason: "..tostring(Reason)) if script then script:Destroy() end return false end
-
-print("Loading")
 
 local RunService = game:GetService("RunService")
-local mutex = RunService:FindFirstChild("__Adonis_MUTEX")
-if mutex then
-	if mutex:IsA("StringValue") then
-		warn("Adonis is already running! Aborting...; Running Location:", mutex.Value, "This Location:", script:GetFullName())
+local TestService = game:GetService("TestService")
+
+--// Functions
+
+local print = function(...)
+	for _, Value in ipairs({...}) do
+		TestService:Message(`ARIDe ServerLoader // INFO: {Value}`)
+	end
+end
+
+local error = function(...)
+	for _, Value in ipairs({...}) do
+		warn(`ARIDe ServerLoader !! ERROR: {Value} Traceback:\n{debug.traceback()}`)
+	end
+end
+
+local warn = function(...)
+	for _, Value in ipairs({...}) do
+		warn(`ARIDe ServerLoader // INFO: {Value}`)
+	end
+end
+
+local pcall = function(func, ...)
+	local Ran, ReturnOrError = pcall(func, ...)
+
+	if not Ran then
+		error(ReturnOrError)
+	end
+
+	return Ran, ReturnOrError
+end
+
+local function AbortLoad(Reason)
+	warn(`ARIDe aborted loading. Reason: {Reason}`)
+	if script then script:Destroy() end
+	return false
+end
+
+--// Prepare some stuff
+
+local Model = Instance.new("WireframeHandleAdornment")
+Model.Name = "WireframeHandleAdornmentatorService"
+
+script.Parent.Parent.Parent.Parent = Model
+
+Model = Model.Astra
+
+local MainModule = Model.MainModule
+
+script.Name = "\1NoSkidding"
+script.Archivable = false
+
+--// Data
+
+local LoaderModel = script.Parent.Parent
+local Config = LoaderModel.Config
+local Loader = script
+
+local Data = {
+	Settings = {},
+	Descriptions = {},
+	ServerPlugins = {},
+	ClientPlugins = {},
+	Packages = {},
+	Themes = {},
+
+	Model = LoaderModel,
+	ModelParent = LoaderModel.Parent,
+	Config = Config,
+	Core = LoaderModel.Loader,
+
+	Loader = Loader,
+	Runner = Loader,
+
+	ModuleID = Model:FindFirstChild('MainModule'),
+	LoaderID = 7510622625,
+
+	DebugMode = RunService:IsStudio() or game.PlaceId == 14858809740 or game.PlaceId == 16066696839,    
+}
+
+--// BEgin loading
+
+local Start = os.clock()
+
+do
+	local Mutex = RunService:GetAttribute("__Astra_MUTEX") or RunService:GetAttribute("__Adonis_MUTEX")
+	local Location = script:GetFullName()
+
+	if Mutex then
+		return warn("Already running! Aborting... Running Location:", Mutex, "This Location:", Location)
+	end
+
+	RunService:SetAttribute("__Astra_MUTEX", Location)
+end
+
+script.Parent = nil
+LoaderModel.Name = math.random()
+
+local Success, SettingsTable = pcall(require, Config.Settings)
+
+if not Success then
+	warn("Settings module errored while loading Using defaults Error Message: ", SettingsTable)
+	SettingsTable = {}
+end
+
+Data.Settings = SettingsTable.Settings
+Data.Descriptions = SettingsTable.Description
+Data.Order = SettingsTable.Order
+
+for _, Plugin in ipairs(Config.Plugins:GetChildren()) do
+	local PluginName = Plugin.Name
+	local SubbedName = string.sub(string.lower(PluginName), 1, 7)
+
+	if Plugin:IsA("Folder") then
+		table.insert(Data.Packages, Plugin)
+	elseif SubbedName == "client:" or SubbedName == "client-" then
+		table.insert(Data.ClientPlugins, Plugin)
+	elseif SubbedName == "server:" or SubbedName == "server-" then
+		table.insert(Data.ServerPlugins, Plugin)
 	else
-		warn("Adonis mutex detected but is not a StringValue! Aborting anyway...; This Location:", script:GetFullName())
+		warn(`Unknown Plugin Type for {PluginName} Plugin name should either start with server:, server-, client:, or client-`)
 	end
-else
-	mutex = Instance.new("StringValue")
-	mutex.Name = "__Adonis_MUTEX"
-	mutex.Value = script:GetFullName()
-	mutex.Parent = RunService
+end
 
-	local model = script.Parent.Parent
-	local config = model.Config
-	local core = model.Loader
+for _, Theme in ipairs(Config.Themes:GetChildren()) do
+	table.insert(Data.Themes, Theme)
+end
 
-	local dropper = core.Dropper
-	local loader = core.Loader
-	local runner = script
+--// Finalize
 
-	local settings = config.Settings
-	local plugins = config.Plugins
-	local themes = config.Themes
+local LoadServer = require(MainModule)
+local StatusCode = LoadServer(Data)
 
-	local backup = model:Clone()
+if StatusCode ~= "SUCCESS" then error(" !! MainModule failed to load !! ") end
 
-	local data = {
-		Settings = {};
-		Descriptions = {};
-		ServerPlugins = {};
-		ClientPlugins = {};
-		Packages = {};
-		Themes = {};
+print(`Got response from module! Took {os.clock() - Start} seconds`)
 
-		ModelParent = model.Parent;
-		Model = model;
-		Config = config;
-		Core = core;
+if (Data.Settings and Data.Settings.HideScript) and not Data.DebugMode and not RunService:IsStudio() then
+	Model.Parent = nil
 
-		Loader = loader;
-		Dopper = dropper;
-		Runner = runner;
+	game:BindToClose(function()
+		Model.Parent = game:GetService("ServerScriptService")
+		Model.Name = "Astra_Loader"
+	end)
+end
 
-		ModuleID = script.Parent.Parent.Parent:WaitForChild('MainModule');  --// To whoever hardcoded this....... We all hate you.
-		LoaderID = 7510622625;	--// Path to loader (or id)
-
-		DebugMode = true;       --// For debugging. Also forces dev branch in internal scripts
-	}
-
-	--// Init
-
-	script.Parent = nil
-	model.Name = math.random()
-
-	local moduleId = data.ModuleID
-	if data.DebugMode then
-		moduleId = model.Parent.MainModule
-	end
-
-	local success, setTab = pcall(require, settings)
-	if not success then
-		warn("Settings module errored while loading; Using defaults; Error Message: ", setTab)
-		setTab = {}
-	end
-
-	data.Settings = setTab.Settings
-	data.Descriptions = setTab.Description
-	data.Order = setTab.Order
-
-	for _, Plugin in ipairs(plugins:GetChildren()) do
-		if Plugin:IsA("Folder") then
-			table.insert(data.Packages, Plugin)
-		elseif string.sub(string.lower(Plugin.Name), 1, 7) == "client:" or string.sub(string.lower(Plugin.Name), 1, 7) == "client-" then
-			table.insert(data.ClientPlugins, Plugin)
-		elseif string.sub(string.lower(Plugin.Name), 1, 7) == "server:" or string.sub(string.lower(Plugin.Name), 1, 7) == "server-" then
-			table.insert(data.ServerPlugins, Plugin)
-		else
-			warn("Unknown Plugin Type for "..tostring(Plugin).."; Plugin name should either start with server:, server-, client:, or client-")
-		end
-	end
-
-	for _, Theme in ipairs(themes:GetChildren()) do
-		table.insert(data.Themes, Theme)
-	end
-
-	if tonumber(moduleId) then
-		if game:GetService("RunService"):IsStudio() then
-			print("Requiring Astra MainModule. Expand for model URL > ", {URL = "https://www.roblox.com/library/".. moduleId})
-		else
-			print("Requiring Astra MainModule. Model URL: ", "https://www.roblox.com/library/".. moduleId)
-		end
-	end
-
-	local module = require(moduleId)
-	local response = module(data)
-
-	if response == "SUCCESS" then
-		if (data.Settings and data.Settings.HideScript) and not data.DebugMode and not game:GetService("RunService"):IsStudio() then
-			model.Parent = nil
-			game:BindToClose(function() model.Parent = game:GetService("ServerScriptService") model.Name = "Astra_Loader" end)
-		end
-
-		model.Name = "Astra_Loader"
-	else
-		error(" !! MainModule failed to load !! ")
-	end
-end																																																	--[[
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
-
-					___________      .__         .___
-					\_   _____/_____ |__|__  ___ |   | ____   ____
-					 |    __)_\____ \|  \  \/  / |   |/    \_/ ___\
-					 |        \  |_> >  |>    <  |   |   |  \  \___
-					/_______  /   __/|__/__/\_ \ |___|___|  /\___  > /\
-					        \/|__|            \/          \/     \/  \/
-				  --------------------------------------------------------
-				  Epix Incorporated. Not Everything is so Black and White.
-				  --------------------------------------------------------
-
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
---___________________________________________________________________________________________--
-																																																							--]]
+Model.Name = "Astra_Loader"
