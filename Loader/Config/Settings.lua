@@ -287,21 +287,18 @@ settings.ExploitGuiDetection = false 	-- (Default: false)	(Client-Sided) If any 
 	
 ]]--
 
-settings.BanMessage = { --// Shown if a player is server-banned in-game or databanned
-	"";
+settings.CustomKickMessages = {
+	BanMessage = { --// Shown if a player is server-banned in-game or databanned
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-	"You are server-banned!";
+	"You are banned!";
 	"Reason: {reason}";
-	"Time: {time}";
-	--"Moderator: {moderator}";
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-}		
+	};		
 
-settings.TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
-	"";		
+	TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
 	"You are Trello-Banned!";
@@ -310,10 +307,9 @@ settings.TrelloBanMessage = { --// Shown if a player is Trelobanned on a connect
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-}	
+	};	
 
-settings.TimeBanMessage = {  --// Shown if a player is Timebanned in-game
-	"";
+	TimeBanMessage = {  --// Shown if a player is Timebanned in-game
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
 	"You are Timebanned!";
@@ -324,10 +320,9 @@ settings.TimeBanMessage = {  --// Shown if a player is Timebanned in-game
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-}
+	};
 
-settings.FailedJoinFilter = { --// Shown if a player tries to join a locked server
-	"";
+	GameBanMessage = { --// Shown if a player is banned in the `settings.Banned` table
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
 	"You are gamebanned!";
@@ -335,20 +330,41 @@ settings.FailedJoinFilter = { --// Shown if a player tries to join a locked serv
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-}	
+	};	
 
-settings.FailedJoinFilter = { --// Shown if a player tries to join a locked server
+	LockMessage = { --// Shown if a player tries to join a locked server
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-	"You did not pass a Join Filter";
-	"FILTER: {filter}";
-	"ERROR: {error}";
+	"This server is locked!";
+	"Locked by: {moderator}";
 	"";
 	"▬▬▬▬ Astra ▬▬▬▬";
 	"";
-}			-- Message shown to people when they are kicked while the game is ;whitelisted
+	};			-- Message shown to people when they are kicked while the game is ;slocked
 
+	NotWhitelistedMessage = { --// Legacy whitelist
+	"";
+	"▬▬▬▬ Astra ▬▬▬▬";
+	"";
+	"This server is whitelisted";
+	"{message}";
+	"";
+	"▬▬▬▬ Astra ▬▬▬▬";
+	"";
+	};	
+	FailedJoinFilter = {
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You did not pass a Join Filter";
+		"FILTER: {filter}";
+		"ERROR: {error}";
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+	}		
+}
 
 ---------------------
 -- END OF SETTINGS --

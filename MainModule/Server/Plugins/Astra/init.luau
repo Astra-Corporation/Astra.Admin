@@ -23,7 +23,7 @@ return function(Vargs)
 		}
 	end
 	
-	Variables.Version = if VersionInstance then VersionInstance.Value or " "
+	Variables.Version = VersionInstance.Value
 
 	Logs.AddLog(Logs.Script, "Loading Astra...");
 
