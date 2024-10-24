@@ -66,7 +66,7 @@ return function(data)
 			while true do
 				data = Remote.Get("SmartlogData")
 				generate()
-				task.wait(7)
+				task.wait(5)
 			end
 		end)
 	end

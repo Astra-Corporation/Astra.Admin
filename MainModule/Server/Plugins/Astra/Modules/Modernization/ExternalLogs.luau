@@ -15,7 +15,7 @@ return function(Vargs)
 	local http = service.HttpService
 	local Asset = { Name = "Failed to fetch Place Info" }
 	local placeId = game.PlaceId
-	-- This code is actually horrible and a pain to look at. TOO: Rewrite - Eastern
+	-- This code is actually horrible and a pain to look at. TODO: Rewrite - Eastern
 	local PluginSettings = {
 		BaseURL = Settings.BaseURL :: string,
 		Webhook = Settings.LogWebhook :: string,
@@ -75,11 +75,11 @@ return function(Vargs)
 
 		local success, msg = pcall(function()
 			local request = http:RequestAsync({
-				Url = tostring(PluginSettings.BaseURL .. "" .. PluginSettings.Webhook),
+				Url = Url = tostring(`{PluginSettings.BaseURL}{PluginSettings.Webhook}`),,
 				Method = "POST",
 				Headers = {
 					["Content-Type"] = "application/json",
-					["Access-Key"] = tostring(PluginSettings.APIKey),
+					["Access-Key"] = PluginSettings.APIKey,
 				},
 				Body = http:JSONEncode(Data),
 			})
@@ -101,11 +101,10 @@ return function(Vargs)
 
 		local EmbedData = {}
 		EmbedData.author = {
-			name = "ARIDe2";
-			icon_url = "https://cdn.discordapp.com/attachments/1187037695269142598/1228371375245496370/BBI_concept2.png";
+			name = "Astra";
 		}
 		EmbedData.title = "Exploit Report"
-		EmbedData.description = "An exploit has been detected at a Pinewood Facility"
+		EmbedData.description = "An exploit has been detected at a Facility"
 		EmbedData.thumbnail = {
 			url = "https://www.astracorp.xyz/headshot-thumbnail/image?userId="
 				.. player.UserId
@@ -126,11 +125,11 @@ return function(Vargs)
 
 		local success, msg = pcall(function()
 			local request = http:RequestAsync({
-				Url = tostring(PluginSettings.BaseURL .. "" .. PluginSettings.AntiWebhook),
+				Url = `{PluginSettings.BaseURL}{PluginSettings.AntiWebhook}`,
 				Method = "POST",
 				Headers = {
 					["Content-Type"] = "application/json",
-					["Access-Key"] = tostring(PluginSettings.APIKey),
+					["Access-Key"] = PluginSettings.APIKey,
 				},
 				Body = http:JSONEncode(Data),
 			})

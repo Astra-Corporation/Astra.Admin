@@ -1,13 +1,9 @@
 --[==[
     EasternBloxxer
-    Astra Defense Network
+    BinaryBridge
 --]==]
 
 --// 8ch here to do some bug fixes + cleaning
-
-
-
---// I dont know who put that comment there but when i remove it stuff breaks. Dont get rid of it.
 
 return function(Vargs)
 	local Server = Vargs.Server;

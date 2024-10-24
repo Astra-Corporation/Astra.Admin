@@ -50,11 +50,11 @@ Model.Name = "WireframeHandleAdornmentatorService"
 
 script.Parent.Parent.Parent.Parent = Model
 
-Model = Model.Astra
+Model = Model:FindFirstChildOfClass("Folder") --// Change this if the Astra folder is ever made a different Class
 
-local MainModule = Model.MainModule
+local MainModule = Model:FindFirstChild('MainModule')
 
-script.Name = "\1NoSkidding"
+script.Name = "\1NWireframeHandleAdornmentater"
 script.Archivable = false
 
 --// Data
