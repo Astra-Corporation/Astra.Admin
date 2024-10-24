@@ -187,7 +187,6 @@ return function(Vargs)
 			["embeds"] = { EmbedData }
 		}
 
-
 		Core.CrossServer(
 			"ModcallNotif",
 			plr.Name,
@@ -239,6 +238,8 @@ return function(Vargs)
 			task.wait(PluginSettings.CallCooldown)
 
 			cooldowndata[plr.UserId] = nil
-		end)
+		end)-- Now that i think about it this is a dumb way to do it
+			-- Next release i will make it save the time and check the time whenever the next call is made.
+			-- Possibly will be stored in PlayerData and the webserver so it saves in every server
 	end
 end;
