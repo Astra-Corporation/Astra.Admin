@@ -3285,34 +3285,23 @@ return function(Vargs, env)
 		};
 
 		Sword = {
-			Prefix = Settings.Prefix;
-			Commands = { "sword", "givesword" };
-			Args = { "player", "allow teamkill (default: true)" };
-			Description = "Gives the target player(s) a sword";
-			AdminLevel = "Moderators";
-			Function = function(Plr: Player, Args: { string })
-				local Target = Args[1] or "me";
-				local Sword = Deps.Assets.ClassicSword;
-
-				Sword:SetAttribute("TeamKill", if Args[2] then string.lower(Args[2]) == "true" else true);
-
-				if Target == "me" then
-					Sword.Parent = Plr:FindFirstChildOfClass("Backpack");
-
-					return;
-				end;
-
-				for _, Player in service.GetPlayers(Plr, Target) do
-					local Backpack = Player:FindFirstChildOfClass("Backpack");
-
-					if Backpack then
-						Sword:Clone().Parent = Backpack;
-					end;
-				end;
-
-				Sword:Destroy();
-			end;
-		};
+            Prefix = Settings.Prefix;
+            Commands = { "sword", "givesword" };
+            Args = { "player", "allow teamkill (default: true)" };
+            Description = "Gives the target player(s) a sword";
+            AdminLevel = "Moderators";
+            Function = function(Player, Args)
+                local Sword = Deps.Assets.ClassicSword
+                if Args[2] then
+                    Sword:SetAttribute("TeamKill", string.lower(Args[2]) == "true")
+                else
+                    Sword:SetAttribute("TeamKill", true)
+                end
+                for _, Player in ipairs(service.GetPlayers(Player, Args[1])) do
+                    Sword:Clone().Parent = Player:FindFirstChildOfClass("Backpack")
+                end
+            end,
+        };
 
 		LoadAvatar = {
 			Prefix = Settings.Prefix;
