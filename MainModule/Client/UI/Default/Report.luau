@@ -5,23 +5,18 @@ return function(data)
 	local gTable
 
 	local window = client.UI.Make("Window", {
-		Name = "Report",
-		Title = "Report",
+		Name = "Call",
+		Title = "Call",
 		Size = { 400, 300 },
 		AllowMultiple = false,
 	})
-	local playerData = client.Remote.Get("PlayerData")
-	local chatMod = client.Remote.Get(
-		"Setting",
-		{ "Prefix", "SpecialPrefix", "BatchKey", "AnyPrefix", "DonorCommands", "DonorCapes", "PlayerPrefix" }
-	)
-	local settingsData = client.Remote.Get("AllSettings")
+
 	local player = ""
 	local reason = ""
-	local division = " " --?????
+
 	local extranotes = "No extra notes provided."
 	local ranPlayers = {}
-	local Reasons = data.Reasons or {"No reasons specified!"}
+	local Reasons = data.Reasons or {"Failed to fetch from server"}
 	local Players  = data.Players or {"Server"}
 	local player = ""
 	local reason = ""
@@ -36,6 +31,8 @@ return function(data)
 		BackgroundColor3 = Color3.new(0.207843, 0.207843, 0.207843),
 	})
 	--// My hope is that this code is so awful I'm never allowed to write UI code again.
+	--// I am still allowed to :(
+
 	rframe:Add("TextLabel", {
 		Text = "  Player: ",
 		Size = UDim2.new(1, -10, 0, 30),
@@ -43,24 +40,6 @@ return function(data)
 		BackgroundTransparency = 1,
 
 		TextXAlignment = "Center",
-	--[[	Children = {
-			{
-				Class = "Dropdown",
-				Size = UDim2.new(1, -10, 0, 30),
-				Position = UDim2.new(0, 5, 0, 5),
-				BackgroundTransparency = 1,
-				TextAlignment = "Center",
-				TextYAlignment = "Center",
-				NoArrow = false,
-
-				Options = (function()
-					return Players
-				end)(),
-				OnSelect = function(selection)
-					player = selection
-				end,
-			},
-		},]]
 	})
 	rframe:Add("Dropdown",{
 		Size = UDim2.new(1, -10, 0, 30),
@@ -84,24 +63,6 @@ return function(data)
 		Position = UDim2.new(0, 4, 0, 63),
 		BackgroundTransparency = 1,
 		TextXAlignment = "Center",
-		--Children = {
-		--	{
-		--		Class = "Dropdown",
-		--		Size = UDim2.new(1, -10, 0, 30),
-		--		Position = UDim2.new(0, 5, 0, 5),
-		--		BackgroundTransparency = 1,
-		--		TextAlignment = "Center",
-		--		TextYAlignment = "Center",
-		--		NoArrow = false,
-
-		--		Options = (function()
-		--			return Reasons
-		--		end)(),
-		--		OnSelect = function(selection)
-		--			reason = selection
-		--		end,
-		--	},
-		--},
 	})
 
 	rframe:Add("Dropdown",{
