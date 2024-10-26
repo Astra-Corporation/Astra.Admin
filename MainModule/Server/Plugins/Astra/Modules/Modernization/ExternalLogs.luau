@@ -75,7 +75,7 @@ return function(Vargs)
 
 		local success, msg = pcall(function()
 			local request = http:RequestAsync({
-				Url = Url = tostring(`{PluginSettings.BaseURL}{PluginSettings.Webhook}`),,
+				Url = tostring(`{PluginSettings.BaseURL}{PluginSettings.Webhook}`),
 				Method = "POST",
 				Headers = {
 					["Content-Type"] = "application/json",
