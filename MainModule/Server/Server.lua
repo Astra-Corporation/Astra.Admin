@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------
---						   	Astra Remotely Integrated Defense v2 (ARIDe)		 	  --
+--						   	Astra Remotely Integrated Defense v3 (ARIDe)		 	  --
 ----------------------------------------------------------------------------------------
 --		 				By: EasternBloxxer - Engineering the future.		   		  --
 --		 				  8ch_32bit was here lololololololololololo		   		 	  --
@@ -35,11 +35,11 @@ local CORE_LOADING_ORDER = table.freeze({
 --//   "Hi." - Me
 --//	Your mom
 --//	Astra will win.
+--//	"ARIDe" was a joke release of this admin system with some features a lot of people requested
+--// 	but werent useful for our usecase of the system
 
 --// Holiday roooaaAaaoooAaaooOod
---// SUMMMEEEEEEEEEeeeeeeeeeRRRRRRE
 
-local ENABLE_DEBUG_PRINTS = true
 local SERVICES_WE_USE = table.freeze({
 	"Workspace";
 	"Players";
@@ -92,11 +92,11 @@ local isModule = function(module)
 end
 
 local print = function(...)
-	print("ARIDe Server // ", ...)
+	print("Astra Server :: ", ...)
 end
 
 local warn = function(...)
-	warn("ARIDe Server // ", ...)
+	warn("Astra Server :: ", ...)
 end;
 
 local function CloneTable(tab, recursive)
@@ -115,12 +115,6 @@ local function CloneTable(tab, recursive)
 	return clone;
 end;
 
-local log = function(...)
-	if ENABLE_DEBUG_PRINTS then 
-		print(...)
-	end
-end
-
 local LogError = function(Player, Error)
 	if not Error then
 		Error = Player
@@ -128,7 +122,7 @@ local LogError = function(Player, Error)
 	end
 
 	if server.Core.DebugMode then
-		warn(`ARIDe Server // Error: {Player}: {Error}`)
+		warn(`Astra Server Error: {Player}: {Error}`)
 	end
 	
 	local Logs = server.Logs
@@ -182,7 +176,7 @@ local function GetVargTable()
 end;
 
 local function LoadModule(module, yield, envVars, noEnv, isCore)
-	noEnv = true
+	noEnv = true --// Seems to make loading take longer when true (?)
 	local isFunc = type(module) == "function"
 	local module = (isFunc and service.New("ModuleScript", {Name = "Non-Module Loaded"})) or module
 	local plug = (isFunc and module) or require(module)
@@ -227,7 +221,7 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 end
 
 local function CleanUp()
-	print("Beginning ARIDe cleanup process...")
+	print("Beginning Astra cleanup process...")
 	print('Bailing out, you are on your own now. Good luck.')
 	
 	local data = service.UnWrap(server.Data)
@@ -269,7 +263,6 @@ server = {
 	Modules = {};
 	Pcall = Pcall;
 	LogError = LogError;
-	log = log;
 	ErrorLogs = ErrorLogs;
 	ServerStartTime = os.time();
 	CommandCache = {};
@@ -282,7 +275,6 @@ locals = {
 	HookedEvents = HookedEvents;
 	ErrorLogs = ErrorLogs;
 	logError = LogError;
-	log = log;
 	origEnv = origEnv;
 	Folder = Folder;
 	GetEnv = GetEnv;
@@ -443,12 +435,12 @@ return service.NewProxy({
 			warn("WARNING: MainModule loaded without using the loader!")
 		end
 
-		if data and data.DebugMode == true then
-			local ARIDeDebugEnabled = service.New("BoolValue");
-			ARIDeDebugEnabled.Name = "ARIDe_DEBUGMODE_ENABLED";
-			ARIDeDebugEnabled.Value = true;
-			ARIDeDebugEnabled.Parent = Folder.Parent.Client;
-		end
+		--if data and data.DebugMode == true then
+		--	local ARIDeDebugEnabled = service.New("BoolValue");
+		--	ARIDeDebugEnabled.Name = "ASTRA_DEBUGMODE_ENABLED";
+		--	ARIDeDebugEnabled.Value = true;
+		--	ARIDeDebugEnabled.Parent = Folder.Parent.Client;
+		--end
 
 		--// Server Variables
 		local setTab = require(server.Deps.DefaultSettings);
@@ -614,9 +606,11 @@ return service.NewProxy({
 		if Logs then
 			Logs.AddLog(Logs.Script, {
 				Text = "Finished Loading";
-				Desc = "ARIDe has finished loading";
+				Desc = "Astra has finished loading";
 			});
-		end;
+		else
+			warn("CRITICAL ERROR! SERVER.LOGS TABLE IS MISSING. THIS SHOULDN'T HAPPEN! SOMETHING WENT WRONG WHILE LOADING CORE MODULES(?)");
+		end; -- Who removed this???
 
 		service.Events.ServerInitialized:Fire();
 		
@@ -625,13 +619,13 @@ return service.NewProxy({
 		-- Server.Logs already does this. Why does it not work 
 		-- I am loosing my sanity
 		-- I am easternbloxxer and this is my message.
-		-- Sometimes i forget i wrote this but then i remember
+		-- Kramp wuz her
 		
 		return "SUCCESS"
 	end;
 
 	__tostring = function()
-		return "ARIDe"
+		return "ASTRA"
 	end;
 
 	__metatable = nil; -- This is now set in __call if DebugMode isn't enabled.

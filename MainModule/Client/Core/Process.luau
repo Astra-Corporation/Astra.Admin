@@ -1,43 +1,12 @@
-client = nil
-service = nil
-Pcall = nil
-Routine = nil
-GetEnv = nil
-origEnv = nil
-logError = nil
-log = nil
-
 --// Processing
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
-
-	local _G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
-		_G, game, script, getfenv, setfenv, workspace,
-		getmetatable, setmetatable, loadstring, coroutine,
-		rawequal, typeof, print, math, warn, error,  pcall,
-		xpcall, select, rawset, rawget, ipairs, pairs,
-		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-		Vector3int16, require, table, type, wait,
-		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
-
 	local script = script
 	local service = Vargs.Service
 	local client = Vargs.Client
 	local TextChatService = service.TextChatService
 
-	local Anti, Core, Functions, Process, Remote, UI, Variables
+	local Anti, Core, Functions, Process, Remote, UI, Variables, log, logError
 	local function Init()
 		UI = client.UI;
 		Anti = client.Anti;
@@ -62,18 +31,16 @@ return function(Vargs, GetEnv)
 		service.Player.CharacterAdded:Connect(service.EventTask("Event: CharacterAdded", Process.CharacterAdded))
 		service.LogService.MessageOut:Connect(Process.LogService) --service.EventTask("Event: MessageOut",client.Process.LogService,60))
 		service.ScriptContext.Error:Connect(Process.ErrorMessage) --service.EventTask("Event: ErrorMessage",client.Process.ErrorMessage,60))
-		-- TextChatService.OnIncomingMessage = Process.IncomingMessage
+		TextChatService.OnIncomingMessage = Process.IncomingMessage
 		--TextChatService.OnBubbleAdded = Process.OnBubbleAdded
-
+		local logError = function(err)
+			warn(err)
+		end
 		--// Get RateLimits
 		Process.RateLimits = Remote.Get("RateLimits") or Process.RateLimits;
 
 		Process.RunAfterLoaded = nil;
 	end
-
-	--getfenv().client = nil
-	--getfenv().service = nil
-	--getfenv().script = nil
 
 	client.Process = {
 		Init = Init;
@@ -97,7 +64,7 @@ return function(Vargs, GetEnv)
 
 						log("~! Call Finish_Loading()")
 						client.Finish_Loading()
-					end	
+					end
 				elseif Core.Key then
 					local comString = Remote.Decrypt(com,Core.Key)
 					local command = (data.Mode == "Get" and Remote.Returnables[comString]) or Remote.Commands[comString]
@@ -144,6 +111,41 @@ return function(Vargs, GetEnv)
 			UI.GetHolder()
 		end;
 
+		IncomingMessage = function(message: TextChatMessage)
+			if not message.TextSource then
+				return nil
+			end
+
+			local Player = service.Players:GetPlayerByUserId(message.TextSource.UserId)
+			local props: TextChatMessageProperties = Instance.new("TextChatMessageProperties")
+			local TagText = Player:GetAttribute('ChatTagText')
+			local TagColor = Player:GetAttribute('ChatTagColor')
+			local ChatColor = Player:GetAttribute('ChatMessageColor')
+			local TagColorHex = "#ffffff"
+
+			if TagColor then 
+				if not  type(TagColor == "Color3") then
+					return warn('TagColor was not valid Color3')
+				end
+
+				TagColorHex = `#{TagColor:ToHex()}`
+			end
+
+			if TagText then
+				props.PrefixText = `<font color='{TagColorHex}'>[{TagText}] </font>{message.PrefixText}`
+			end
+
+			if ChatColor then
+				if not type(ChatColor == "Color3") then
+					return warn('ChatMessageColor was not valid Color3')
+				end
+				ChatColor = ChatColor:ToHex()
+				props.Text = `<font color='#{ChatColor}'>{message.Text}</font>`
+			end
+
+			return service.UnWrap(props)
+		end,
+
 		CharacterRemoving = function()
 			if Variables.UIKeepAlive then
 				for ind,g in client.GUIs do
@@ -175,7 +177,7 @@ return function(Vargs, GetEnv)
 			local textbox = service.UserInputService:GetFocusedTextBox()
 			if textbox then
 				textbox:ReleaseFocus()
-			end -- Can we remove this now
+			end
 
 			service.Events.CharacterRemoving:Fire()
 		end

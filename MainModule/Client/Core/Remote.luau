@@ -1,41 +1,10 @@
-client = nil
-service = nil
-Pcall = nil
-Routine = nil
-GetEnv = nil
-origEnv = nil
-logError = nil
-log = nil
-
 --// Remote
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
-	setfenv(1, env)
-	local _G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
-		_G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
-
 	local script = script
 	local service = Vargs.Service
 	local client = Vargs.Client
-	local Anti, Core, Functions, Process, Remote, UI, Variables
+	local Anti, Core, Functions, Process, Remote, UI, Variables, log, logError
 	local function Init()
 		UI = client.UI;
 		Anti = client.Anti;
@@ -45,7 +14,8 @@ return function(Vargs, GetEnv)
 		Process = client.Process;
 		Remote = client.Remote;
 		log = client.log;
-
+		logError = client.logError
+		
 		Remote.Init = nil;
 	end
 
@@ -68,7 +38,6 @@ return function(Vargs, GetEnv)
 			--client.G_Access_Perms = settings.G_Access_Perms
 			client.Allowed_API_Calls = settings.Allowed_API_Calls
 			client.HelpButtonImage = settings.HelpButtonImage
-			log("GOT SETTINGS")
 		else
 			log("~! GET SETTINGS FAILED?")
 			warn("FAILED TO GET SETTINGS FROM SERVER");
@@ -110,9 +79,7 @@ return function(Vargs, GetEnv)
 				return Remote.Ping()
 			end;
 			
-			ClientVersion = function ()
-				return version()
-			end;
+			--ClientVersion = version;
 			
 			ClientHooked = function(args)
 				return Core.Special
@@ -256,21 +223,43 @@ return function(Vargs, GetEnv)
 			end;
 
 			Batch = function(data)
-				print('hi')
-				if type(data) ~= "table" then
-					return warn('Batch data was not a table!')
-				end
-				data = data[1] -- adonis doing weird things to me tables....
 				
-				for Action,Data in ipairs(data) do 
-					local Command = Remote.Commands[Action]
-					if not Command then
-						warn(`Invalid Remote Command in batch {Action}`)
+				if type(data) ~= "table" then
+					warn("Batch data was not a table!")
+					return
+				end
+
+				print("Received batch data:", data)
+
+				if #data == 1 and type(data[1]) == "table" then
+					data = data[1]
+				end
+
+				for index, item in ipairs(data) do
+					if type(item) ~= "table" then
+						warn(`Batch item at index {index} is not a table! Skipping...`)
+						continue
 					end
-					print(Action,Data)
-					Command(data)
+
+					local action = item.Action
+					local commandArgs = item.Args
+
+					if not action then
+						warn(`Missing 'Action' field in batch item at index {index}. Skipping...`)
+						continue
+					end
+
+					local command = Remote.Commands[action]
+					if not command then
+						warn(`Invalid remote command '{action}' in batch item at index {index}. Skipping...`)
+						continue
+					end
+
+					print(`Executing command '{action}' with arguments:`, commandArgs)
+					command(commandArgs)
 				end
 			end,
+
 			
 			GiveReturn = function(args)
 				print("SERVER GAVE US A RETURN")
@@ -383,27 +372,22 @@ return function(Vargs, GetEnv)
 		};
 
 		Fire = function(...)
-			log(`Remote.Fire({...})`)
 			local limits = Process.RateLimits
 			local limit = (limits and limits.Remote) or 0.01;
 			local RemoteEvent = Core.RemoteEvent;
 			local extra = {...};
 
 			if RemoteEvent and RemoteEvent.Object then
-				log("Queuing REMOTE_SEND")
 				service.Queue("REMOTE_SEND", function()
-					log("queued code running")
 					Remote.Sent = Remote.Sent+1;
 					RemoteEvent.Object:FireServer({Mode = "Fire", Module = client.Module, Loader = client.Loader, Sent = Remote.Sent, Received = Remote.Received}, unpack(extra));
 					task.wait(limit);
-					log("ran")
 				end)
 			end
 		end;
 
 		Send = function(com,...)
 			Core.LastUpdate = os.time()
-			log(`Remote.Send({com}, {...})`)
 			Remote.Fire(Remote.Encrypt(com,Core.Key),...)
 		end;
 

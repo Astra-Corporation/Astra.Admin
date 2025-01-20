@@ -157,6 +157,7 @@ return function(Vargs, GetEnv)
 		if server.CommandModules then
 			local env = GetEnv()
 			for i, module in server.CommandModules:GetChildren() do
+				print(module)
 				local func = require(module)
 				local ran, tab = pcall(func, Vargs, env)
 
@@ -189,7 +190,7 @@ return function(Vargs, GetEnv)
 		})
 		for ind, cmd in Settings.Commands or {} do
 			if type(cmd) == "table" and cmd.Function then
-				setfenv(cmd.Function, commandEnv)
+				--setfenv(cmd.Function, commandEnv)
 				Commands[ind] = cmd
 			end
 		end

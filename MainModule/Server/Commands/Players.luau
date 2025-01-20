@@ -7,7 +7,8 @@ return function(Vargs, env)
 		server.Functions, server.Commands, server.Admin, server.Anti, server.Core, server.HTTP, server.Logs, server.Remote, server.Process, server.Variables, server.Deps
 
 	local Pcall = env.Pcall
-
+	local quotes = require(Deps.Assets.Quotes)
+	
 	return {
 		ViewCommands = {
 			Prefix = Settings.Prefix;
@@ -525,7 +526,6 @@ return function(Vargs, env)
 			Description = "Shows you a random quote";
 			AdminLevel = "Players";
 			Function = function(plr: Player, args: {string})
-				local quotes = require(Deps.Assets.Quotes)
 				Functions.Message('Command', "Random Quote", quotes[math.random(1, #quotes)], 'MatIcon://Chat', {plr})
 			end
 		};
