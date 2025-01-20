@@ -1,42 +1,12 @@
-client = nil
-service = nil
-Pcall = nil
-Routine = nil
-GetEnv = nil
-origEnv = nil
-logError = nil
-log = nil
-
---// Core
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
-	setfenv(1, env)
-	local _G, game, script, getfenv, setfenv, workspace,
-		getmetatable, setmetatable, loadstring, coroutine,
-		rawequal, typeof, print, math, warn, error,  pcall,
-		xpcall, select, rawset, rawget, ipairs, pairs,
-		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-		Vector3int16, require, table, type, wait,
-		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
-		_G, game, script, getfenv, setfenv, workspace,
-		getmetatable, setmetatable, loadstring, coroutine,
-		rawequal, typeof, print, math, warn, error,  pcall,
-		xpcall, select, rawset, rawget, ipairs, pairs,
-		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-		Vector3int16, require, table, type, wait,
-		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
 
-	local script = script
-	local service = Vargs.Service
-	local client = Vargs.Client
+	local client, service = Vargs.Client, Vargs.Service
 	
-	local Anti, Core, Functions, Process, Remote, UI, Variables
+	local FiOne = service.UnWrap(client.Shared.FiOne) 
+	local Anti, Core, Functions, Process, Remote, UI, Variables, log, Pcall, Routine
+
+	
 	local function Init(data)
 		UI = client.UI;
 		Anti = client.Anti;
@@ -46,6 +16,8 @@ return function(Vargs, GetEnv)
 		Process = client.Process;
 		Remote = client.Remote;
 		log = client.log
+		Pcall = client.Pcall
+		Routine = client.Routine
 
 		Core.Name = "\0"
 		Core.Special = client.DepsName
@@ -56,7 +28,8 @@ return function(Vargs, GetEnv)
 		if data.DebugMode == true then
 			Core.DebugMode = true
 		end
-
+		
+		
 		Core.Init = nil;
 	end
 
@@ -171,8 +144,10 @@ return function(Vargs, GetEnv)
 						--Remote.Fire(`{client.DepsName}GET_KEY`)
 						Core.Key = Remote.Get(`{client.DepsName}GET_KEY`)
 						if Core.Key then
+							log("GOT KEY")
 							client.Finish_Loading()
 						else
+							log("SERVER DID NOT SEND KEY(?) RETRYING")
 							Remote.Fire(`{client.DepsName}GET_KEY`)
 						end
 					end

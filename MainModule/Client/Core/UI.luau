@@ -10,6 +10,10 @@ logError = nil
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
 	setfenv(1, env)
+	-- Last module remaining using setfenv.... 
+	-- Sadly the UI code is so horrible we cannot get rid of it right now
+	-- Sorry Roblox and anyone who wants open source Astra
+	-- :(
 	local _G, game, script, getfenv, setfenv, workspace,
 	getmetatable, setmetatable, loadstring, coroutine,
 	rawequal, typeof, print, math, warn, error,  pcall,
@@ -21,24 +25,23 @@ return function(Vargs, GetEnv)
 	Vector3int16, require, table, type, wait,
 	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
 		_G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
-	
-	
+		getmetatable, setmetatable, loadstring, coroutine,
+		rawequal, typeof, print, math, warn, error,  pcall,
+		xpcall, select, rawset, rawget, ipairs, pairs,
+		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
+		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
+		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
+		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
+		Vector3int16, require, table, type, wait,
+		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
+
+
 	local service = Vargs.Service
 	local client = Vargs.Client
 
 	local UIFolder = client.UIFolder
 
 	local script = script
-
 
 	local GetEnv = env.GetEnv
 
@@ -60,15 +63,13 @@ return function(Vargs, GetEnv)
 
 		UI.Init = nil;
 	end
-
+	
+	local exp_noenv = true 
+	
 	local function RunLast()
 		UI.DefaultTheme = Remote.Get("Setting","DefaultTheme");
 		UI.RunLast = nil;
 	end
-
-	getfenv().client = nil
-	getfenv().service = nil
-	getfenv().script = nil
 
 	client.UI = {
 		Init = Init;
@@ -141,7 +142,7 @@ return function(Vargs, GetEnv)
 
 				local rets = {
 					TrackTask(`UI: {module:GetFullName()}`,
-						--func,
+					--	func,
 						setfenv(func, newEnv),
 						false,
 						data,
@@ -298,7 +299,7 @@ return function(Vargs, GetEnv)
 						local gTable,gIndex = UI.Register(newGui)
 
 						if folder:IsA("ModuleScript") then
-							local folderNoEnv = string.sub(folder.Name, 1, 5) == "NoEnv" or folder:FindFirstChild("NoEnv")
+							local folderNoEnv = false --string.sub(folder.Name, 1, 5) == "NoEnv" or folder:FindFirstChild("NoEnv")
 
 							local newEnv = GetEnv{{
 								script = folder,
@@ -308,7 +309,10 @@ return function(Vargs, GetEnv)
 							local ran, func = pcall(require, folder)
 							local rets = {
 								--// NoEnv temporarily disabled ~ Expertcoderz
-								--[[if folderNoEnv then pcall(func, newGui, gTable, data, newEnv) else]] pcall(setfenv(func, newEnv), newGui, gTable, data, newEnv)
+								if folderNoEnv then 
+									pcall(func, newGui, gTable, data, newEnv) 
+								else
+									pcall(setfenv(func, newEnv), newGui, gTable, data, newEnv)
 							}
 
 							local ran, ret = rets[1], rets[2]

@@ -1,30 +1,23 @@
 {
-  "name": "Astra",
-  "tree": {
-    "$className": "DataModel",
+	"name": "Astra",
+	"emitLegacyScripts": true,
+	"tree": {
+		"$className": "DataModel",
 
-    "ServerScriptService": {
-      "$className": "ServerScriptService",
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
 
-      "Astra_Rojo": {
-        "$className": "Folder",
-        "MainModule": {
-          "$path": "MainModule"
-        },
-
-        "LICENSE": {
-          "$path": "LICENSE.lua"
-        },
-        
-        "Astra_Loader": {
-          "$className": "Model",
-          "$path": "Loader",
-
-          "LICENSE": {
-            "$path": "LICENSE.lua"
-          }
-        }
-      }
-    }
-  }
+			"Astra_Rojo": {
+				"$className": "Folder",
+				"MainModule": {
+					"$path": "MainModule"
+				},
+				
+				"Adonis_Loader": {
+					"$className": "Model",
+					"$path": "Loader"
+				}
+			}
+		}
+	}
 }

@@ -6,7 +6,7 @@ return function(Vargs, GetEnv)
 	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Defaults, Permissions
 	local logError = server.LogError
 	local function Init()
-		Functions = server.Functions;
+		Functions = server.Functions
 		Admin = server.Admin
 		Anti = server.Anti
 		Core = server.Core
@@ -294,35 +294,30 @@ return function(Vargs, GetEnv)
 		},
 
 		Remote = function(p, cliData, com, ...)
+			log(p, cliData, com, ...)
 			if not service.Players:FindFirstChild(tostring(p.Name)) then
 				return warn(`Player {p} wasn't in Players while sending a remote request. Ignored.`)
-			end 
+			end
 
 			if not p:IsA("Player") then
-				Anti.Detected(
-					p,
-					"Crash",
-					`Received a Remote request from client but client wasn't a player(?)`
-				)
+				Anti.Detected(p, "Crash", `Received a Remote request from client but client wasn't a player(?)`)
 			end
-			
+
 			if Anti.KickedPlayers[p] then
-				p:Kick("ARIDe // Communication following disconnect. \n Something wants you gone from this server but you are still sending requests. Have to remove you. Sorry!")
-				Anti.Detected(
-					p,
-					"Crash",
-					`Communication Following Disconnect`
+				p:Kick(
+					"ARIDe // Communication following disconnect. \n Something wants you gone from this server but you are still sending requests. Have to remove you. Sorry!"
 				)
+				Anti.Detected(p, "Crash", `Communication Following Disconnect`)
 			elseif not com or type(com) ~= "string" or #com > 50 or cliData == "WorseMemes" or com == "WorseMemes" then
 				Anti.Detected(
 					p,
 					"Log",
 					service.MaxLen((tostring(com) ~= "WorseMemes" and tostring(com)) or tostring(select(1, ...)), 150)
 				)
-				Anti.RemovePlayer(p);
+				Anti.RemovePlayer(p)
 				Anti.Detected(p, "Crash", "Invalid Remote Data")
 			elseif cliData and type(cliData) ~= "table" then
-				Anti.RemovePlayer(p);
+				Anti.RemovePlayer(p)
 				Anti.Detected(p, "Crash", "Invalid Remote Data")
 				--elseif cliData and keys and cliData.Module ~= keys.Module then
 				--	Anti.Detected(p, "Kick", "Invalid Client Module (r10006)")
@@ -341,7 +336,7 @@ return function(Vargs, GetEnv)
 								AddLog("RemoteFires", {
 									Text = `{p.Name} requested key from server`,
 									Desc = "Player requested key from server",
-									Player = p;
+									Player = p,
 								})
 								if keys.LoadingStatus == "WAITING_FOR_KEY" then
 									keys.LoadingStatus = "LOADING"
@@ -366,12 +361,11 @@ return function(Vargs, GetEnv)
 								AddLog("RemoteFires", {
 									Text = `{p.Name} requested key from server`,
 									Desc = "Player requested key from server",
-									Player = p;
+									Player = p,
 								})
 							else
-								Anti.Detected(p, "kick","Communication Key Error (r10003)")
+								Anti.Detected(p, "kick", "Communication Key Error (r10003)")
 							end
-
 						elseif rateLimitCheck and string.len(com) <= Remote.MaxLen then
 							local comString = Decrypt(com, keys.Key, keys.Cache)
 							local command = (cliData.Mode == "Get" and Remote.Returnables[comString])
@@ -419,7 +413,6 @@ return function(Vargs, GetEnv)
 					else
 						Anti.Detected(p, "Log", "Out of Sync (r10005)")
 					end
-				
 				else
 					Anti.Detected(p, "Log", "Invalid Remote Data")
 				end
@@ -430,36 +423,34 @@ return function(Vargs, GetEnv)
 			opts = opts or {}
 
 			if not service.Players:FindFirstChild(tostring(p.Name)) and not opts.CrossServer then
-				return	--// Check if the player is still in the datamodel when the command is being ran
-			end 		--// This should prevent users running infinite loops and then leaving 
+				return --// Check if the player is still in the datamodel when the command is being ran
+			end --// This should prevent users running infinite loops and then leaving
 
 			local hasDonor = server.Admin.CheckDonor(p)
-			local hasAdmin = server.Admin.CheckAdmin(p) 
+			local hasAdmin = server.Admin.CheckAdmin(p)
 
 			local cmdlimit = Variables.BatchCommandLimit.Player
 			local cmds = 0
 
-			if hasDonor then cmdlimit += Variables.BatchCommandLimit.Donor end
+			if hasDonor then
+				cmdlimit += Variables.BatchCommandLimit.Donor
+			end
 
 			for cmd in string.gmatch(msg, `[^{Settings.BatchKey}]+`) do
-
-				if hasAdmin then break end;
+				if hasAdmin then
+					break
+				end
 
 				cmds += 1
-				if cmds > cmdlimit then 
-					Remote.MakeGui(p, 'Output', {
-						Message = `You ran too many commands at once!`;
+				if cmds > cmdlimit then
+					Remote.MakeGui(p, "Output", {
+						Message = `You ran too many commands at once!`,
 					})
 					return
 				end
 			end
 
-			if
-				#msg > Process.MsgStringLimit
-				and type(p) == "userdata"
-				and p:IsA("Player")
-				and not hasAdmin
-			then
+			if #msg > Process.MsgStringLimit and type(p) == "userdata" and p:IsA("Player") and not hasAdmin then
 				msg = string.sub(msg, 1, Process.MsgStringLimit)
 			end
 
@@ -481,7 +472,7 @@ return function(Vargs, GetEnv)
 					end
 				end
 			else
-				local alias,aliasData = Admin.IsAlias(p, msg)
+				local alias, aliasData = Admin.IsAlias(p, msg)
 				local pData = opts.PlayerData or (p and Core.GetPlayer(p))
 
 				if string.match(msg, Settings.BatchKey) then
@@ -503,27 +494,31 @@ return function(Vargs, GetEnv)
 					end
 					return
 				end
-				if alias then		
+				if alias then
 					local exec = aliasData.Command
-					local isRecursive = Admin.IsRecursiveAlias(p,alias,exec)
+					local isRecursive = Admin.IsRecursiveAlias(p, alias, exec)
 
 					if isRecursive then
-						return Remote.MakeGui(p, 'Output', {
-							Message = if isRecursive == true then `Your alias was inf recursive and has not been ran` else isRecursive;
-						}) 
+						return Remote.MakeGui(p, "Output", {
+							Message = if isRecursive == true
+								then `Your alias was inf recursive and has not been ran`
+								else isRecursive,
+						})
 					end
 
 					local suppliedArgs = string.split(msg, Settings.SplitKey)
 					table.remove(suppliedArgs, 1)
 					if #suppliedArgs > #aliasData.Args.Names then
-						for i = #aliasData.Args.Names+1, #suppliedArgs do
-							suppliedArgs[#aliasData.Args.Names] = suppliedArgs[#aliasData.Args.Names] .. Settings.SplitKey .. suppliedArgs[i]
+						for i = #aliasData.Args.Names + 1, #suppliedArgs do
+							suppliedArgs[#aliasData.Args.Names] = suppliedArgs[#aliasData.Args.Names]
+								.. Settings.SplitKey
+								.. suppliedArgs[i]
 							suppliedArgs[i] = nil
 						end
 					end
 					exec = exec:gsub("<([^>]+)>", function(argName)
 						local argIndex
-						for i,v in ipairs(aliasData.Args.Names) do
+						for i, v in ipairs(aliasData.Args.Names) do
 							if v == argName then
 								argIndex = i
 							end
@@ -553,19 +548,16 @@ return function(Vargs, GetEnv)
 				end
 
 				if not allowed then
-					if
-						not (isSystem or opts.NoOutput)
-						and (denialMessage or hasAdmin or opts.Check)
-					then
+					if not (isSystem or opts.NoOutput) and (denialMessage or hasAdmin or opts.Check) then
 						Remote.MakeGui(p, "Output", {
 							Message = denialMessage
 								or (
 									if not hasAdmin
-									then string.format(
-										"'%s' is either not a valid command, or you do not have permission to run it.",
-										msg
-									)
-									else string.format("You do not have permission to run '%s'.", msg)
+										then string.format(
+											"'%s' is either not a valid command, or you do not have permission to run it.",
+											msg
+										)
+										else string.format("You do not have permission to run '%s'.", msg)
 								),
 						})
 					end
@@ -626,11 +618,11 @@ return function(Vargs, GetEnv)
 									Remote.MakeGui(p, "Output", {
 										Message = cmdError,
 									})
-									
+
 									Logs.AddLog(server.Logs.Errors, {
 										Text = `Encountered an error while running a command: {msg}`,
-										Desc = `Encountered an error while running a command: {msg}\n{cmdError}\n{debug.traceback()}`
-									});
+										Desc = `Encountered an error while running a command: {msg}\n{cmdError}\n{debug.traceback()}`,
+									})
 								end
 							elseif cmdError ~= nil and cmdError ~= true and not isSystem then
 								Remote.MakeGui(p, "Output", {
@@ -779,16 +771,14 @@ return function(Vargs, GetEnv)
 							local success, res, message = pcall(func, p, PlayerData)
 							if success and res == false then
 								local Data = {
-									filter = filter;
-									error = message;
-									TimeEnabled = 0;
-									moderator = {Name = "SERVER"};
-									Reason = "The maze wasn't meant for you"
+									filter = filter,
+									error = message,
+									TimeEnabled = 0,
+									moderator = { Name = "SERVER" },
+									Reason = "The maze wasn't meant for you",
 								}
-								local msg =  Functions.GetKickMessage("FailedJoinFilter", Data)
-								p:Kick(
-									msg
-								)
+								local msg = Functions.GetKickMessage("FailedJoinFilter", Data)
+								p:Kick(msg)
 								Removed = true
 								Logs:AddLog(Logs.Script, `{p} failed the join filter {filter}`)
 								break
@@ -804,8 +794,12 @@ return function(Vargs, GetEnv)
 				end
 
 				if p.DisplayName then
-					if string.match(p.DisplayName,"Latte_ImACheater") then
-						Anti.Detected(p, "log", `Player has been flagged for being a likely exploiter (latte displayname)`)
+					if string.match(p.DisplayName, "Latte_ImACheater") then
+						Anti.Detected(
+							p,
+							"log",
+							`Player has been flagged for being a likely exploiter (latte displayname)`
+						)
 					end
 				end
 			end)
@@ -830,7 +824,6 @@ return function(Vargs, GetEnv)
 					Player = p,
 				})
 
-
 				--local test = Remote.Get(p, "Fingerprint")
 				--print(`FROM SERVER: {test}`)
 				--// Get chats
@@ -849,8 +842,6 @@ return function(Vargs, GetEnv)
 					end
 				end)
 
-
-
 				task.delay(260, function()
 					if
 						p.Parent
@@ -864,7 +855,7 @@ return function(Vargs, GetEnv)
 						--	Desc = `{keyData.LoadingStatus}: Client failed to load in time (5 minutes?)`,
 						--	Player = p,
 						--})
-						Anti.Detected(p, "kick", "Client failed to load in time (5 minutes?)");
+						Anti.Detected(p, "kick", "Client failed to load in time (5 minutes?)")
 					end
 				end)
 			elseif err ~= "REMOVED" then
@@ -955,27 +946,27 @@ return function(Vargs, GetEnv)
 
 			--// Load admin or non-admin specific things
 			--if level < 1 then
-				if Settings.AntiSpeed and Settings.AllowClientAntiExploit then
-					Remote.Send(p, "LaunchAnti", "Speed", {
-						Speed = tostring(60.5 + math.random(9e8) / 9e8),
-					})
+			if Settings.AntiSpeed and Settings.AllowClientAntiExploit then
+				Remote.Send(p, "LaunchAnti", "Speed", {
+					Speed = tostring(60.5 + math.random(9e8) / 9e8),
+				})
+			end
+
+			if Settings.Detection and Settings.AllowClientAntiExploit then
+				Remote.Send(p, "LaunchAnti", "MainDetection")
+
+				Remote.Send(p, "LaunchAnti", "AntiAntiIdle", {
+					Enabled = (Settings.AntiAntiIdle ~= false or Settings.AntiClientIdle ~= false),
+				})
+
+				if Settings.ExploitGuiDetection and Settings.AllowClientAntiExploit then
+					Remote.Send(p, "LaunchAnti", "AntiCoreGui")
 				end
+			end
 
-				if Settings.Detection and Settings.AllowClientAntiExploit then
-					Remote.Send(p, "LaunchAnti", "MainDetection")
-
-					Remote.Send(p, "LaunchAnti", "AntiAntiIdle", {
-						Enabled = (Settings.AntiAntiIdle ~= false or Settings.AntiClientIdle ~= false),
-					})
-
-					if Settings.ExploitGuiDetection and Settings.AllowClientAntiExploit then
-						Remote.Send(p, "LaunchAnti", "AntiCoreGui")
-					end
-				end
-
-				if Settings.AntiBuildingTools and Settings.AllowClientAntiExploit then
-					Remote.Send(p, "LaunchAnti", "AntiTools", { BTools = true })
-				end
+			if Settings.AntiBuildingTools and Settings.AllowClientAntiExploit then
+				Remote.Send(p, "LaunchAnti", "AntiTools", { BTools = true })
+			end
 			--end
 
 			--// Finish things up
@@ -1135,7 +1126,7 @@ return function(Vargs, GetEnv)
 			if char and keyData and keyData.FinishedLoading then
 				local level = Admin.GetLevel(p)
 				--local pdata = Core.GetPlayer(p)
-				local CommandBoxonSpawn = Settings.CommandBoxonSpawn or false; --pdata.Client.CommandBoxonSpawn or true;
+				local CommandBoxonSpawn = Settings.CommandBoxonSpawn or false --pdata.Client.CommandBoxonSpawn or true;
 				--// Wait for UI stuff to finish
 				task.wait(1)
 				if not p:FindFirstChildWhichIsA("PlayerGui") then
@@ -1157,10 +1148,10 @@ return function(Vargs, GetEnv)
 				if
 					(
 						not args[1]
-							or (
-								args[1] and typeof(args[1]) == "table" and args[1].FinishedLoading == nil
-								or args[1].FinishedLoading == true
-							)
+						or (
+							args[1] and typeof(args[1]) == "table" and args[1].FinishedLoading == nil
+							or args[1].FinishedLoading == true
+						)
 					) and (Settings.Console and (not Settings.Console_AdminsOnly or level > 0))
 				then
 					Remote.RefreshGui(p, "Console")

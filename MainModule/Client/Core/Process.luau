@@ -10,17 +10,17 @@ log = nil
 --// Processing
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
-	setfenv(1, env)
+
 	local _G, game, script, getfenv, setfenv, workspace,
-		getmetatable, setmetatable, loadstring, coroutine,
-		rawequal, typeof, print, math, warn, error,  pcall,
-		xpcall, select, rawset, rawget, ipairs, pairs,
-		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-		Vector3int16, require, table, type, wait,
-		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
+	getmetatable, setmetatable, loadstring, coroutine,
+	rawequal, typeof, print, math, warn, error,  pcall,
+	xpcall, select, rawset, rawget, ipairs, pairs,
+	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
+	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
+	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
+	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
+	Vector3int16, require, table, type, wait,
+	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
 		_G, game, script, getfenv, setfenv, workspace,
 		getmetatable, setmetatable, loadstring, coroutine,
 		rawequal, typeof, print, math, warn, error,  pcall,
@@ -35,6 +35,8 @@ return function(Vargs, GetEnv)
 	local script = script
 	local service = Vargs.Service
 	local client = Vargs.Client
+	local TextChatService = service.TextChatService
+
 	local Anti, Core, Functions, Process, Remote, UI, Variables
 	local function Init()
 		UI = client.UI;
@@ -50,49 +52,18 @@ return function(Vargs, GetEnv)
 	end
 
 	local function RunLast()
-		--[[client = service.ReadOnly(client, {
-				[client.Variables] = true;
-				[client.Handlers] = true;
-				G_API = true;
-				G_Access = true;
-				G_Access_Key = true;
-				G_Access_Perms = true;
-				Allowed_API_Calls = true;
-				HelpButtonImage = true;
-				Finish_Loading = true;
-				RemoteEvent = true;
-				ScriptCache = true;
-				Returns = true;
-				PendingReturns = true;
-				EncodeCache = true;
-				DecodeCache = true;
-				Received = true;
-				Sent = true;
-				Service = true;
-				Holder = true;
-				GUIs = true;
-				LastUpdate = true;
-				RateLimits = true;
-
-				Init = true;
-				RunLast = true;
-				RunAfterInit = true;
-				RunAfterLoaded = true;
-				RunAfterPlugins = true;
-			}, true)--]]
-
-			Process.RunLast = nil;
+		Process.RunLast = nil;
 	end
 
 	local function RunAfterLoaded(data)
 		--// Events
-		--service.NetworkClient.ChildRemoved:Connect(function() task.wait(30) client.Anti.Detected("crash", "Network client disconnected") end)
-		--service.NetworkClient.ChildAdded:Connect(function() client.Anti.Detected("crash", "Network client reconnected?") end)
 		service.Player.Chatted:Connect(service.EventTask("Event: ProcessChat", Process.Chat))
 		service.Player.CharacterRemoving:Connect(service.EventTask("Event: CharacterRemoving", Process.CharacterRemoving))
 		service.Player.CharacterAdded:Connect(service.EventTask("Event: CharacterAdded", Process.CharacterAdded))
 		service.LogService.MessageOut:Connect(Process.LogService) --service.EventTask("Event: MessageOut",client.Process.LogService,60))
 		service.ScriptContext.Error:Connect(Process.ErrorMessage) --service.EventTask("Event: ErrorMessage",client.Process.ErrorMessage,60))
+		-- TextChatService.OnIncomingMessage = Process.IncomingMessage
+		--TextChatService.OnBubbleAdded = Process.OnBubbleAdded
 
 		--// Get RateLimits
 		Process.RateLimits = Remote.Get("RateLimits") or Process.RateLimits;
@@ -100,9 +71,9 @@ return function(Vargs, GetEnv)
 		Process.RunAfterLoaded = nil;
 	end
 
-	getfenv().client = nil
-	getfenv().service = nil
-	getfenv().script = nil
+	--getfenv().client = nil
+	--getfenv().service = nil
+	--getfenv().script = nil
 
 	client.Process = {
 		Init = Init;
@@ -126,14 +97,16 @@ return function(Vargs, GetEnv)
 
 						log("~! Call Finish_Loading()")
 						client.Finish_Loading()
-					end
+					end	
 				elseif Core.Key then
 					local comString = Remote.Decrypt(com,Core.Key)
 					local command = (data.Mode == "Get" and Remote.Returnables[comString]) or Remote.Commands[comString]
 					if command then
 						local rets = {service.TrackTask(`Remote: {comString}`, command, false, args)}
 						if not rets[1] then
-							logError(rets[2])
+							--logError(rets[2])
+							--what the hell man
+							logError('Something in remote return was bad')
 						else
 							return {unpack(rets, 2)};
 						end
@@ -153,7 +126,7 @@ return function(Vargs, GetEnv)
 			end
 
 			--if (Script == nil or (not Trace or Trace == "")) and not (Trace and string.find(Trace,"CoreGui.RobloxGui")) then
-				--Anti.Detected("log",`Scriptless/Traceless error found. Script: {Script} - Trace: {Trace}`)
+			--Anti.Detected("log",`Scriptless/Traceless error found. Script: {Script} - Trace: {Trace}`)
 			--end
 		end;
 
@@ -202,12 +175,8 @@ return function(Vargs, GetEnv)
 			local textbox = service.UserInputService:GetFocusedTextBox()
 			if textbox then
 				textbox:ReleaseFocus()
-			end
-			local Chat = service.Chat
-			local ClientChatModules = Chat:WaitForChild('ClientChatModules')
-			local ChatSettings = require(service.UnWrap(ClientChatModules:WaitForChild("ChatSettings")))
-			--print(Variables.EnableChatChannelTabs)
-			ChatSettings.ShowChannelsBar = true
+			end -- Can we remove this now
+
 			service.Events.CharacterRemoving:Fire()
 		end
 	}

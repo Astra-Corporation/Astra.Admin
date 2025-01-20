@@ -69,64 +69,7 @@ return function(Vargs)
 	end
 
 	if not Settings.CustomKickMessages then
-		Settings.CustomKickMessages = {
-			BanMessage = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are server-banned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			TrelloBanMessage = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are Trello-Banned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			TimeBanMessage = { --// Shown if a player is Timebanned in-game
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are Timebanned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"Expires: {expiretime}",
-				"Time remaining: {remainingtime}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			GameBan = { --// Shown if a player tries to join a locked server
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You did not pass a Join Filter",
-				"FILTER: {filter}",
-				"ERROR: {error}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			FailedJoinFilter = { --// Shown if a player tries to join a locked server
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are gamebanned!",
-				"Reason: {reason}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-		}
+		Settings.CustomKickMessages = Variables.DefaultCustomMessages
 		warn(
 			"Settings.CustomKickMessages is not set! Custom kick messages will not work. This message will only display once until the issue is fixed"
 		)

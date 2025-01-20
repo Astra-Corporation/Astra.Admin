@@ -2,12 +2,6 @@ return function(Vargs, GetEnv)
 	local server = Vargs.Server;
 	local service = Vargs.Service;
 	local cloneTable = service.CloneTable;
-	local Realtypes = game:GetService('ServerScriptService'):FindFirstChild('AstraTypes')
-	if Realtypes then
-		local types = require(Realtypes)
-		type Admin = types.CoreAdmin
-		type Server = types.Server
-	end
 	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Commands, Permissions
 	local AddLog, TrackTask, Defaults
 	local CreatorId = game.CreatorType == Enum.CreatorType.User and game.CreatorId or service.GetGroupCreatorId(game.CreatorId)
@@ -254,7 +248,6 @@ return function(Vargs, GetEnv)
 
 				AddLog("Script", "ChatService Handler Loaded")
 			else
-				warn("Place is missing ChatService; Vanilla Roblox chat related features may not work")
 				AddLog("Script", "ChatService Handler Not Found")
 			end
 		end)

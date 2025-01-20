@@ -39,6 +39,7 @@ local CORE_LOADING_ORDER = table.freeze({
 --// Holiday roooaaAaaoooAaaooOod
 --// SUMMMEEEEEEEEEeeeeeeeeeRRRRRRE
 
+local ENABLE_DEBUG_PRINTS = true
 local SERVICES_WE_USE = table.freeze({
 	"Workspace";
 	"Players";
@@ -114,6 +115,12 @@ local function CloneTable(tab, recursive)
 	return clone;
 end;
 
+local log = function(...)
+	if ENABLE_DEBUG_PRINTS then 
+		print(...)
+	end
+end
+
 local LogError = function(Player, Error)
 	if not Error then
 		Error = Player
@@ -175,7 +182,7 @@ local function GetVargTable()
 end;
 
 local function LoadModule(module, yield, envVars, noEnv, isCore)
-	noEnv = false --// Seems to make loading take longer when true (?)
+	noEnv = true
 	local isFunc = type(module) == "function"
 	local module = (isFunc and service.New("ModuleScript", {Name = "Non-Module Loaded"})) or module
 	local plug = (isFunc and module) or require(module)
@@ -188,7 +195,7 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 		if isCore then
 			local ran, err = service.TrackTask(
 				`CoreModule: {module}`,
-				(noEnv and plug) or setfenv(plug, GetEnv(getfenv(plug), envVars)),
+				plug,
 				function(err)
 					warn(`Module encountered an error while loading: {module}\n{err}\n{debug.traceback()}`)
 				end,
@@ -199,7 +206,7 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 		else
 			local ran, err = service.TrackTask(
 				`Plugin: {module}`,
-				(noEnv and plug) or setfenv(plug, GetEnv(getfenv(plug), envVars)),
+				plug,
 				function(err)
 					warn(`Module encountered an error while loading: {module}\n{err}\n{debug.traceback()}`)
 				end,
@@ -214,7 +221,7 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 	if server.Logs then
 		server.Logs.AddLog(server.Logs.Script,{
 			Text = `Loaded Module: {module}`;
-			Desc = "ARIDe loaded a core module or plugin";
+			Desc = "Astra loaded a core module or plugin";
 		})
 	end
 end
@@ -234,7 +241,7 @@ local function CleanUp()
 		end
 	end
 
-	server.Model.Name = "ARIDe_Loader"
+	server.Model.Name = "Astra_Loader"
 	server.Model.Parent = service.ServerScriptService
 	server.Running = false
 
@@ -262,6 +269,7 @@ server = {
 	Modules = {};
 	Pcall = Pcall;
 	LogError = LogError;
+	log = log;
 	ErrorLogs = ErrorLogs;
 	ServerStartTime = os.time();
 	CommandCache = {};
@@ -274,6 +282,7 @@ locals = {
 	HookedEvents = HookedEvents;
 	ErrorLogs = ErrorLogs;
 	logError = LogError;
+	log = log;
 	origEnv = origEnv;
 	Folder = Folder;
 	GetEnv = GetEnv;
@@ -295,10 +304,6 @@ service = require(Shared.Service)(function(eType, msg, desc, ...)
 		LogError("Server", msg)
 	elseif eType == "TaskError" then
 		LogError("Task", msg)
-	end
-end, function(c, parent, tab)
-	if not isModule(c) and c ~= server.Loader and c ~= server.Runner and c ~= server.Model and c ~= script and c ~= Folder and parent == nil then
-		tab.UnHook()
 	end
 end, ServiceSpecific, GetEnv(nil, {server = server}))
 
@@ -620,6 +625,7 @@ return service.NewProxy({
 		-- Server.Logs already does this. Why does it not work 
 		-- I am loosing my sanity
 		-- I am easternbloxxer and this is my message.
+		-- Sometimes i forget i wrote this but then i remember
 		
 		return "SUCCESS"
 	end;

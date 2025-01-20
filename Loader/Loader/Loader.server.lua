@@ -82,7 +82,7 @@ local Data = {
 	ModuleID = Model:FindFirstChild('MainModule'),
 	LoaderID = 7510622625,
 
-	DebugMode = RunService:IsStudio() or game.PlaceId == 14858809740 or game.PlaceId == 16066696839,    
+	DebugMode = true    
 }
 
 --// BEgin loading

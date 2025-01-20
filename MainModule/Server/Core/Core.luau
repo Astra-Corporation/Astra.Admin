@@ -263,6 +263,8 @@ return function(Vargs, GetEnv)
 						if server.Typechecker.interface({Mode = server.Typechecker.string})(cliData) then
 							cliData.Mode = "Get"
 							return Process.Remote(p, cliData, com, ...)
+						else
+							log("BOOO",p, cliData, com, ...)
 						end
 						return nil
 					end;
@@ -270,6 +272,9 @@ return function(Vargs, GetEnv)
 						if server.Typechecker.interface({Mode = server.Typechecker.string})(cliData) then
 							cliData.Mode = "Fire"
 							Process.Remote(p, cliData, com, ...)
+						
+						else
+						log("Someone will die",p, cliData, com, ...)
 						end
 					end)
 

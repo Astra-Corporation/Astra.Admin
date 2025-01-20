@@ -1,14 +1,8 @@
 -------------------
--- Adonis Client --
+-- Astra Client --
 -------------------
 --!nocheck
-																																																																																						  --[[
-This module is part of Adonis 1.0 and contains lots of old code;
-future updates will generally only be made to fix bugs, typos or functionality-affecting problems.
 
-If you find bugs or similar issues, please submit an issue report to us!
-
-]]
 --// Load Order List
 local CORE_LOADING_ORDER = table.freeze({
 	--// Required by most modules
@@ -118,10 +112,10 @@ local SERVICES_WE_USE = table.freeze({
 --// Logging
 local clientLog = {}
 local dumplog = function()
-	warn("Astra Client // Dumping client log...")
+	warn("Astra Client :: Dumping client log...")
 
 	for _, v in clientLog do
-		warn(":: Adonis ::", v)
+		warn(":: Astra ::", v)
 	end
 end
 local log = function(...)
@@ -169,7 +163,7 @@ end
 
 local oldPrint = print
 print = function(...)
-	oldPrint(":: Adonis ::", ...)
+	oldPrint(":: Astra ::", ...)
 end
 
 --[[
@@ -182,7 +176,7 @@ local cPcall = function(func, ...)
 	local ran, err = pcall(coroutine.resume, coroutine.create(func), ...)
 
 	if err then
-		warn(":: ADONIS_ERROR ::", err)
+		warn(":: ASTRA_ERROR ::", err)
 		logError(tostring(err))
 	end
 
@@ -323,12 +317,13 @@ client = setmetatable({
 	OldPrint = oldPrint,
 	LogError = logError,
 	TestEvent = Instance.new("RemoteEvent"),
-
 	Disconnect = function(info)
 		service.Player:Kick(info or "Disconnected from server")
 		--wait(30)
 		--client.Kill()(info)
 	end,
+	log = log;
+	logError = logError;
 
 	--Kill = Kill;
 }, {
@@ -361,9 +356,10 @@ locals = {
 	origEnv = origEnv,
 	log = log,
 	dumplog = dumplog,
-}
+} -- Get rid of this if we ever finish getting rid of get/set-fenv stuff. I dont think anything else uses it
 
 log("Create service metatable")
+
 
 service = require(Folder.Shared.Service)(function(eType, msg, desc, ...)
 	--warn(eType, msg, desc, ...)
@@ -385,10 +381,6 @@ service = require(Folder.Shared.Service)(function(eType, msg, desc, ...)
 		--if Detected then
 		--	Detected("log", tostring(msg))
 		--end
-	end
-end, function(c, parent, tab)
-	if not isModule(c) and c ~= script and c ~= Folder and parent == nil then
-		tab.UnHook()
 	end
 end, ServiceSpecific, GetEnv(nil, { client = client }))
 

@@ -64,7 +64,7 @@ return function(Vargs)
 				GUI.Name = TrackerName;
 				GUI.Adornee = _Root;
 				GUI:FindFirstChild("Username").Text = PlayerName;
-
+				GUI:FindFirstChild("Username").TextColor3 = player.TeamColor.Color
 				local Attachment0 = Root:FindFirstChild("KronosTrackingAtt");
 
 				if not Attachment0 then

@@ -1299,7 +1299,7 @@ return function(Vargs, GetEnv)
 		end;
 
 		MakeLocal = function(p: Player, object: Instance, parent: string?, clone: boolean?)
-			object.Parent = p:FindFirstChild('PlayerGui') or p
+			object.Parent = p --TODO: make it use PlayerGui again and finish client support for that
 			task.wait(0.5)
 			Remote.Send(p, "Function", "MakeLocal", object, parent, clone)
 		end;

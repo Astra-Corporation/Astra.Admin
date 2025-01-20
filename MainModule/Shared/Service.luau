@@ -15,7 +15,7 @@ type TrackedTask = {
 
 local HttpService = game:GetService("HttpService")
 
-return function(ErrorHandler, eventChecker, fenceSpecific, env)
+return function(ErrorHandler, fenceSpecific, env)
 	local Pcall = env.Pcall
 	local LogError = env.logError or env.LogError
 	local Server = env.server or env.Server
@@ -48,9 +48,9 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 	local RunningLoops = {}
 	local ServiceVariables = {}
 	local RealMethods = {}
-	
+
 	local TrackedTasks: { [string | number]: TrackedTask } = {}
-	
+
 	local Methods = setmetatable({}, {
 		__index = function(_, Index: any)
 			return function(Object: any, ...)
@@ -60,12 +60,12 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 
 				if Success and typeof(Object[Index]) == "function" then
 					local Method = RealMethods[ClassName]
-					
+
 					if not Method then
 						Method = {}
 						RealMethods[ClassName] = Method
 					end
-					
+
 					local ObjectIndex = Object[Index]
 					local MethodIndex = Method[Index]
 
@@ -84,7 +84,7 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 				return Object[Index](Object, ...)
 			end
 		end,
-		
+
 		__metatable = "Methods",
 	})
 
@@ -96,15 +96,15 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 	local Instance = {
 		new = function(ClassName: string, Parent: Instance?)
 			local Object: Instance = Instance_new(ClassName)
-			
+
 			if Parent then
 				Object.Parent = Service.UnWrap(Parent)
 			end
-			
+
 			return if Service and Client then Service.Wrap(Object, true) else Object
 		end
 	}
-	
+
 	local Events, Wrapper, Helpers = {
 		TrackTask = function(Name: string, Function: (...any) -> (...any), TaskErrorHandler: (string) -> ()?, ...: any?)
 			if type(TaskErrorHandler) ~= "function" then
@@ -112,7 +112,7 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 					LogError(`{Error}\n{debug.traceback()}`)
 				end
 			end
-			
+
 			local Index: string = HttpService:GenerateGUID(false)
 			local IsThread: boolean = string.sub(Name, 1, 7) == "Thread:"
 
@@ -127,11 +127,11 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 
 			local function TaskFunction(...: any)
 				TrackedTasks[Index] = Task
-				
+
 				Task.Status = "Running"
-				
+
 				local Returns: { any? } = { xpcall(Function, TaskErrorHandler, ...) }
-				
+
 				Task.Returns = Returns
 
 				if not Task.Returns[1] then
@@ -141,24 +141,24 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 				end
 
 				TrackedTasks[Index] = nil
-				
+
 				return table.unpack(Task.Returns)
 			end
 
 			if IsThread then
 				local Thread: thread = coroutine.create(TaskFunction)
-				
+
 				Task.Thread = Thread
-				
+
 				return coroutine.resume(Thread, ...)
 			end
-			
+
 			return TaskFunction(...)
 		end,
 
 		EventTask = function(Name: string, Function: (...any?) -> (...any?))
 			local TrackTask = Service.TrackTask
-			
+
 			return function(...: any?)
 				return TrackTask(Name, Function, false, ...)
 			end
@@ -598,6 +598,7 @@ return function(ErrorHandler, eventChecker, fenceSpecific, env)
 		ProcessQueue = function(queue, key)
 			if queue then
 				if queue.Processing then
+					warn(`{key} is already Processing!`)
 					return "Processing"
 				else
 					local funcs = queue.Functions;

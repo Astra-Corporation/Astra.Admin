@@ -68,6 +68,7 @@ return function(Vargs, GetEnv)
 			--client.G_Access_Perms = settings.G_Access_Perms
 			client.Allowed_API_Calls = settings.Allowed_API_Calls
 			client.HelpButtonImage = settings.HelpButtonImage
+			log("GOT SETTINGS")
 		else
 			log("~! GET SETTINGS FAILED?")
 			warn("FAILED TO GET SETTINGS FROM SERVER");
@@ -382,22 +383,27 @@ return function(Vargs, GetEnv)
 		};
 
 		Fire = function(...)
+			log(`Remote.Fire({...})`)
 			local limits = Process.RateLimits
 			local limit = (limits and limits.Remote) or 0.01;
 			local RemoteEvent = Core.RemoteEvent;
 			local extra = {...};
 
 			if RemoteEvent and RemoteEvent.Object then
+				log("Queuing REMOTE_SEND")
 				service.Queue("REMOTE_SEND", function()
+					log("queued code running")
 					Remote.Sent = Remote.Sent+1;
 					RemoteEvent.Object:FireServer({Mode = "Fire", Module = client.Module, Loader = client.Loader, Sent = Remote.Sent, Received = Remote.Received}, unpack(extra));
 					task.wait(limit);
+					log("ran")
 				end)
 			end
 		end;
 
 		Send = function(com,...)
 			Core.LastUpdate = os.time()
+			log(`Remote.Send({com}, {...})`)
 			Remote.Fire(Remote.Encrypt(com,Core.Key),...)
 		end;
 

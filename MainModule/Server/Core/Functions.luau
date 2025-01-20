@@ -454,6 +454,11 @@ return function(Vargs, GetEnv)
 
 		GetChatService = function(waitTime)
 			local isTextChat = service.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService
+			
+			if isTextChat then
+				return nil
+			end
+			
 			local chatHandler = service.ServerScriptService:WaitForChild("ChatServiceRunner", waitTime or isTextChat and 0.2 or 145)
 			local chatMod = chatHandler and chatHandler:WaitForChild("ChatService", waitTime or isTextChat and 0.2 or 145)
 

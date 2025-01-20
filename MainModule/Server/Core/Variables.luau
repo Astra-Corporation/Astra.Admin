@@ -65,6 +65,64 @@ return function(Vargs, GetEnv)
 			"Remote and/or logservice spoofcheck failed";
 			"Tamper Protection 0x7D2B";
 		};
+		DefaultCustomMessages =  {
+			BanMessage = {
+				"",
+				"▬▬▬▬ Astra ▬▬▬▬",
+				"",
+				"You are server-banned!",
+				"Reason: {reason}",
+				"Time: {time}",
+				"",
+				"▬▬▬▬ BinaryBridge ▬▬▬▬",
+				"",
+			},
+			TrelloBanMessage = {
+				"",
+				"▬▬▬▬ Astra ▬▬▬▬",
+				"",
+				"You are Trello-Banned!",
+				"Reason: {reason}",
+				"Time: {time}",
+				"",
+				"▬▬▬▬ BinaryBridge ▬▬▬▬",
+				"",
+			},
+			TimeBanMessage = {
+				"",
+				"▬▬▬▬ Astra ▬▬▬▬",
+				"",
+				"You are Timebanned!",
+				"Reason: {reason}",
+				"Time: {time}",
+				"Expires: {expiretime}",
+				"Time remaining: {remainingtime}",
+				"",
+				"▬▬▬▬ BinaryBridge ▬▬▬▬",
+				"",
+			},
+			GameBan = {
+				"",
+				"▬▬▬▬ Astra ▬▬▬▬",
+				"",
+				"You did not pass a Join Filter",
+				"FILTER: {filter}",
+				"ERROR: {error}",
+				"",
+				"▬▬▬▬ BinaryBridge ▬▬▬▬",
+				"",
+			},
+			FailedJoinFilter = { 
+				"",
+				"▬▬▬▬ Astra ▬▬▬▬",
+				"",
+				"You are gamebanned!",
+				"Reason: {reason}",
+				"",
+				"▬▬▬▬ BinaryBridge ▬▬▬▬",
+				"",
+			}
+		},
 		OptedOutOfAdmin = {};
 		OptedOutOfHelp = {};
 		BatchCommandLimit = {
