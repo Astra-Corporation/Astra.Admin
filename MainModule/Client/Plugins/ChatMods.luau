@@ -1,6 +1,5 @@
-client = nil
-service = nil
-return function()
+return function(Vargs,GetEnv)
+	local client, service = Vargs.Client, Vargs.Service
 	local Functions = client.Functions
 	local Variables = client.Variables
 	local shark = [=[
@@ -21,7 +20,7 @@ return function()
               ...''''''``^>?_-_->l,`.                       
                             .`:;<+_~<>;:`                   
                                  ...''.. 
-                              :: Astra v2 ::
+                              :: Astra v3 ::
 	]=]
 
 	print(shark)

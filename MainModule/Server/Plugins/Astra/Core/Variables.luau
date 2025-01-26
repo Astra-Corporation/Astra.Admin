@@ -1,6 +1,5 @@
-return function(Vargs)
+return function(Vargs)-- TODO: clean up before release
 	local server = Vargs.Server
-    
     server.Variables.WebServer = false
 	server.Variables.WhitelistData = {
 		Enabled = server.Settings.WhitelistEnabled or false;
@@ -30,5 +29,4 @@ return function(Vargs)
 	};
 	
 	server.Variables.DonorPass = {658237163,3497976,721481162};
-	server.Variables.CustomDeps = server.Deps.Kronos;
 end

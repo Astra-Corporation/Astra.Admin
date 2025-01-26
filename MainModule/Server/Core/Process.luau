@@ -294,7 +294,6 @@ return function(Vargs, GetEnv)
 		},
 
 		Remote = function(p, cliData, com, ...)
-			log(p, cliData, com, ...)
 			if not service.Players:FindFirstChild(tostring(p.Name)) then
 				return warn(`Player {p} wasn't in Players while sending a remote request. Ignored.`)
 			end
@@ -422,7 +421,7 @@ return function(Vargs, GetEnv)
 		Command = function(p, msg, opts, noYield)
 			opts = opts or {}
 
-			if not service.Players:FindFirstChild(tostring(p.Name)) and not opts.CrossServer then
+			if not service.Players:FindFirstChild(tostring(p.Name)) and not opts.CrossServer and not opts.isWebPanel then
 				return --// Check if the player is still in the datamodel when the command is being ran
 			end --// This should prevent users running infinite loops and then leaving
 

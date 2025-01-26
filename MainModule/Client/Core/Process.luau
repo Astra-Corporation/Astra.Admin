@@ -71,8 +71,8 @@ return function(Vargs, GetEnv)
 					if command then
 						local rets = {service.TrackTask(`Remote: {comString}`, command, false, args)}
 						if not rets[1] then
-							--logError(rets[2])
-							--what the hell man
+							--logError(rets[2]) -- The more you go thru this the worse it gets.
+							--TODO: Make this error handle better
 							logError('Something in remote return was bad')
 						else
 							return {unpack(rets, 2)};

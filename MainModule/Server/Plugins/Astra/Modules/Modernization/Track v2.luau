@@ -21,11 +21,9 @@ return function(Vargs)
 	local Players = game:GetService("Players");
 
 	local TrackTable = Variables.TrackingTable;
-
-	local Kronos = Deps.Kronos;
-
-	local TrackBeam = Kronos:FindFirstChild("TrackBeam");
-	local TrackGUI = Kronos:FindFirstChild("TrackingGUI");
+	
+	local TrackBeam = Deps:FindFirstChild("TrackBeam");
+	local TrackGUI = Deps:FindFirstChild("TrackingGUI");
 
 	Commands.Track.Function = function(plr: Player, args: { string })
 		local ID = plr.UserId;

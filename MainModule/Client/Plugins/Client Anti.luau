@@ -3,16 +3,15 @@
 script.Archivable = false
 task.spawn(function()
 	if not game:GetService("RunService"):IsStudio() then
-		script.Name = "Stats"
+		script.Name = "\n\n\n\n\n\n\n\nModuleScript"
 	end
 end)
 
-GetEnv = nil
 
-return function(Vargs)
+
+return function(Vargs,GetEnv)
 	local client, service = Vargs.Client, Vargs.Service
 	local env = GetEnv(nil, {script = script})
-	setfenv(1, env)
 
 	local _G, game, script, getfenv, setfenv, workspace,
 	getmetatable, setmetatable, loadstring, coroutine,
@@ -25,15 +24,15 @@ return function(Vargs)
 	Vector3int16, require, table, type, wait,
 	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
 		_G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
+		getmetatable, setmetatable, loadstring, coroutine,
+		rawequal, typeof, print, math, warn, error,  pcall,
+		xpcall, select, rawset, rawget, ipairs, pairs,
+		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
+		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
+		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
+		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
+		Vector3int16, require, table, type, wait,
+		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
 
 	local Anti, Process, UI, Variables
 	local script = script
@@ -54,8 +53,10 @@ return function(Vargs)
 	local Process = client.Process;
 	local Detected = Anti.Detected;
 
+	getfenv().client = nil
+	getfenv().service = nil
+	getfenv().script = nil
 	script.Parent = nil
-
 	local compareTables
 	compareTables = function(t1, t2)
 		if service.CountTable(t1) ~= service.CountTable(t2) then

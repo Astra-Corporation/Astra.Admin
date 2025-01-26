@@ -19,7 +19,7 @@ return function(Vargs)
 	local TrackTask = Service.TrackTask
 	local AddLog = Logs.AddLog;
 
-	Functions.AddJoinFilter("Whitelist",function(Player:Player, PlayerData)
+	Functions.AddJoinFilter("Whitelist",function(Player:Player, PlayerData) -- We need to make this support Trello and webpanel. A big mess right now.
 		if Variables.WhitelistData.Enabled then
 			local listed = false
 			local level, rankName = Admin.GetLevel(Player)

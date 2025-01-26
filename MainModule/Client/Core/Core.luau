@@ -2,11 +2,9 @@ return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
 
 	local client, service = Vargs.Client, Vargs.Service
-	
 	local FiOne = service.UnWrap(client.Shared.FiOne) 
 	local Anti, Core, Functions, Process, Remote, UI, Variables, log, Pcall, Routine
 
-	
 	local function Init(data)
 		UI = client.UI;
 		Anti = client.Anti;
@@ -45,43 +43,9 @@ return function(Vargs, GetEnv)
 			service.TrackTask("Thread: API Manager", Core.StartAPI)
 		end
 
-		--[[client = service.ReadOnly(client, {
-				[client.Variables] = true;
-				[client.Handlers] = true;
-				G_API = true;
-				G_Access = true;
-				G_Access_Key = true;
-				G_Access_Perms = true;
-				Allowed_API_Calls = true;
-				HelpButtonImage = true;
-				Finish_Loading = true;
-				RemoteEvent = true;
-				ScriptCache = true;
-				Returns = true;
-				PendingReturns = true;
-				EncodeCache = true;
-				DecodeCache = true;
-				Received = true;
-				Sent = true;
-				Service = true;
-				Holder = true;
-				GUIs = true;
-				LastUpdate = true;
-				RateLimits = true;
-
-				Init = true;
-				RunLast = true;
-				RunAfterInit = true;
-				RunAfterLoaded = true;
-				RunAfterPlugins = true;
-		}, true)--]]
-
 		Core.RunLast = nil
 	end
 
-	getfenv().client = nil
-	getfenv().service = nil
-	getfenv().script = nil
 
 	client.Core = {
 		Init = Init;
@@ -144,10 +108,8 @@ return function(Vargs, GetEnv)
 						--Remote.Fire(`{client.DepsName}GET_KEY`)
 						Core.Key = Remote.Get(`{client.DepsName}GET_KEY`)
 						if Core.Key then
-							log("GOT KEY")
 							client.Finish_Loading()
 						else
-							log("SERVER DID NOT SEND KEY(?) RETRYING")
 							Remote.Fire(`{client.DepsName}GET_KEY`)
 						end
 					end
@@ -157,14 +119,8 @@ return function(Vargs, GetEnv)
 
 		DebugMode = client.DebugMode;
 
-		LoadPlugin = function(plugin)
-			local plug = require(plugin)
-			local func = setfenv(plug,GetEnv(getfenv(plug)))
-			task.spawn(Pcall, func)
-		end;
-
 		LoadBytecode = function(str, env)
-			return require(client.Shared.FiOne)(str, env)
+			return require(FiOne)(str, env)
 		end;
 
 		LoadCode = function(str, env)
@@ -199,8 +155,6 @@ return function(Vargs, GetEnv)
 			local table = table
 			local rawset = rawset
 			local rawget = rawget
-			local getfenv = getfenv
-			local setfenv = setfenv
 			local require = require
 			local tostring = tostring
 			local client = client
@@ -211,8 +165,6 @@ return function(Vargs, GetEnv)
 			local API_Special = {
 
 			}
-
-			setfenv(1,setmetatable({}, {__metatable = getmetatable(getfenv())}))
 
 			local API_Specific = {
 				API_Specific = {
@@ -225,48 +177,6 @@ return function(Vargs, GetEnv)
 
 			local API = {
 				Access = ReadOnly({}, nil, nil, true);
-				--[[
-				Access = service.MetaFunc(function(...)
-					local args = {...}
-					local key = args[1]
-					local ind = args[2]
-					local targ
-
-					setfenv(1,setmetatable({}, {__metatable = getmetatable(getfenv())}))
-
-					if API_Specific[ind] then
-						targ = API_Specific[ind]
-					elseif client[ind] and client.Allowed_API_Calls[ind] then
-						targ = client[ind]
-					end
-
-					if client.G_Access and key == client.G_Access_Key and targ and client.Allowed_API_Calls[ind] then
-						if type(targ) == "table" then
-							return service.NewProxy {
-								__index = function(tab,inde)
-									if targ[inde] ~= nil and API_Special[inde] == nil or API_Special[inde] == true then
-										if targ[inde]~=nil and type(targ[inde]) == "table" and client.G_Access_Perms == "Read" then
-											return service.ReadOnly(targ[inde])
-										else
-											return targ[inde]
-										end
-									elseif API_Special[inde] == false then
-										error(`Access Denied: {inde}`)
-									else
-										error(`Could not find {inde}`)
-									end
-								end;
-								__newindex = function(tabl,inde,valu)
-									error("Read-only")
-								end;
-								__metatable = true;
-							}
-						end
-					else
-						error("Incorrect key or G_Access is disabled")
-					end
-				end);
-				--]]
 
 				Scripts = ReadOnly({
 					ExecutePermission = (function(srcScript, code)
@@ -287,7 +197,7 @@ return function(Vargs, GetEnv)
 						if data and data.Source then
 							local module;
 							if not exists then
-								module = require(FiOne:Clone())
+								module = require(UnWrap(FiOne):clone())
 								table.insert(ScriptCache,{
 									Script = srcScript;
 									Source = data.Source;

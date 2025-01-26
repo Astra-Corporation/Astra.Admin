@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------
 --						   	Astra Remotely Integrated Defense v3 (ARIDe)		 	  --
 ----------------------------------------------------------------------------------------
---		 				By: EasternBloxxer - Engineering the future.		   		  --
+--		 					By: krampsuzc - Engineering the future.				   	  --
 --		 				  8ch_32bit was here lololololololololololo		   		 	  --
 ----------------------------------------------------------------------------------------
 

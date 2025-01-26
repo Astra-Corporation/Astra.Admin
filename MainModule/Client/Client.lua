@@ -1,6 +1,9 @@
--------------------
--- Astra Client --
--------------------
+----------------------------------------------------------------------------------------
+--						  	 		Astra Client Loader V3							  --
+----------------------------------------------------------------------------------------
+--		 				By: krampuszc - Engineering the future.				   		  --
+--		 				  8ch_32bit was here lololololololololololo		   		 	  --
+----------------------------------------------------------------------------------------
 --!nocheck
 
 --// Load Order List
@@ -20,72 +23,72 @@ local CORE_LOADING_ORDER = table.freeze({
 })
 
 --// Loccalllsssss
-local _G, game, script, getfenv, setfenv, workspace, getmetatable, setmetatable, loadstring, coroutine, rawequal, typeof, print, math, warn, error, pcall, xpcall, select, rawset, rawget, ipairs, pairs, next, Rect, Axes, os, time, Faces, unpack, string, Color3, newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor, NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint, NumberSequenceKeypoint, PhysicalProperties, Region3int16, Vector3int16, require, table, type, wait, Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay, spawn, task, tick, assert =
+local _G, game, script, getfenv,setfenv, workspace, getmetatable, setmetatable, loadstring, coroutine, rawequal, typeof, print, math, warn, error, pcall, xpcall, select, rawset, rawget, ipairs, pairs, next, Rect, Axes, os, time, Faces, unpack, string, Color3, newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor, NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint, NumberSequenceKeypoint, PhysicalProperties, Region3int16, Vector3int16, require, table, type, wait, Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay, spawn, task, tick, assert =
 	_G,
-game,
-script,
-getfenv,
-setfenv,
-workspace,
-getmetatable,
-setmetatable,
-loadstring,
-coroutine,
-rawequal,
-typeof,
-print,
-math,
-warn,
-error,
-pcall,
-xpcall,
-select,
-rawset,
-rawget,
-ipairs,
-pairs,
-next,
-Rect,
-Axes,
-os,
-time,
-Faces,
-table.unpack,
-string,
-Color3,
-newproxy,
-tostring,
-tonumber,
-Instance,
-TweenInfo,
-BrickColor,
-NumberRange,
-ColorSequence,
-NumberSequence,
-ColorSequenceKeypoint,
-NumberSequenceKeypoint,
-PhysicalProperties,
-Region3int16,
-Vector3int16,
-require,
-table,
-type,
-task.wait,
-Enum,
-UDim,
-UDim2,
-Vector2,
-Vector3,
-Region3,
-CFrame,
-Ray,
-task.delay,
-task.defer,
-task,
-tick,
-function(cond, errMsg)
-	return cond or error(errMsg or "assertion failed!", 2)
-end
+	game,
+	script,
+	getfenv,
+	setfenv,
+	workspace,
+	getmetatable,
+	setmetatable,
+	loadstring,
+	coroutine,
+	rawequal,
+	typeof,
+	print,
+	math,
+	warn,
+	error,
+	pcall,
+	xpcall,
+	select,
+	rawset,
+	rawget,
+	ipairs,
+	pairs,
+	next,
+	Rect,
+	Axes,
+	os,
+	time,
+	Faces,
+	table.unpack,
+	string,
+	Color3,
+	newproxy,
+	tostring,
+	tonumber,
+	Instance,
+	TweenInfo,
+	BrickColor,
+	NumberRange,
+	ColorSequence,
+	NumberSequence,
+	ColorSequenceKeypoint,
+	NumberSequenceKeypoint,
+	PhysicalProperties,
+	Region3int16,
+	Vector3int16,
+	require,
+	table,
+	type,
+	task.wait,
+	Enum,
+	UDim,
+	UDim2,
+	Vector2,
+	Vector3,
+	Region3,
+	CFrame,
+	Ray,
+	task.delay,
+	task.defer,
+	task,
+	tick,
+	function(cond, errMsg)
+		return cond or error(errMsg or "assertion failed!", 2)
+	end
 
 local SERVICES_WE_USE = table.freeze({
 	"Workspace",
@@ -134,7 +137,6 @@ end)
 local unique = {}
 local origEnv = getfenv()
 local Folder = script.Parent
-setfenv(1, setmetatable({}, { __metatable = unique }))
 --local origWarn = warn
 local startTime = time()
 local oldInstNew = Instance.new
@@ -216,7 +218,7 @@ do
 			if Detected then
 				Detected("kick", info)
 			elseif Fire then
-				Fire("BadMemes", info)
+				Fire("WorseMemes", info)
 			end
 		end)
 
@@ -267,31 +269,35 @@ end
 
 local LoadModule = function(module, yield, envVars, noEnv)
 	local plugran, plug = pcall(require, module)
-
+	noEnv = true
 	if plugran then
 		if type(plug) == "function" then
 			if yield then
-				--Pcall(setfenv(plug,GetEnv(getfenv(plug), envVars)))
 				local ran, err = service.TrackTask(
 					`Plugin: {module}`,
-					(noEnv and plug) or setfenv(plug, GetEnv(getfenv(plug), envVars)),
+					plug,
 					function(err)
-						warn(`Module encountered an error while loading: {module}\n{err}\n{debug.traceback()}`)
+						warn(`Module encountered an error while loading: {module}\n{err}`)
 					end,
 					GetVargTable(),
 					GetEnv
 				)
+				if not ran then 
+					warn(err)
+				end
 			else
-				-- service.Threads.RunTask(`PLUGIN: {module,setfenv(plug,GetEnv(getfenv(plug), envVars))}`)
 				local ran, err = service.TrackTask(
 					`Thread: Plugin: {module}`,
-					(noEnv and plug) or setfenv(plug, GetEnv(getfenv(plug), envVars)),
+					plug,
 					function(err)
-						warn(`Module encountered an error while loading: {module}\n{err}\n{debug.traceback()}`)
+						warn(`Module encountered an error while loading: {module}\n{err}`)
 					end,
 					GetVargTable(),
 					GetEnv
 				)
+				if not ran then 
+					warn(err) -- Never trust the error handlers. I spent so long trying to figure out why the above didnt run
+				end
 			end
 		else
 			client[module.Name] = plug
@@ -324,6 +330,7 @@ client = setmetatable({
 	end,
 	log = log;
 	logError = logError;
+	require = require;
 
 	--Kill = Kill;
 }, {
@@ -359,7 +366,6 @@ locals = {
 } -- Get rid of this if we ever finish getting rid of get/set-fenv stuff. I dont think anything else uses it
 
 log("Create service metatable")
-
 
 service = require(Folder.Shared.Service)(function(eType, msg, desc, ...)
 	--warn(eType, msg, desc, ...)
@@ -421,14 +427,14 @@ log("Wrap")
 local service_Wrap = service.Wrap
 local service_UnWrap = service.UnWrap
 
-for i, val in service do
-	if type(val) == "userdata" then
-		service[i] = service_Wrap(val, true)
-	end
-end
+--for i, val in service do
+--	if type(val) == "userdata" then
+--		service[i] = service_Wrap(val, true)
+--	end
+--end
 
 --// Folder Wrap
-Folder = service_Wrap(Folder, true)
+--Folder = service_Wrap(Folder, true)
 
 --// Global Wrapping
 Enum = service_Wrap(Enum, true)
@@ -442,6 +448,7 @@ Instance = {
 	end,
 }
 require = function(obj, noWrap: boolean?)
+	noWrap = true
 	return if noWrap == true then oldReq(service_UnWrap(obj)) else service_Wrap(oldReq(service_UnWrap(obj)), true)
 end
 
@@ -535,8 +542,6 @@ return service.NewProxy({
 		else
 			data.DebugMode = false
 		end
-
-		setfenv(1, setmetatable({}, { __metatable = unique }))
 
 		client.Folder = Folder
 		client.UIFolder = Folder:WaitForChild("UI", 9e9)
@@ -753,36 +758,6 @@ return service.NewProxy({
 		--// Below can be used to determine when all modules and plugins have finished loading; service.Events.AllModulesLoaded:Connect(function() doSomething end)
 		client.AllModulesLoaded = true
 		service.Events.AllModulesLoaded:Fire(os.time())
-
-		--[[client = service.ReadOnly(client, {
-			[client.Variables] = true;
-			[client.Handlers] = true;
-			G_API = true;
-			G_Access = true;
-			G_Access_Key = true;
-			G_Access_Perms = true;
-			Allowed_API_Calls = true;
-			HelpButtonImage = true;
-			Finish_Loading = true;
-			RemoteEvent = true;
-			ScriptCache = true;
-			Returns = true;
-			PendingReturns = true;
-			EncodeCache = true;
-			DecodeCache = true;
-			Received = true;
-			Sent = true;
-			Service = true;
-			Holder = true;
-			GUIs = true;
-			LastUpdate = true;
-			RateLimits = true;
-
-			Init = true;
-			RunAfterInit = true;
-			RunAfterLoaded = true;
-			RunAfterPlugins = true;
-		}, true)--]]
 
 		service.Events.ClientInitialized:Fire()
 

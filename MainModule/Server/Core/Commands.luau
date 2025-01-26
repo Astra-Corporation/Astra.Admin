@@ -157,7 +157,6 @@ return function(Vargs, GetEnv)
 		if server.CommandModules then
 			local env = GetEnv()
 			for i, module in server.CommandModules:GetChildren() do
-				print(module)
 				local func = require(module)
 				local ran, tab = pcall(func, Vargs, env)
 
