@@ -18,7 +18,14 @@ return function(Vargs)
 	local DoCheck = Admin.DoCheck;
 	local TrackTask = Service.TrackTask
 	local AddLog = Logs.AddLog;
-
+	local UseNewChat = Service.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService
+	
+	local function GetTextToSend(Text)
+		return `<font size="15" color="rgb(255,255,255)" face="SourceSansLight">{Service.SanitizeXML(Text)}</font>`
+	end
+	
+	Variables.JoinMessagesEnabled = true
+	
 	Functions.ChangeStat = function(plr,stat,value)	
 		local statName = assert(stat, "Missing stat name (argument #2)")
 		local valueToAdd = assert(tonumber(value), "Missing/invalid numerical value to add (argument #3)")
@@ -79,13 +86,27 @@ return function(Vargs)
 	end;
 
 	Functions.SendJoinNotif = function(player:Player)
+		if not Variables.JoinMessagesEnabled then
+			return
+		end
+		
 		for i,v in Service.GetPlayers() do
+			if UseNewChat then
+				Remote.Send(v, "Function", "DisplaySystemMessageInTextChat", nil, GetTextToSend(`{player.Name} has joined`))
+			end
 			Remote.Send(v, "Function", "ChatMessage",  `{player.Name} has joined`, Color3.new(1, 1, 1),Enum.Font.SourceSansLight,Enum.FontSize.Size10)
 		end
 	end;
 
 	Functions.SendLeaveNotif = function(player:Player)
+		if not Variables.JoinMessagesEnabled then
+			return
+		end
+
 		for i,v in Service.GetPlayers() do
+			if UseNewChat then
+				Remote.Send(v, "Function", "DisplaySystemMessageInTextChat", nil, GetTextToSend(`{player.Name} has left`))
+			end
 			Remote.Send(v, "Function", "ChatMessage",`{player.Name} has left`, Color3.new(1, 1, 1),Enum.Font.SourceSansLight,Enum.FontSize.Size10)
 		end
 	end;
@@ -123,8 +144,12 @@ return function(Vargs)
 	end;
 
 	Functions.GetKickMessage = function(Type, Data)
-		local Message = Settings.CustomKickMessages[Type] or Variables.DefaultKickMessage;
+		local Message = Settings.CustomKickMessages[Type] or Variables.DefaultKickMessages[Type];
 
+		if not Message then
+			Message = Variables.DefaultKickMessage	
+		end
+		
 		if type(Message) == "table" then
 			Message = table.concat(Message, "\n")	
 		end
@@ -133,25 +158,31 @@ return function(Vargs)
 			Data.time = Functions.EpochToHuman(Data.time)
 		end
 
-		if tonumber(Data.expireTime) then
-			Data.expireTime = Functions.EpochToHuman(Data.expireTime)
+		if tonumber(Data.expiretime) then
+			Data.expiretime = Functions.EpochToHuman(Data.expiretime)
 		end
+		
+		if tonumber(Data.remainingtime) then
+			Data.remainingtime = Functions.EpochToHuman(Data.remainingtime)
+		end
+		
+		local placeholders = {
+			reason = "No Reason Provided",
+			time = "0",
+			name = "nil",
+			id = "nil",
+			moderator = Data.moderator and Data.moderator.Name or "Server",
+			type = Data.kickType or "nil",
+			expiretime = "Not set",
+			remainingtime = "Not set",
+			filter = "Could not receive!",
+			error = "",
+			KickMessageType = Type or "Could not receive!"
+		}
 
-		local yay, response = pcall(function()
-			Message = string.gsub(Message, "{reason}", Data.reason or "No Reason Provided")
-			Message = string.gsub(Message, "{time}", Data.time or "None")
-			Message = string.gsub(Message, "{name}", Data.name or "nil")
-			Message = string.gsub(Message, "{id}", Data.id or "nil")
-			Message = string.gsub(Message, "{moderator}", Data.moderator.Name or "Server")
-			Message = string.gsub(Message, "{type}", Data.kickType or "nil")
-			Message = string.gsub(Message, "{expiretime}", Data.expireTime or "nil")
-			Message = string.gsub(Message, "{remainingtime}", Data.remainingTime or "nil")
-			Message = string.gsub(Message, "{filter}", Data.filter or "Could not receive!")
-			Message = string.gsub(Message, "{error}", Data.error or "Could not receive!")
-		end)
-
-		if not yay then
-			return 'SOMETHING WENT WRONG WHILE THE KICK MESSAGE WAS BEING SET'
+		for placeholder, defaultValue in pairs(placeholders) do
+			local value = Data[placeholder] or defaultValue
+			Message = string.gsub(Message, `\{{placeholder}\}`, value)
 		end
 
 		return Message
@@ -188,21 +219,4 @@ return function(Vargs)
 
 		return Functions.GetKickMessage("Whitelist", Data)
 	end;
-
-	--Functions.GetJoinFilterMessage = function()
-	--	local WhitelistData = Variables.WhitelistData
-	--	local Data = {
-	--		reason = WhitelistData.Reason;
-	--		time = WhitelistData.TimeEnabled;
-	--		name = "nil";
-	--		id = 0;
-	--		moderator = WhitelistData.Moderator;
-	--		kickType = "nil";
-	--		expireTime = "nil";
-	--		remainingTime = "nil";
-	--	}
-
-	--	return Functions.GetKickMessage("Whitelist", Data)
-	--end;
-
 end

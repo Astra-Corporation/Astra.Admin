@@ -1,4 +1,5 @@
--- Some tests.
+-- A module i use to easily test the custom kick messages
+-- Not useful at all so its disabled until i need it again
 return function(Vargs)
 	local Server = Vargs.Server;
 	local Service = Vargs.Service;
@@ -26,16 +27,18 @@ return function(Vargs)
 	
 	for i,v in pairs(Settings.CustomKickMessages) do 
 		local z =Functions.GetKickMessage(i, {
-			reason = "No Reason Provided",
+			reason = "Test Reason",
 			time = os.time(),
 			name = p.Name,
 			id = p.UserId,
-			moderator = { Name = "Server", UserId = 1 },
+			moderator = "Server",
 			kickType = "GameBan",
-			expireTime = "Infinite",
-			remainingTime = "Server Ban",
+			expiretime = os.time(),
+			remainingtime = os.time(),
+			KickMessageType = "kick message type here";
+			error = "no error";
+			filter = "join filter 24324123th";
 		})
 		print(z)
 	end
-
 end

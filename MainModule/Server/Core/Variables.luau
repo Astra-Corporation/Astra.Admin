@@ -65,64 +65,6 @@ return function(Vargs, GetEnv)
 			"Remote and/or logservice spoofcheck failed";
 			"Tamper Protection 0x7D2B";
 		};
-		DefaultCustomMessages =  {
-			BanMessage = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are server-banned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			TrelloBanMessage = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are Trello-Banned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			TimeBanMessage = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are Timebanned!",
-				"Reason: {reason}",
-				"Time: {time}",
-				"Expires: {expiretime}",
-				"Time remaining: {remainingtime}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			GameBan = {
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You did not pass a Join Filter",
-				"FILTER: {filter}",
-				"ERROR: {error}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			},
-			FailedJoinFilter = { 
-				"",
-				"▬▬▬▬ Astra ▬▬▬▬",
-				"",
-				"You are gamebanned!",
-				"Reason: {reason}",
-				"",
-				"▬▬▬▬ BinaryBridge ▬▬▬▬",
-				"",
-			}
-		},
 		OptedOutOfAdmin = {};
 		OptedOutOfHelp = {};
 		BatchCommandLimit = {
@@ -130,15 +72,109 @@ return function(Vargs, GetEnv)
 			Donor = 50; -- how many donor adds to default
 		};
 		
-		DefaultKickMessage = { --// Shown if a player tries to join a locked server
+		WhitelistData = {
+			Enabled = false;
+			TimeEnabled = 0;
+			Moderator = {Name = "SERVER"};
+			List = server.Settings.Whitelist or {};
+			Reason = server.Settings.WhitelistMessage or "No reason set"
+		};
+		
+		SlockData = {
+			Enabled = false;
+			TimeEnabled = 0;
+			Moderator = {Name = "SERVER"};
+			Reason = "The maze wasn't meant for you."
+		};
+		
+		DefaultKickMessage = { 
 			"";
 			"▬▬▬▬ Astra ▬▬▬▬";
 			"";
-			"You were kicked. I am not sure why.";
-			"The kick message for this was not set up! Please notify a developer about this issue asap.";
-			"";
+			"You were kicked.";
+			"Notify a developer about this issue asap! The kick message of this type could not be found so the default is shown instead!";
+			"{reason}\n{KickMessageType}";
 			"▬▬▬▬ BinaryBridge ▬▬▬▬";
 			"";
+		};
+		
+		DefaultKickMessages = {
+			BanMessage = { --// Shown if a player is server-banned in-game or databanned
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You are banned!";
+				"Reason: {reason}";
+				"Time: {time}";
+				"Moderator: {moderator}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};		
+
+			TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
+				"";		
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You are Trello-Banned!";
+				"Reason: {reason}";
+				"Time: {time}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};	
+
+			TimeBanMessage = {  --// Shown if a player is Timebanned in-game
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You are Timebanned!";
+				"Reason: {reason}";
+				"Time: {time}";
+				"Expires: {expiretime}";
+				"Time remaining: {remainingtime}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};
+
+			GameBanMessage = { --// Shown if a player is banned in the `settings.Banned` table
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You are gamebanned!";
+				"Reason: {reason}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};	
+
+			KickMessage = { --// Shown if a player is banned in the `settings.Banned` table
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You were kicked by an admin!";
+				"Reason: {reason}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};	
+			ShutdownMessage = { --// Shown if a player is banned in the `settings.Banned` table
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"Server Shutdown";
+				"{reason}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+			};	
+
+			FailedJoinFilter = { 
+				"";
+				"▬▬▬▬ Astra ▬▬▬▬";
+				"";
+				"You did not pass a Join Filter";
+				"FILTER: {filter}";
+				"ERROR: {error}";
+				"";
+				"▬▬▬▬ BinaryBridge ▬▬▬▬";
+				"";
+			}		
 		};
 		
 		AntiKickMessage = {
