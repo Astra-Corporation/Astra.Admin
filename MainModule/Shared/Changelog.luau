@@ -1,4 +1,8 @@
 return {
+	"[v3.0.2 - 2025-01-26]";
+	"Kick message improvements";
+	"New chat support";
+	"";
 	"[v2.6.2 - 2024-08-30]";
 	"Added !sit command for donors";
 	"Several backend improvements";

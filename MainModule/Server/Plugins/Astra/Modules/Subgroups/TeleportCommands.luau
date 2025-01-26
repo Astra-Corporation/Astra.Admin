@@ -1,8 +1,3 @@
---[==[
-    EasternBloxxer
-    Astra Defense Network
---]==]
-
 local places = {
 	PBOP = {
 		PlaceId = 758601306;

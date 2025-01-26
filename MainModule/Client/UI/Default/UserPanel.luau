@@ -321,11 +321,11 @@ return function(data, env)
 		local clientTab = tabFrame:NewTab("Client", {
 			Text = "Client";
 		})
-		
+
 		--local UITab = tabFrame:NewTab("UI", {
 		--	Text = "UI";
 		--})
-		
+
 		local gameTab = tabFrame:NewTab("Game", {
 			Text = "Game";
 		})
@@ -345,12 +345,12 @@ return function(data, env)
 				infoTab:FocusTab()
 			end
 		end
-	
+
 
 		--// Help/Info
 		do
 			infoTab:Add("TextLabel", {
-				Text = "ARIDe - We're watching.";
+				Text = "ASTRA";
 				TextWrapped = true;
 				Font =  Enum.Font.SourceSansLight;
 				Position = UDim2.new(0.011, 0,0.027, 0);
@@ -358,7 +358,7 @@ return function(data, env)
 				TextSize = 25.000;
 			})
 			infoTab:Add("TextLabel", {
-				Text = "ARIDe is a security and ease of use focused Adonis modification for the BinaryBridge series of experiences.\n\nIt is currently maintained by EasternBloxxer and the Astra maintainer team.\nFor full credits press the credits button below or run the command !credits.";
+				Text = "Astra is a security and ease of use focused Adonis modification for the BinaryBridge series of experiences.\n\nIt is currently maintained by EasternBloxxer and the Astra maintainer team.\nFor full credits press the credits button below or run the command !credits.";
 				--Text = "Astra, as its clumsy name suggests, is nothing more than a glorified modification of the popular Adonis admin commands that connects to a separate and independently managed server through Httpservice.\n\nCreated by EasternBloxxer\n\nFull credits can be found via !credits.";
 				TextWrapped = true;
 				Position = UDim2.new(0.011, 0,0.285, 0);
@@ -1092,39 +1092,58 @@ return function(data, env)
 			local commandBox
 			local aliasBox
 			local aliases = aliasTab:Add("ScrollingFrame", {
-				Size = UDim2.new(1, -10, 1, -35);
+				Size = UDim2.new(1, -10, 1, -65);
+				Position = UDim2.new(0, 5, 0, 31);
+				BackgroundTransparency = 0.5;
+			})
+			--local balls = aliases:
+			local search = aliasTab:Add("TextBox", {
+				Size = UDim2.new(1, -10, 0, 20);
 				Position = UDim2.new(0, 5, 0, 5);
 				BackgroundTransparency = 0.5;
+				BorderSizePixel = 0;
+				TextColor3 = Color3.new(1, 1, 1);
+				Text = "";
+				PlaceholderText = "Search";
+				TextStrokeTransparency = 0.8;
 			})
 
 			local function getAliases()
 				client.Variables.Aliases = client.Remote.Get("Aliases")
 
-				local num = 0
+				local filter = search.Text
+				filter = string.lower(tostring(filter)):gsub("%%", "%%%%"):gsub("%[", "%%["):gsub("%]", "%%]")
+				local num = 1
 				selected = nil
 				aliases:ClearAllChildren();
 
-				for i,v in next,client.Variables.Aliases do
+				for i,v in client.Variables.Aliases do
 					if type(v) == 'table' then
-						aliases:Add("TextButton", {
-							Text = "Alias: ".. i;
-							Size = UDim2.new(1, 0, 0, 25);
-							Position = UDim2.new(0, 0, 0, num*25);
-							OnClicked = function(button)
-								local data = v
-								data.ExistingAlias = true
-								client.UI.Remove("Aliases")
-								client.UI.Make("Aliases", v)
-							end
-						})
-
-						num +=1 
+						if filter == "" or (string.find(string.lower(i),filter)) then
+							aliases:Add("TextButton", {
+								Text = "Alias: ".. i;
+								Size = UDim2.new(1, 0, 0, 25);
+								Position = UDim2.new(0, 0, 0, (25*(num-1)));
+								BackgroundTransparency = (num%2 == 0 and 0) or 0.2;
+								OnClicked = function(button)
+									local data = v
+									data.ExistingAlias = true
+									client.UI.Remove("Aliases")
+									client.UI.Make("Aliases", v)
+								end
+							})	
+							num +=1
+						end
+						
+						
 					else
+						warn('The client did not like an alias so it has been removed!')
+						warn(i,v)
 						client.Functions.RemoveAlias(i)
 					end
 				end
 
-				aliases:ResizeCanvas(false, true)
+				aliases:ResizeCanvas(false, true, false, false, 5, 0)
 			end
 
 			aliasTab:Add("TextButton", {
@@ -1138,6 +1157,7 @@ return function(data, env)
 			})
 
 			getAliases()
+			search:GetPropertyChangedSignal("Text"):Connect(getAliases)
 		end
 
 
@@ -1277,7 +1297,7 @@ return function(data, env)
 						local ans = UI.Make("YesNoPrompt", {Question = "You must rejoin for these changes to apply. Would you like to do that now?"})
 						if string.lower(ans) == "yes" then 
 							client.Remote.Send("ProcessCommand",`!rejoin`)
-															--// Hardcoded for now.
+							--// Hardcoded for now.
 						end
 					end
 				};
@@ -1437,16 +1457,16 @@ return function(data, env)
 		--	else
 		--		currentColor1 = BrickColor.new(currentColor1).Color
 		--	end
-			
+
 		--	if type(currentColor2) == "table" then
 		--		currentColor2 = Color3.new(currentColor2[1],currentColor2[2],currentColor2[3])
 		--	else
 		--		currentColor2 = BrickColor.new(currentColor2).Color
 		--	end
-			
-			
+
+
 		--	--/// Sorry. I was lazy. very lazy.
-			
+
 		--	local dStatus = UITab:Add("TextLabel", {
 		--		Text = " Donor Status: ";
 		--		Size = UDim2.new(1, -10, 0, 20);

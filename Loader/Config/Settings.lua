@@ -285,75 +285,76 @@ settings.ExploitGuiDetection = false 	-- (Default: false)	(Client-Sided) If any 
 	{expiretime} - Shows the time a ban will expire, only applicable on a Timeban, else will return "Undefined" or "Permanent"
 	{remainingtime} - Shows the remaining time on a Timeban, any other form of ban will return "Undefined" or "Permanent"
 	
+	Not up to date i still need to update this!
 ]]--
 
 settings.CustomKickMessages = {
 	BanMessage = { --// Shown if a player is server-banned in-game or databanned
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"You are banned!";
-	"Reason: {reason}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You are banned!";
+		"Reason: {reason}";
+		"Time: {time}";
+		"Moderator: {moderator}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
 	};		
 
 	TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"You are Trello-Banned!";
-	"Reason: {reason}";
-	"Time: {time}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
+		"";		
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You are Trello-Banned!";
+		"Reason: {reason}";
+		"Time: {time}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
 	};	
 
 	TimeBanMessage = {  --// Shown if a player is Timebanned in-game
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"You are Timebanned!";
-	"Reason: {reason}";
-	"Time: {time}";
-	"Expires: {expiretime}";
-	"Time remaining: {remainingtime}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You are Timebanned!";
+		"Reason: {reason}";
+		"Time: {time}";
+		"Expires: {expiretime}";
+		"Time remaining: {remainingtime}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
 	};
 
 	GameBanMessage = { --// Shown if a player is banned in the `settings.Banned` table
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"You are gamebanned!";
-	"Reason: {reason}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You are gamebanned!";
+		"Reason: {reason}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
+	};	
+	
+	KickMessage = { --// Shown if a player is banned in the `settings.Banned` table
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"You were kicked by an admin!";
+		"Reason: {reason}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
+	};	
+	ShutdownMessage = { --// Shown if a player is banned in the `settings.Banned` table
+		"";
+		"▬▬▬▬ Astra ▬▬▬▬";
+		"";
+		"Server Shutdown";
+		"{reason}";
+		"";
+		"▬▬▬▬ Technologies ▬▬▬▬";
 	};	
 
-	LockMessage = { --// Shown if a player tries to join a locked server
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"This server is locked!";
-	"Locked by: {moderator}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	};			-- Message shown to people when they are kicked while the game is ;slocked
-
-	NotWhitelistedMessage = { --// Legacy whitelist
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	"This server is whitelisted";
-	"{message}";
-	"";
-	"▬▬▬▬ Astra ▬▬▬▬";
-	"";
-	};	
-	FailedJoinFilter = {
+	FailedJoinFilter = { 
 		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
@@ -361,7 +362,7 @@ settings.CustomKickMessages = {
 		"FILTER: {filter}";
 		"ERROR: {error}";
 		"";
-		"▬▬▬▬ Astra ▬▬▬▬";
+		"▬▬▬▬ Technologies ▬▬▬▬";
 		"";
 	}		
 }

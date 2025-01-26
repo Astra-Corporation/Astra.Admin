@@ -1,5 +1,4 @@
 --!nonstrict
-local pinfo = nil
 return function(Vargs)
 	local server = Vargs.Server
 	local service = Vargs.Service
@@ -13,15 +12,17 @@ return function(Vargs)
 	local Logs = server.Logs
 	local Variables = server.Variables
 	local chatsrc = require(server.Deps.ClientChatMods)
-
-	local TaintedTable = {}
+	local ChatVersion = service.TextChatService.ChatVersion
 	
 	service.Events.PlayerAdded:Connect(function(p: Player)
-		local data = Core.GetPlayer(p);
-		local DoChannelTabs = data.Client.EnableChatChannelTabs or false;
-		local ls = Core.NewScript("LocalScript",string.format(chatsrc,tostring(DoChannelTabs)),true)
-		ls.Parent = p:FindFirstChild('PlayerGui')
-		ls.Disabled = false
+
+		if ChatVersion == Enum.ChatVersion.LegacyChatService then
+			local data = Core.GetPlayer(p);
+			local DoChannelTabs = data.Client.EnableChatChannelTabs or false;
+			local ls = Core.NewScript("LocalScript",string.format(chatsrc,tostring(DoChannelTabs)),true)
+			ls.Parent = p:FindFirstChild('PlayerGui')
+			ls.Disabled = false
+		end
 
 		local level, rankName = Admin.GetLevel(p)
 		Remote.MakeGui(p, "Notification", {
@@ -31,8 +32,7 @@ return function(Vargs)
 
 		})
 
-		Remote.Send(p, "Function", "ChatMessage", `Controlled by Astra`, Color3.new(1, 1, 1))
-		task.wait(0.3)
-		Remote.Send(p, "Function", "ChatMessage", `Welcome, {p.Name}!`, Color3.new(1, 1, 1))
+		Remote.Send(p, "Function", "DisplaySystemMessageInTextChat", nil, `Controlled by Astra`)
+		Remote.Send(p, "Function", "DisplaySystemMessageInTextChat", nil, `Welcome, {p.Name}!`)
 	end)
 end

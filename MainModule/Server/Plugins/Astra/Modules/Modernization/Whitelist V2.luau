@@ -30,6 +30,10 @@ return function(Vargs)
 				listed = true
 			end
 
+			if CheckTable(Player, Variables.Whitelist.Lists.Trello) then
+				listed = true
+			end
+
 			if not listed and level == 0 then
 				return false,`This server is whitelisted\r\nWhitelisted by: {WhitelistData.Moderator.Name}\nYour permission level: {rankName}\nRequired permission level: Moderators or LISTED`	
 			end

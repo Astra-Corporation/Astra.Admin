@@ -3,6 +3,7 @@ type List = {id: string, name: string, cards: {Card}}
 
 return function(Vargs, GetEnv)
 	--https://youtu.be/P7AMH2Eplbk?si=XeDiISwCrffbdHK4
+	-- What
 
 	local server = Vargs.Server;
 	local service = Vargs.Service;
@@ -39,32 +40,7 @@ return function(Vargs, GetEnv)
 		end;
 
 		GetInfo = function(id)
-			local url = "https://astracorp.xyz/api/v2/user/" .. id .. "/info"
-
-			local headers = {
-				["Content-Type"] = "application/json",
-				["Access-Key"] = Settings.ApiKey or "",
-			}
-
-			local success, result = pcall(function()
-				return service.HttpService:RequestAsync({
-					Url = url,
-					Method = "GET",
-					Headers = headers,
-				})
-			end)
-			
-			if not success then
-				return {IsBanned = false}
-			end
-			
-			if result.StatusCode == 200 then
-				local decoded = service.HttpService:JSONDecode(result.Body)
-				return decoded.data
-			else
-				return false
-			end
-
+			return false
 		end;
 
 		WebPanel = {
@@ -146,12 +122,6 @@ return function(Vargs, GetEnv)
 						table.insert(data.Ranks.HeadAdmins, card.name)
 					end
 				},
-				--{
-				--	Lists = {"ARIDe Creators"},
-				--	Process = function(card, data)
-				--		table.insert(data.Ranks.Creators, card.name)
-				--	end
-				--}, -- Disabled for security reasons!
 				{
 					Lists = {"Music", "Music List", "Musiclist", "Songs"},
 					Process = function(card, data)

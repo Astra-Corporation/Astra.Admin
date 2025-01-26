@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="ScreenGui" referent="RBX1CCBC73933864C72BBD901AD4DDE99A9">
+	<Item class="ScreenGui" referent="RBXD2747FA5E7AF47208D31FBC336781997">
 		<Properties>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<bool name="AutoLocalize">false</bool>
@@ -25,7 +25,7 @@
 			<BinaryString name="Tags"></BinaryString>
 			<token name="ZIndexBehavior">0</token>
 		</Properties>
-		<Item class="TextLabel" referent="RBX1FE6E5EC5E9E44A28DD298196D27948E">
+		<Item class="TextLabel" referent="RBXE27982B57A4C4DEDB0B269A5A9E344F0">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -56,7 +56,6 @@
 					<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 					<Weight>400</Weight>
 					<Style>Normal</Style>
-					<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 				</Font>
 				<bool name="Interactable">true</bool>
 				<int name="LayoutOrder">0</int>
@@ -119,7 +118,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="TextBox" referent="RBXBEF03F6CE7964C129D97C771D5C0BE91">
+			<Item class="TextBox" referent="RBXBD7AE6FDBAA241FC9E32175DDCF7967B">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -151,7 +150,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -189,6 +187,7 @@
 					<bool name="SelectionGroup">false</bool>
 					<Ref name="SelectionImageObject">null</Ref>
 					<int name="SelectionOrder">0</int>
+					<bool name="ShouldEmitUpAndDownArrowEvents">false</bool>
 					<bool name="ShowNativeInput">true</bool>
 					<UDim2 name="Size">
 						<XS>0</XS>
@@ -224,7 +223,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="StringValue" referent="RBX7BE589A461E842E8ACD9A4817664D271">
+			<Item class="StringValue" referent="RBXF1E827B9D00148B0B6491FE289C4BBFC">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -236,7 +235,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX96BD7F20C7AB4BC8A73F111264F552AC">
+		<Item class="Frame" referent="RBXCA98C205258B4DBB9ECADAEF54E6613E">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -299,7 +298,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="NumberValue" referent="RBX086E7E991E804AECBA6AA5A5545984CC">
+			<Item class="NumberValue" referent="RBX4F0433D7069F4C09B1C8B6781A7FE9BC">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -310,7 +309,7 @@
 					<double name="Value">0</double>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX555521C4206A421D9EBBAF4B96AE10B4">
+			<Item class="Frame" referent="RBXEEB2F7EF273E49EFAF3B52AE50D7C188">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -374,7 +373,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="ImageLabel" referent="RBXABF3479575064F9BBEDFAB43B53523D5">
+			<Item class="ImageLabel" referent="RBX8BAC28771D024F7C85D03B13D0C6A2A2">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -471,7 +470,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="ImageLabel" referent="RBX2B1DFE04ACFA44148E2D338149D7E761">
+			<Item class="ImageLabel" referent="RBX9A1319D44AE74C4AAB5ABA33F6AD0FFD">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -569,7 +568,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX7ACF0A1FD1D8456E899040CAC18DEA8A">
+		<Item class="Frame" referent="RBX982ACB4A7FF0446D8EFCFB297F70C723">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -632,7 +631,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">1</int>
 			</Properties>
-			<Item class="TextButton" referent="RBX9F54EA73BBD74A00BE20C6DB1377D96F">
+			<Item class="TextButton" referent="RBXAEEE201AD2AC489C9A0A8C0A3BC9820E">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -730,7 +729,7 @@
 					<int name="ZIndex">1</int>
 				</Properties>
 			</Item>
-			<Item class="ImageButton" referent="RBXA03B3BE542154E4DB503C0D37E3B4142">
+			<Item class="ImageButton" referent="RBXC7A0AC450FB84B16B19F96B2A2B8DA28">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -833,7 +832,7 @@
 					<int name="ZIndex">1</int>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX6AE381B514C845F0ACCC4FD62B3543FA">
+			<Item class="Frame" referent="RBX1DA70F4919A74DEDAF94E2A756DCBFD3">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -898,7 +897,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextLabel" referent="RBX2FB91F6BB9C54C54A8F4DEE72B8456D9">
+		<Item class="TextLabel" referent="RBX9731280ADF14453FBF1CE74E3FBEAF04">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -929,7 +928,6 @@
 					<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 					<Weight>400</Weight>
 					<Style>Normal</Style>
-					<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 				</Font>
 				<bool name="Interactable">true</bool>
 				<int name="LayoutOrder">0</int>
@@ -992,7 +990,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="TextButton" referent="RBXC87A26329FDC42FBBD247501DF77BCF1">
+			<Item class="TextButton" referent="RBX1E3EC56CB6C648F2BC835A9AC0520746">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1024,7 +1022,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -1091,7 +1088,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="StringValue" referent="RBX17B59D4D083C4F5ABE1F185F0E6FD8E5">
+			<Item class="StringValue" referent="RBX871A1FF88FF74C46AEE6B4D066D463EB">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -1103,7 +1100,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextLabel" referent="RBX77231CD5077C4B0492DADEF0007D0147">
+		<Item class="TextLabel" referent="RBX4C475CE27871463085AFDE8A5A57FE0E">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -1134,7 +1131,6 @@
 					<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 					<Weight>400</Weight>
 					<Style>Normal</Style>
-					<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 				</Font>
 				<bool name="Interactable">true</bool>
 				<int name="LayoutOrder">0</int>
@@ -1197,7 +1193,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="TextButton" referent="RBX0498AC0CB26D470CAC07DDF02FB3D713">
+			<Item class="TextButton" referent="RBXF5A8144EF0FA42A5B3DB715C5D455627">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1229,7 +1225,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -1296,7 +1291,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="StringValue" referent="RBX336B5F7124D14663A85AEC14C9247304">
+			<Item class="StringValue" referent="RBX6A267FE6EFA54F91BB0134F19E294FBD">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -1308,7 +1303,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextButton" referent="RBX203CC0A694FF4A97AD73C1246E85B3C6">
+		<Item class="TextButton" referent="RBXBF42292AAC244BD3AAA87FF49E9EEFC4">
 			<Properties>
 				<bool name="Active">true</bool>
 				<Vector2 name="AnchorPoint">
@@ -1406,7 +1401,7 @@
 				<bool name="Visible">true</bool>
 				<int name="ZIndex">1</int>
 			</Properties>
-			<Item class="TextButton" referent="RBX3A0E398C462B4FA992778025D3AB904D">
+			<Item class="TextButton" referent="RBX85BC76AA7A17497798B051C83CEA8B35">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1438,7 +1433,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>700</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arialbd.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -1504,7 +1498,7 @@
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">2</int>
 				</Properties>
-				<Item class="ImageLabel" referent="RBX005D7F3FAFB04BC58F7241EB2351FC01">
+				<Item class="ImageLabel" referent="RBXCF5743325B924851B18C9FE65E59EA9C">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -1602,7 +1596,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="ImageButton" referent="RBX20ECA8C7BF364188806DE7D2240B00AB">
+			<Item class="ImageButton" referent="RBX1DB3A8DDA25F4C59A90ADC2868C1B782">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1705,7 +1699,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="TextButton" referent="RBX7712D4D6CE694055BC0C445A26FE8415">
+			<Item class="TextButton" referent="RBXF7F932439C914F5EA6027BC3272CF300">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1737,7 +1731,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>700</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arialbd.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -1803,7 +1796,7 @@
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">2</int>
 				</Properties>
-				<Item class="ImageLabel" referent="RBXDA2A7927BE804474B0AA48138BE8A849">
+				<Item class="ImageLabel" referent="RBX10EF60D584C94E6AB717DAC3094BCEF0">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -1901,7 +1894,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="TextButton" referent="RBXF72D8952072544F091F812678E534A4B">
+			<Item class="TextButton" referent="RBX8AD3E9B5A4AE4842A99ADE016BFA356C">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -1933,7 +1926,6 @@
 						<Family><url>rbxasset://fonts/families/ComicNeueAngular.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/ComicNeue-Angular-Bold.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -1999,7 +1991,7 @@
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">2</int>
 				</Properties>
-				<Item class="TextLabel" referent="RBXA6878258BE0441B88377088E6DD082FA">
+				<Item class="TextLabel" referent="RBX9C5C7B4103024A03ABF736C204A43F51">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2030,7 +2022,6 @@
 							<Family><url>rbxasset://fonts/families/ComicNeueAngular.json</url></Family>
 							<Weight>400</Weight>
 							<Style>Normal</Style>
-							<CachedFaceId><url>rbxasset://fonts/ComicNeue-Angular-Bold.ttf</url></CachedFaceId>
 						</Font>
 						<bool name="Interactable">true</bool>
 						<int name="LayoutOrder">0</int>
@@ -2094,7 +2085,7 @@
 						<int name="ZIndex">10</int>
 					</Properties>
 				</Item>
-				<Item class="ImageLabel" referent="RBX23127E9859E04203857AE9E8772321BD">
+				<Item class="ImageLabel" referent="RBX405E6CBAD47D487F8500E3B5822E2F05">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2192,7 +2183,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="TextLabel" referent="RBXBC49C9BBB77A45C8803EEE6EEF54BD4E">
+			<Item class="TextLabel" referent="RBX055DB250B91E45B7B5376C4A7527B6EE">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -2286,7 +2277,7 @@
 					<int name="ZIndex">9</int>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX24B7AEA57147401C9AAEDCF431C1F13D">
+			<Item class="Frame" referent="RBX32E3DCEA2FB2480986DA10943354CFF7">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -2349,7 +2340,7 @@
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">1</int>
 				</Properties>
-				<Item class="ImageButton" referent="RBXFAA0C40BCC104346B4ED5E258C024AF8">
+				<Item class="ImageButton" referent="RBXDBDFA35DA6D143C798DCABFD52CC6634">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2452,7 +2443,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBX6D06CDE53A99495EBC0DA6891535E2B6">
+				<Item class="ImageButton" referent="RBXC4F8ED0231CB4CAAA2845EA3DDEB41DF">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2555,7 +2546,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageLabel" referent="RBX7A40B654E56A4D9CBBD6DBF33AF16D36">
+				<Item class="ImageLabel" referent="RBXB214512958B54B979BB8824072B19775">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2652,7 +2643,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageLabel" referent="RBX2669FCC07D0D4B66A883E9E7A01B0E27">
+				<Item class="ImageLabel" referent="RBXA64EFFD5A3634B5C8DEB4DD1A5AC45B8">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2749,7 +2740,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBXDAE06FD956694F3DA0C36A00284817CD">
+				<Item class="ImageButton" referent="RBX330B1BA3646C453490035C3DE82AA2AA">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2852,7 +2843,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBX2B7A2C30618E490294A6E9244824B674">
+				<Item class="ImageButton" referent="RBX9C16247F67504AB1BF75B7DD2F88C4BF">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -2955,7 +2946,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBXCE6E7A6132764230819F46E9356BE215">
+				<Item class="ImageButton" referent="RBXA22FFF71D81849969EA5D543FC581469">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -3058,7 +3049,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBX1BC06214EF11467084F559C37D3F72FD">
+				<Item class="ImageButton" referent="RBXF20D3CB4ABE64CF09DE179E40BF29EEC">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -3161,7 +3152,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBX16E47C17223F47F48C95FACC67A1DD32">
+				<Item class="ImageButton" referent="RBX3E626D8831E947BAB782933B723FFF0A">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -3264,7 +3255,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="ImageButton" referent="RBX49527C432F7D40F2BAD2ADE746454A78">
+				<Item class="ImageButton" referent="RBX08281B28E98A43EDAF4A829EC6ECD6EF">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -3367,7 +3358,7 @@
 						<int name="ZIndex">1</int>
 					</Properties>
 				</Item>
-				<Item class="UICorner" referent="RBXA7FE121FBBB44306A3834FD3EE815797">
+				<Item class="UICorner" referent="RBXF8007DE400864A159E01D928E2977309">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -3381,7 +3372,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ScrollingFrame" referent="RBX2209EB63256C4FCA9386B3764EC22BB0">
+				<Item class="ScrollingFrame" referent="RBXBD4562AF4C3448869107F0BA2668923D">
 					<Properties>
 						<bool name="Active">true</bool>
 						<Vector2 name="AnchorPoint">
@@ -3471,7 +3462,7 @@
 						<int name="ZIndex">2</int>
 					</Properties>
 				</Item>
-				<Item class="Frame" referent="RBX9DA8BA288D6D4C27A5627078DE6A11C7">
+				<Item class="Frame" referent="RBX99B528489EA44982A4515BE4D56FE884">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -3534,7 +3525,7 @@
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
 					</Properties>
-					<Item class="UICorner" referent="RBX1F3187D0012F401E9A0BA62C56CB376B">
+					<Item class="UICorner" referent="RBX0472CC76F6D14DBF9BB1CF0F43E22381">
 						<Properties>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -3549,7 +3540,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UIGradient" referent="RBX361B80C268B9468EB11010E282C658A0">
+				<Item class="UIGradient" referent="RBX8B159CA035394CC69AC96C7DEF89C512">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -3568,7 +3559,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="UIGradient" referent="RBXD0C904685F7840A0A44F5A284B050579">
+			<Item class="UIGradient" referent="RBX5C376EDB1E2F41CEA6EE391D44C874C8">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -3586,7 +3577,7 @@
 					<NumberSequence name="Transparency">0 0 0 1 0 0 </NumberSequence>
 				</Properties>
 			</Item>
-			<Item class="UIDragDetector" referent="RBX5DC6590BF5284BF6913F28C499ECC5D3">
+			<Item class="UIDragDetector" referent="RBXCECFA43AA0394802B01065204BDF9C8A">
 				<Properties>
 					<Content name="ActivatedCursorIcon"><null></null></Content>
 					<BinaryString name="AttributesSerialize"></BinaryString>
@@ -3640,7 +3631,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="BoolValue" referent="RBXD76E06C2053A440C83BB44D36B4B66F1">
+		<Item class="BoolValue" referent="RBXF4B40072ACEF4B1087CA5A71CC903344">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -3651,7 +3642,7 @@
 				<bool name="Value">true</bool>
 			</Properties>
 		</Item>
-		<Item class="Frame" referent="RBX04ACCA0EF17C4F4FB16C0E4EDD3AAD06">
+		<Item class="Frame" referent="RBX506C356489FB424FBE62ADCC994F3874">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -3714,7 +3705,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">1</int>
 			</Properties>
-			<Item class="ScrollingFrame" referent="RBXDD32F9F889F54EC285C29AAF76434E0F">
+			<Item class="ScrollingFrame" referent="RBXD2E3D890464C4F03AE611068A583D503">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -3804,7 +3795,7 @@
 					<int name="ZIndex">1</int>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX7306C18C7EE2412B8B6E04AB46666377">
+			<Item class="Frame" referent="RBXD78036482A494DF9BF16EFADBC5E89F9">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -3869,7 +3860,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextLabel" referent="RBX6BFC4AB1AA144599B88C102507B358D9">
+		<Item class="TextLabel" referent="RBXFFF87658FCCB4AAF8FACC244FC8D5FAB">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -3900,7 +3891,6 @@
 					<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 					<Weight>400</Weight>
 					<Style>Normal</Style>
-					<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 				</Font>
 				<bool name="Interactable">true</bool>
 				<int name="LayoutOrder">0</int>
@@ -3963,7 +3953,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="TextButton" referent="RBX96A986E27F85431384E1F898CAB85E24">
+			<Item class="TextButton" referent="RBXC974BBD7947842EAB80EAA8629984F3E">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Vector2 name="AnchorPoint">
@@ -3995,7 +3985,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -4062,7 +4051,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="StringValue" referent="RBX673EB6E7D699498CAE665974D83A424D">
+			<Item class="StringValue" referent="RBXB397B0AA03204CEAB8917EADAFCD570F">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -4074,7 +4063,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX5CA44B7A2E1C4771BFE40F2E4C28CBC7">
+		<Item class="Frame" referent="RBX4ECE792F8A3D43C99E77570962321A94">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -4137,7 +4126,7 @@
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">2</int>
 			</Properties>
-			<Item class="StringValue" referent="RBX2F4C9593D7AE4BCE88425B0140F8B84D">
+			<Item class="StringValue" referent="RBX1C0E6D5EA4E6426D9EC19B61C625D32C">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -4148,7 +4137,7 @@
 					<string name="Value">TestDesc</string>
 				</Properties>
 			</Item>
-			<Item class="TextLabel" referent="RBX213B865B2D1448C1837E7803F2929AAD">
+			<Item class="TextLabel" referent="RBX55F6E72886B64465ABF1CF46A5A6C43E">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -4179,7 +4168,6 @@
 						<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -4243,7 +4231,7 @@
 					<int name="ZIndex">2</int>
 				</Properties>
 			</Item>
-			<Item class="TextLabel" referent="RBX38A8E63F0CFB43D49EA59FA953E1EBEE">
+			<Item class="TextLabel" referent="RBX59B5B923F9064C13A061F8031C1D5E74">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -4274,7 +4262,6 @@
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
 						<Weight>400</Weight>
 						<Style>Normal</Style>
-						<CachedFaceId><url>rbxasset://fonts/SourceSansPro-Regular.ttf</url></CachedFaceId>
 					</Font>
 					<bool name="Interactable">true</bool>
 					<int name="LayoutOrder">0</int>
@@ -4339,7 +4326,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextButton" referent="RBX6D14DDD47C114F6487D4D8679B3D625B">
+		<Item class="TextButton" referent="RBX5E2539EE3AAD48BBA347BEDA939D8FDE">
 			<Properties>
 				<bool name="Active">true</bool>
 				<Vector2 name="AnchorPoint">
@@ -4371,7 +4358,6 @@
 					<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
 					<Weight>400</Weight>
 					<Style>Normal</Style>
-					<CachedFaceId><url>rbxasset://fonts/arial.ttf</url></CachedFaceId>
 				</Font>
 				<bool name="Interactable">true</bool>
 				<int name="LayoutOrder">0</int>
@@ -4438,7 +4424,7 @@
 				<int name="ZIndex">2</int>
 			</Properties>
 		</Item>
-		<Item class="Folder" referent="RBX3DBF7DC404864B6E93CDC24FD944F4A8">
+		<Item class="Folder" referent="RBXE29EA860BD0348DCBC1E2BC54B6A43B1">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -4447,7 +4433,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="BoolValue" referent="RBXEED7BD21258A4A459C2B7104ADF85691">
+			<Item class="BoolValue" referent="RBX7D50FD1D9F364717BF58781DD34871C3">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -4458,7 +4444,7 @@
 					<bool name="Value">true</bool>
 				</Properties>
 			</Item>
-			<Item class="BoolValue" referent="RBXFD3DF58238C44D9098D22AD0FE34461A">
+			<Item class="BoolValue" referent="RBXE3B6512251644B6DAF0D6EAD65D6D001">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -4469,14 +4455,14 @@
 					<bool name="Value">true</bool>
 				</Properties>
 			</Item>
-			<Item class="ModuleScript" referent="RBXF9B97D8C786F4E2F81E0D327ED835F53">
+			<Item class="ModuleScript" referent="RBXED3C990C37AF4AA58873E8CB01578F9E">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">Code</string>
-					<string name="ScriptGuid">{9858AAD6-20B1-4116-B341-3E2C389A3289}</string>
+					<string name="ScriptGuid">{B19C3AD4-CD65-4B4A-8DF8-07F4B6D7062E}</string>
 					<ProtectedString name="Source"><![CDATA[																																																				--[[
 																																																				--[[
 --//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
@@ -4725,7 +4711,7 @@ return function(data, env)
 
 				local sizeText = label.ContentText
 
-				local maxWidth = 400
+				local maxWidth = 500
 				local bounds = service.TextService:GetTextSize(sizeText, label.TextSize, label.Font, Vector2.new(maxWidth, math.huge))
 
 				local sizeX, sizeY = bounds.X + 10, bounds.Y + 10
@@ -4997,6 +4983,7 @@ return function(data, env)
 					Name = "RenderError";
 					BackgroundColor3 = dSecondaryBackground;
 					TextColor = BrickColor.new('Really red');
+					ZIndex = 10;
 					Text = `\n**********************\nSomething went wrong when running {Component}\n{Response}\n**********************`
 				})
 			end
@@ -5428,10 +5415,10 @@ return function(data, env)
 
 				Resizing = nil
 				Mouse.Icon = curIcon
-				--DragEnabled = true
-				--if Walls then
-				--	wallPosition()
-				--end
+				DragEnabled = true
+				if Walls then
+					wallPosition()
+				end
 			end
 		end
 
@@ -5530,30 +5517,30 @@ return function(data, env)
 			end
 		end)
 
-		--[[Event(Mouse.Button1Down, function()
-			if gTable.Active and inFrame and not Resizing and not isInFrame(Mouse.X, Mouse.Y, ScrollFrame) and not isInFrame(Mouse.X, Mouse.Y, Drag) then
-				Resizing = inFrame
-				startXPos = Drag.AbsolutePosition.X
-				startYPos = Drag.AbsolutePosition.Y
-				startXSize = Drag.AbsoluteSize.X
-				startYSize = Main.AbsoluteSize.Y
-				checkMouse()
-			end
-		end)
+		--Event(Mouse.Button1Down, function()
+		--	if gTable.Active and inFrame and not Resizing and not isInFrame(Mouse.X, Mouse.Y, ScrollFrame) and not isInFrame(Mouse.X, Mouse.Y, Drag) then
+		--		Resizing = inFrame
+		--		startXPos = Drag.AbsolutePosition.X
+		--		startYPos = Drag.AbsolutePosition.Y
+		--		startXSize = Drag.AbsoluteSize.X
+		--		startYSize = Main.AbsoluteSize.Y
+		--		checkMouse()
+		--	end
+		--end)
 
-		Event(Mouse.Button1Up, function()
-			if gTable.Active then
-				if Resizing and onResize then
-					onResize(UDim2.new(Drag.Size.X.Scale, Drag.Size.X.Offset, Main.Size.Y.Scale, Main.Size.Y.Offset))
-				end
+		--Event(Mouse.Button1Up, function()
+		--	if gTable.Active then
+		--		if Resizing and onResize then
+		--			onResize(UDim2.new(Drag.Size.X.Scale, Drag.Size.X.Offset, Main.Size.Y.Scale, Main.Size.Y.Offset))
+		--		end
 
-				Resizing = nil
-				Mouse.Icon = curIcon
-				--if Walls then
-				--	wallPosition()
-				--end
-			end
-		end)--]]
+		--		Resizing = nil
+		--		Mouse.Icon = curIcon
+		--		--if Walls then
+		--		--	wallPosition()
+		--		--end
+		--	end
+		--end)
 	else
 		LeftSizeIcon.Visible  = false
 		RightSizeIcon.Visible = false
@@ -5692,12 +5679,6 @@ return function(data, env)
 		gTable:Ready()
 		BringToFront()
 	end
-	--task.spawn(function()
-	--local Module = client.Deps.BlurTest
-	--local a = service.UnWrap(Main)
-
-	--require(Module):ModifyFrame(a, "Blur")
-	--end)
 	
 	return api,GUI
 end]]></ProtectedString>
@@ -5705,7 +5686,7 @@ end]]></ProtectedString>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Folder" referent="RBX9BAD31A0CD8E4E42B424C962A2C9A40D">
+			<Item class="Folder" referent="RBX1C99EA25F242483D96C0807DA9C8FD9C">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -5714,14 +5695,14 @@ end]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ModuleScript" referent="RBX8830886A27E44D34959F50C6F6E756BE">
+				<Item class="ModuleScript" referent="RBXDC9EAAC7F1A748AD8B9F5E1A0E19BFFB">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Dropdown</string>
-						<string name="ScriptGuid">{0AC23DD7-256D-43C3-9087-001B5AEDE0F3}</string>
+						<string name="ScriptGuid">{4CFF95A8-DCCF-478E-8EF5-059D89BC717E}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -5834,38 +5815,14 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBXE52C275B40A5470F82D10AC6E720DDC9">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-						<bool name="DefinesCapabilities">false</bool>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">Example</string>
-						<string name="ScriptGuid">{327DD169-D864-4FA1-AED8-E9A7FC998EA6}</string>
-						<ProtectedString name="Source"><![CDATA[return function(cdata)
-	local new = cdata.new
-	local functionify = cdata.functionify
-	local create = cdata.create
-	local GUI = cdata.GUI
-	local data = cdata.data
-	local checkProperty = cdata.checkProperty
-	local client = cdata.client
-	local service = cdata.service
-	
-	
-end]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ModuleScript" referent="RBXDBCCCF43E4EB44CB823047B1A01B2B74">
+				<Item class="ModuleScript" referent="RBX4B1AB9BF10874ABD9A99A10A887EEEAE">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">ButtonEntry</string>
-						<string name="ScriptGuid">{AFF9D69D-9657-4A36-8059-9088AFAF819B}</string>
+						<string name="ScriptGuid">{B7CF3C81-EB9A-4525-86E5-BDEB58A3795F}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -5896,14 +5853,14 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX62920D1645EC4D869F408616E35DD4F8">
+				<Item class="ModuleScript" referent="RBXD6A04ECF7C464190974823C14F2B91AE">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Boolean</string>
-						<string name="ScriptGuid">{DF9EDBB9-CDD3-46C2-A238-178B1000E247}</string>
+						<string name="ScriptGuid">{01353A5F-7C41-49E5-9019-274B6B174BED}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -5947,14 +5904,14 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX539DFD79C68044909395A52FFE948D1B">
+				<Item class="ModuleScript" referent="RBXFF6672C6543F4A53912482CB0F0C421B">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">StringEntry</string>
-						<string name="ScriptGuid">{BF9DCD7A-E4C9-4131-B445-0045DE455951}</string>
+						<string name="ScriptGuid">{2C18EF77-0B66-48B9-B763-711E36D63577}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -6006,14 +5963,14 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX48BDEAAEFE45433CBF6F08ADD5365825">
+				<Item class="ModuleScript" referent="RBX3BFE8A93671C4DA9AE9E47444AFC7B2D">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">Slider</string>
-						<string name="ScriptGuid">{AECA3A61-3F0A-4DE9-A075-A93FE53A0368}</string>
+						<string name="ScriptGuid">{CED74D45-A9C5-4236-BBB3-DA8C685E54BD}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -6108,14 +6065,14 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX25255E901031498C876CC8173F98CADC">
+				<Item class="ModuleScript" referent="RBX1A9A71C89068424181434AFD37004CC2">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">TabFrame</string>
-						<string name="ScriptGuid">{1230F77F-B40A-475B-8DCA-7C27DF9F0E67}</string>
+						<string name="ScriptGuid">{E6FAEF87-CA3D-4953-94FB-8EFE531F2571}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -6165,7 +6122,7 @@ end]]></ProtectedString>
 		local tabButton = create("TextButton",{
 			Name = name;
 			Text = data.Text or name;
-			Size = UDim2.new(0, textSize.X+15, 0, 20);
+			Size = UDim2.new(0, textSize.X+15, 0, 21);
 			ZIndex = buttons.ZIndex;
 			TextYAlignment = Enum.TextYAlignment.Center;
 			Position = UDim2.new(0, (nextPos.X.Offset > 0 and nextPos.X.Offset+5) or 0, 0, 0);
@@ -6179,7 +6136,7 @@ end]]></ProtectedString>
 				--	PaddingTop = UDim.new(0, 5)
 				--};
 				UICorner = {
-					CornerRadius = UDim.new(0, 5)
+					CornerRadius = UDim.new(0, 3)
 				}
 			}
 		})
@@ -6259,14 +6216,273 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBXF5C936B7B02C4CB3958411BC0CE4C64A">
+				<Item class="ModuleScript" referent="RBX8C267F4752D449FAAA78B307554640C2">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">DifferentScrollingFrame</string>
+						<string name="ScriptGuid">{A570E526-4D45-416B-AF0F-AAAB612935BC}</string>
+						<ProtectedString name="Source"><![CDATA[return function(cdata)
+	local new = cdata.new
+	local functionify = cdata.functionify
+	local create = cdata.create
+	local GUI = cdata.GUI
+	local data = cdata.data
+	local checkProperty = cdata.checkProperty
+	local client = cdata.client
+	local service = cdata.service
+	local dScrollBar = cdata.dScrollBar
+	
+	local genning = false
+	if not data.ScrollBarThickness then
+		data.ScrollBarThickness = dScrollBar
+	end
+
+	new:SetSpecial("GenerateList", function(obj, list, labelProperties, bottom)
+		local list = list or obj;
+		local genHold = {}
+		local entProps = labelProperties or {}
+
+		genning = genHold
+		new:ClearAllChildren()
+
+		new.AutomaticCanvasSize = "Y"
+
+		local layout = service.New("UIListLayout", {
+			Parent = new;
+			Name = "LayoutOrder";
+			FillDirection = data.Layout_FillDirection or "Vertical";
+			VerticalAlignment = data.Layout_VerticalAlignment or "Top";
+			HorizontalAlignment = data.Layout_HorizontalAlignment or "Left";
+		})
+
+		local num = 0
+		for i,v in pairs(list) do
+			local text = v;
+			local desc;
+			local color
+			local richText;
+			local onClick;
+
+			if type(v) == "table" then
+				text = v.Text
+				desc = v.Desc
+				color = v.Color
+				onClick = v.OnClick
+
+				if v.RichTextAllowed or entProps.RichTextAllowed then
+					richText = true
+				end
+			end
+
+			local label
+			if v.TextSelectable or entProps.TextSelectable then
+				label = create("TextBox",{
+					Text = ` {text}`;
+					ToolTip = desc;
+					AutomaticSize = if not entProps.ySize then Enum.AutomaticSize.Y else nil;
+					Size = UDim2.new(1,-5,0,(entProps.ySize or 25));
+					Visible = true;
+					--BackgroundTransparency = 1;
+					BackgroundTransparency = (num%2 == 0 and 0) or 0.2;
+					Font = "Arial";
+					TextSize = 14;
+					TextStrokeTransparency = 0.8;
+					TextXAlignment = "Left";
+					Position = UDim2.new(0,0,0,num*(entProps.ySize or 20));
+					RichText = richText or false;
+					TextEditable = false;
+					ClearTextOnFocus = false;
+				})
+			else
+				label = create(onClick and "TextButton" or "TextLabel",{
+					Text = ` {text}`;
+					ToolTip = desc;
+					AutomaticSize = if not entProps.ySize then Enum.AutomaticSize.Y else nil;
+					Size = UDim2.new(1,-5,0,(entProps.ySize or 25));
+					Visible = true;
+					BackgroundTransparency = (num%2 == 0 and 0) or 0.2;
+					Font = "Arial";
+					TextSize = 14;
+					TextStrokeTransparency = 0.8;
+					TextXAlignment = "Left";
+					Position = UDim2.new(0,0,0,num*(entProps.ySize or 20));
+					RichText = richText or false;
+					OnClick = onClick;
+				})
+			end
+
+			if color then
+				label.TextColor3 = color
+			end
+
+			if labelProperties then
+				for i,v in pairs(entProps) do
+					if checkProperty(label, i) then
+						label[i] = v
+					end
+				end
+			end
+
+			if genning == genHold then
+				label.Parent = new;
+			else
+				label:Destroy()
+				break
+			end
+
+			num = num+1
+
+			if data.Delay then
+				if type(data.Delay) == "number" then
+					wait(data.Delay)
+				elseif i%100 == 0 then
+					wait(0.1)
+				end
+			end
+		end
+
+		--new:ResizeCanvas(false, true, false, bottom, 5, 5, 50)
+		if bottom then
+			new.CanvasPosition = Vector2.new(0, layout.AbsoluteContentSize.Y);
+		end
+
+		genning = nil
+	end)
+
+	new:SetSpecial("ResizeCanvas", function(ignore, onX, onY, xMax, yMax, xPadding, yPadding, modBreak)
+		local xPadding,yPadding = data.xPadding or 5, data.yPadding or 5
+		local newY, newX = 0,0
+
+		if not onX and not onY then onX = false onY = true end
+		for i,v in ipairs(new:GetChildren()) do
+			if v:IsA("GuiObject") then
+				if onY then
+					v.Size = UDim2.new(v.Size.X.Scale, v.Size.X.Offset, 0, v.AbsoluteSize.Y)
+					v.Position = UDim2.new(v.Position.X.Scale, v.Position.X.Offset, 0, v.AbsolutePosition.Y-new.AbsolutePosition.Y)
+				end
+
+				if onX then
+					v.Size = UDim2.new(0, v.AbsoluteSize.X, v.Size.Y.Scale, v.Size.Y.Offset)
+					v.Position = UDim2.new(0, v.AbsolutePosition.X-new.AbsolutePosition.X, v.Position.Y.Scale, v.Position.Y.Offset)
+				end
+
+				local yLower = v.Position.Y.Offset + v.Size.Y.Offset
+				local xLower = v.Position.X.Offset + v.Size.X.Offset
+				newY = math.max(newY, yLower)
+				newX = math.max(newX, xLower)
+				if modBreak then
+					if i%modBreak == 0 then
+						wait(1/60)
+					end
+				end
+			end
+		end
+
+		if onY then
+			new.CanvasSize = UDim2.new(new.CanvasSize.X.Scale, new.CanvasSize.X.Offset, 0, newY+yPadding)
+		end
+
+		if onX then
+			new.CanvasSize = UDim2.new(0, newX + xPadding, new.CanvasSize.Y.Scale, new.CanvasSize.Y.Offset)
+		end
+
+		if xMax then
+			new.CanvasPosition = Vector2.new((newX + xPadding)-new.AbsoluteSize.X, new.CanvasPosition.Y)
+		end
+
+		if yMax then
+			new.CanvasPosition = Vector2.new(new.CanvasPosition.X, (newY+yPadding)-new.AbsoluteSize.Y)
+		end
+	end)
+
+	if data.List then new:GenerateList(data.List) data.List = nil end
+	
+end]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXB5A74BB64F2C48258EE461AF0B922DAB">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">Entry</string>
+						<string name="ScriptGuid">{C153070A-3CE1-4B84-B244-A18B57BA04B9}</string>
+						<ProtectedString name="Source"><![CDATA[return function(cdata)
+	local new = cdata.new
+	local functionify = cdata.functionify
+	local create = cdata.create
+	local GUI = cdata.GUI
+	local data = cdata.data
+	local checkProperty = cdata.checkProperty
+	local client = cdata.client
+	local service = cdata.service
+	local Tooltip = cdata.Tooltip
+	local Expand = cdata.Expand
+	
+	local label = new.Text
+	local dots = new.Dots
+	local desc = new.Desc
+	local richText = data.RichText or label.RichText
+
+	label.ZIndex = data.ZIndex or new.ZIndex
+	dots.ZIndex = data.ZIndex or new.ZIndex
+
+	if data.Text then
+		label.Text = data.Text
+		label.Visible = true
+		data.Text = nil
+	end
+
+	if data.Desc or data.ToolTip then
+		desc.Value = data.Desc or data.ToolTip
+		data.Desc = nil
+	end
+
+	Expand(new, Tooltip, nil, richText)
+	
+end]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXE195E91850B842CC8D9CBE39B62BD4C6">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">Example</string>
+						<string name="ScriptGuid">{85E9EBFD-335F-4EB3-A95D-30D0C2E27B4A}</string>
+						<ProtectedString name="Source"><![CDATA[return function(cdata)
+	local new = cdata.new
+	local functionify = cdata.functionify
+	local create = cdata.create
+	local GUI = cdata.GUI
+	local data = cdata.data
+	local checkProperty = cdata.checkProperty
+	local client = cdata.client
+	local service = cdata.service
+	
+	
+end]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX8527351B2B5B4418A97A39FD1773D154">
 					<Properties>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<string name="Name">ScrollingFrame</string>
-						<string name="ScriptGuid">{C6E38D8F-91C1-46D1-8EE6-D40F03ADE67C}</string>
+						<string name="ScriptGuid">{3BF12A53-6EF0-4116-9A65-A923078D023A}</string>
 						<ProtectedString name="Source"><![CDATA[return function(cdata)
 	local new = cdata.new
 	local functionify = cdata.functionify
@@ -6447,55 +6663,9 @@ end]]></ProtectedString>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ModuleScript" referent="RBX6EAA3008BFF24C6CA4DCCBEE306E878E">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-						<bool name="DefinesCapabilities">false</bool>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">Entry</string>
-						<string name="ScriptGuid">{D73DEC93-7B2B-4924-9532-ED6D7FE2F071}</string>
-						<ProtectedString name="Source"><![CDATA[return function(cdata)
-	local new = cdata.new
-	local functionify = cdata.functionify
-	local create = cdata.create
-	local GUI = cdata.GUI
-	local data = cdata.data
-	local checkProperty = cdata.checkProperty
-	local client = cdata.client
-	local service = cdata.service
-	local Tooltip = cdata.Tooltip
-	local Expand = cdata.Expand
-	
-	local label = new.Text
-	local dots = new.Dots
-	local desc = new.Desc
-	local richText = data.RichText or label.RichText
-
-	label.ZIndex = data.ZIndex or new.ZIndex
-	dots.ZIndex = data.ZIndex or new.ZIndex
-
-	if data.Text then
-		label.Text = data.Text
-		label.Visible = true
-		data.Text = nil
-	end
-
-	if data.Desc or data.ToolTip then
-		desc.Value = data.Desc or data.ToolTip
-		data.Desc = nil
-	end
-
-	Expand(new, Tooltip, nil, richText)
-	
-end]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBXA04EC43B90D64D9896D947CFE3048C46">
+		<Item class="Frame" referent="RBXF59CD131A294406E9CF8828F609E0E03">
 			<Properties>
 				<bool name="Active">false</bool>
 				<Vector2 name="AnchorPoint">
@@ -6530,9 +6700,9 @@ end]]></ProtectedString>
 				<Ref name="NextSelectionRight">null</Ref>
 				<Ref name="NextSelectionUp">null</Ref>
 				<UDim2 name="Position">
-					<XS>0</XS>
+					<XS>0.206286833</XS>
 					<XO>0</XO>
-					<YS>0</YS>
+					<YS>0.438163877</YS>
 					<YO>0</YO>
 				</UDim2>
 				<Ref name="RootLocalizationTable">null</Ref>
@@ -6547,9 +6717,9 @@ end]]></ProtectedString>
 				<int name="SelectionOrder">0</int>
 				<UDim2 name="Size">
 					<XS>0</XS>
-					<XO>110</XO>
+					<XO>146</XO>
 					<YS>0</YS>
-					<YO>25</YO>
+					<YO>21</YO>
 				</UDim2>
 				<token name="SizeConstraint">0</token>
 				<int64 name="SourceAssetId">-1</int64>
@@ -6558,7 +6728,7 @@ end]]></ProtectedString>
 				<bool name="Visible">false</bool>
 				<int name="ZIndex">999999</int>
 			</Properties>
-			<Item class="TextLabel" referent="RBXA8F4E7B68F484A45AFB50A008CE611A0">
+			<Item class="TextLabel" referent="RBXDA1E64E705F747E88D3E1E39CA0E7EA8">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Vector2 name="AnchorPoint">
@@ -6628,7 +6798,7 @@ end]]></ProtectedString>
 					<token name="SizeConstraint">0</token>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
-					<string name="Text">Test Desciption</string>
+					<string name="Text">Longer Test Description</string>
 					<Color3 name="TextColor3">
 						<R>1</R>
 						<G>1</G>
@@ -6644,24 +6814,50 @@ end]]></ProtectedString>
 					</Color3>
 					<float name="TextStrokeTransparency">1</float>
 					<float name="TextTransparency">0</float>
-					<token name="TextTruncate">1</token>
+					<token name="TextTruncate">2</token>
 					<bool name="TextWrapped">true</bool>
 					<token name="TextXAlignment">0</token>
-					<token name="TextYAlignment">1</token>
+					<token name="TextYAlignment">0</token>
 					<bool name="Visible">true</bool>
 					<int name="ZIndex">999999</int>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBXD817E15DCF054781BF98D05FB68A79AD">
+			<Item class="UICorner" referent="RBX16F47CD7AE6041018D596D59E84BE01A">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<UDim name="CornerRadius">
 						<S>0</S>
-						<O>8</O>
+						<O>5</O>
 					</UDim>
 					<bool name="DefinesCapabilities">false</bool>
 					<string name="Name">UICorner</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="UIPadding" referent="RBX5B00DA837BF748569636DB3E6B005B22">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">UIPadding</string>
+					<UDim name="PaddingBottom">
+						<S>0</S>
+						<O>0</O>
+					</UDim>
+					<UDim name="PaddingLeft">
+						<S>0</S>
+						<O>3</O>
+					</UDim>
+					<UDim name="PaddingRight">
+						<S>0</S>
+						<O>3</O>
+					</UDim>
+					<UDim name="PaddingTop">
+						<S>0</S>
+						<O>0</O>
+					</UDim>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
