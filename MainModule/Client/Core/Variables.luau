@@ -42,6 +42,7 @@ return function(Vargs, GetEnv)
 		BuildInfo = {
 			COMMIT = "";
 			BRANCH = "";
+			BUILD_DATE = = "";
 		};
 		ParticlesEnabled = true;
 		ForceListsSelectable = true;

@@ -18,12 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
-      - name: Inject Git Info into Variables.luau
+      - name: Inject Git Info into Variables
         run: |
           COMMIT=$(git rev-parse --short HEAD)
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          BUILD_DATE=$(date -u +"%B %d %Y %H:%M:%S UTC")
+
           sed -i "s|COMMIT = \"\";|COMMIT = \"$COMMIT\";|" MainModule/Client/Core/Variables.luau
           sed -i "s|BRANCH = \"\";|BRANCH = \"$BRANCH\";|" MainModule/Client/Core/Variables.luau
+          sed -i "s|BUILD_DATE = \"\";|BUILD_DATE = \"$BUILD_DATE\";|" MainModule/Client/Core/Variables.luau
 
       - name: Layout file name
         id: naming

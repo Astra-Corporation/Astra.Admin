@@ -2,7 +2,8 @@ return function(Vargs,GetEnv)
 	local client, service = Vargs.Client, Vargs.Service
 	local Functions = client.Functions
 	local Variables = client.Variables
-	local shark = [=[
+  local BuildInfo = Variables.BuildInfo
+  local shark = [=[
 	                           .^:;.                        
                               ,!>!^                         
                              "!i>!'                     ',, 
@@ -20,9 +21,8 @@ return function(Vargs,GetEnv)
               ...''''''``^>?_-_->l,`.                       
                             .`:;<+_~<>;:`                   
                                  ...''.. 
-                              :: Astra v3 ::
-	]=]
-
-	print(shark)
+                    Running Astra V3 Compiled %s %s@%s                        
+  ]=]
+print(string.format(shark,BuildInfo.BUILD_DATE,BuildInfo.COMMIT,BuildInfo.BRANCH))
 
 end
