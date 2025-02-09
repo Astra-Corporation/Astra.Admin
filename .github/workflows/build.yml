@@ -1,5 +1,5 @@
 name: rojo
- 
+
 on:
   push:
     branches: [main]
@@ -17,7 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      
+
+      - name: Inject Git Info into Variables.luau
+        run: |
+          COMMIT=$(git rev-parse --short HEAD)
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          sed -i "s|COMMIT = \"\";|COMMIT = \"$COMMIT\";|" MainModule/Client/Core/Variables.luau
+          sed -i "s|BRANCH = \"\";|BRANCH = \"$BRANCH\";|" MainModule/Client/Core/Variables.luau
+
       - name: Layout file name
         id: naming
         env:

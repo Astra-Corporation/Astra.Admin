@@ -39,7 +39,10 @@ return function(Vargs, GetEnv)
 		CodeName = "";
 		UIKeepAlive = true;
 		KeybindsEnabled = true;
-		
+		BuildInfo = {
+			COMMIT = "";
+			BRANCH = "";
+		};
 		ParticlesEnabled = true;
 		ForceListsSelectable = true;
 		EnableChatChannelTabs = false;

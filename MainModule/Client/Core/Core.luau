@@ -2,7 +2,7 @@ return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
 
 	local client, service = Vargs.Client, Vargs.Service
-	local FiOne = service.UnWrap(client.Shared.FiOne) 
+	local FiOne = service.UnWrap(client.Shared.FiOne)
 	local Anti, Core, Functions, Process, Remote, UI, Variables, log, Pcall, Routine
 
 	local function Init(data)

@@ -12,37 +12,17 @@ return function(Vargs)
 	-- Some vars
 	local Prefix = Settings.Prefix;
 
-
-	Variables.PersistData = {}
-
-	local PersistData = Variables.PersistData
-	-- // so other plugins can interact with the data, not used for anything RN but may be used later
-
-
-
-	--// This is really dumb! Waste of memory!
-	
-	--Service.HookEvent("PlayerAdded",function(a) -- If persist data doesn't exist when someone joins, create data for them
-	--	if not PersistData[a.Name] then
-	--		PersistData[a.Name] = {false,false}
-	--	end
-	--end)
-
-	Service.HookEvent("CharacterAdded",function(a) -- // The event that happens when a character is spawned
-		if not PersistData[a.Name] then
-			return
+	Service.HookEvent("CharacterAdded",function(Player: Player) 		
+		if Player:GetAttribute("ASTRA_PersistGod") then
+			Commands.God.Function(Player,{"me"})
 		end
-		
-		if PersistData[a.Name][2] then
-			Commands.God.Function(a,{"me"})    --Give god if persisted
-		end
-		if PersistData[a.Name][1] then
-			Commands.Fly.Function(a,{"me"},true) --Give fly if persisted, the bool value at the end is whether to use noclip while flying (hint you almost 100% want this with :fly)
+
+		if Player:GetAttribute("ASTRA_PersistFly") then
+			Commands.Fly.Function(Player,{"me"},true)
 		end
 	end)
 
-
-	Server.Commands.PersistFly = {
+	Commands.PersistFly = {
 		Prefix = Server.Settings.Prefix;    
 		Commands = {"persistfly";"pfly"};    
 		Args = {"player"};
@@ -51,18 +31,15 @@ return function(Vargs)
 		Fun = false;
 		AdminLevel = "Moderators";        
 		Function = function(plr,args)   
-			for i,v in pairs(Service.GetPlayers(plr,args[1])) do
-				
-				if not PersistData[v.Name] then
-					PersistData[v.Name] = {false,false}
-				end
-				
-				PersistData[v.Name][1] = true
-				Functions.Hint("You will now persist fly on death",{v})
+			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
+
+				Player:SetAttribute("ASTRA_PersistFly",true)
+				Functions.Hint("You will now persist fly on next spawn",{Player})
 			end
 		end
 	};
-	Server.Commands.unPersistFly = {
+
+	Commands.unPersistFly = {
 		Prefix = Server.Settings.Prefix;    
 		Commands = {"unpersistfly";"unpfly"};
 		Args = {"player"};
@@ -71,17 +48,15 @@ return function(Vargs)
 		Fun = false;
 		AdminLevel = "Moderators";        
 		Function = function(plr,args)   
-			for i,v in pairs(Service.GetPlayers(plr,args[1])) do
-				if not PersistData[v.Name] then
-					PersistData[v.Name] = {false,false}
-				end
-				
-				PersistData[v.Name][1] = false
-				Functions.Hint("You will no longer persist fly on death",{v})
+			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
+
+				Player:SetAttribute("ASTRA_PersistFly",nil)
+				Functions.Hint("You will no longer persist fly on next spawn",{Player})
 			end
 		end
 	};
-	Server.Commands.PersistGod = {
+
+	Commands.PersistGod = {
 		Prefix = Server.Settings.Prefix;    
 		Commands = {"persistgod";"pgod"};    
 		Args = {"player"};
@@ -90,16 +65,15 @@ return function(Vargs)
 		Fun = false;
 		AdminLevel = "Moderators";        
 		Function = function(plr,args) 
-			for i,v in pairs(Service.GetPlayers(plr,args[1])) do
-				if not PersistData[v.Name] then
-					PersistData[v.Name] = {false,false}
-				end
-				PersistData[v.Name][2] = true
-				Functions.Hint("You will now persist god on death",{v})
+			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
+
+				Player:SetAttribute("ASTRA_PersistGod",true)
+				Functions.Hint("You will now persist god on next spawn",{Player})
 			end
 		end
 	};
-	Server.Commands.unPersistGod = {
+
+	Commands.unPersistGod = {
 		Prefix = Server.Settings.Prefix;    
 		Commands = {"unpersistgod";"unpgod"};    
 		Args = {"player"};
@@ -108,12 +82,10 @@ return function(Vargs)
 		Fun = false;
 		AdminLevel = "Moderators";        
 		Function = function(plr,args)   
-			for i,v in pairs(Service.GetPlayers(plr,args[1])) do
-				if not PersistData[v.Name] then
-					PersistData[v.Name] = {false,false}
-				end
-				PersistData[v.Name][2] = false
-				Functions.Hint("You will no longer persist god on death",{v})
+			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
+
+				Player:SetAttribute("ASTRA_PersistGod",nil)
+				Functions.Hint("You will no longer persist god on next spawn",{Player})
 			end
 		end
 	};
