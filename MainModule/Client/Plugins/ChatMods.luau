@@ -21,7 +21,7 @@ return function(Vargs,GetEnv)
               ...''''''``^>?_-_->l,`.                       
                             .`:;<+_~<>;:`                   
                                  ...''.. 
-                    Running Astra V3 Compiled %s %s@%s                        
+  Running Astra V3 Compiled %s %s@%s                        
   ]=]
 print(string.format(shark,BuildInfo.BUILD_DATE,BuildInfo.COMMIT,BuildInfo.BRANCH))
 
