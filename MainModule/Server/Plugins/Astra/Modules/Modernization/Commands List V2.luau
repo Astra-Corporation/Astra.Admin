@@ -77,7 +77,7 @@ return function(Vargs)
 		end
 	};
 
-	server.Commands.ViewCommands = {
+	server.Commands.ViewCommands = { -- Someone remind me to rewrite this.....
 		Prefix = Settings.Prefix;
 		Commands = {"cmds","commands","cmdlist"};
 		Args = {};
