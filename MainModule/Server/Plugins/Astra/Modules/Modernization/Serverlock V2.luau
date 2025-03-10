@@ -18,7 +18,8 @@ return function(Vargs)
 	local DoCheck = Admin.DoCheck;
 	local TrackTask = Service.TrackTask
 	local AddLog = Logs.AddLog;
-
+	local Required = Admin.LevelToListName(100)
+	
 	Functions.AddJoinFilter("Serverlock",function(Player:Player, PlayerData)
 		if not Variables.SlockData.Enabled then
 			return true;
@@ -29,7 +30,7 @@ return function(Vargs)
 		local WhitelistData = Variables.SlockData
 
 		if level < 1 then
-			return false, `This server is locked\r\Locked by: {WhitelistData.Moderator.Name}\nYour permission level: {rankName}\nRequired permission level: Moderators`	
+			return false, `This server is locked\r\Locked by: {WhitelistData.Moderator.Name}\nYour permission level: {rankName}\nRequired permission level: {Required}`	
 		end;
 	end);
 	

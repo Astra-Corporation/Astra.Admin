@@ -18,31 +18,38 @@ return function(Vargs)
 	local DoCheck = Admin.DoCheck;
 	local TrackTask = Service.TrackTask
 	local AddLog = Logs.AddLog;
-
-	Functions.AddJoinFilter("Whitelist",function(Player:Player, PlayerData) -- We need to make this support Trello and webpanel. A big mess right now.
-		if Variables.WhitelistData.Enabled then
+	
+	local Actions = "on/off/add/remove/reason"
+	local Required = Admin.LevelToListName(100)
+	
+	Functions.AddJoinFilter("Whitelist",function(Player:Player, PlayerData)
+		if Variables.Whitelist.Enabled then
 			local listed = false
 			local level, rankName = Admin.GetLevel(Player)
-			local WhitelistData = Variables.WhitelistData
+			local WhitelistData = Variables.Whitelist
+			
+			if level >0 then
+				return true
+			end
 			
 			local CheckTable = Admin.CheckTable
-			if CheckTable(Player, WhitelistData.List) then
-				listed = true
+			for listName, list in Variables.Whitelist.Lists do
+				if CheckTable(Player, list) then
+					listed = true
+					break;
+				end
 			end
 
-			if CheckTable(Player, Variables.Whitelist.Lists.Trello) then
-				listed = true
-			end
-
-			if not listed and level == 0 then
-				return false,`This server is whitelisted\r\nWhitelisted by: {WhitelistData.Moderator.Name}\nYour permission level: {rankName}\nRequired permission level: Moderators or LISTED`	
+			if not listed then
+				return false,`This server is whitelisted\r\nWhitelisted by: {WhitelistData.Moderator or "GAME"}\nYour permission level: {rankName or "Unknown"}\nRequired permission level: {Required} or LISTED\n Reason: {WhitelistData.Reason}`	
 			end
 			
-			return true;
+			return true
 		end
 		
-		return true;
+		return true
 	end);
+	
 	
 	Commands.Whitelist = {
 		Prefix = Settings.Prefix,
@@ -53,35 +60,34 @@ return function(Vargs)
 		Fun = false,
 		AdminLevel = "Moderators",
 		Function = function(plr, args)
-			local Actions = "on/off/add/remove/reason";
 			if args[1]:lower() == "on" or args[1]:lower() == "enable" then
-				Variables.WhitelistData.Enabled = true
-				Variables.WhitelistData.TimeEnabled = os.time()
-				Variables.WhitelistData.Moderator = plr
+				Variables.Whitelist.Enabled = true
+				Variables.Whitelist.TimeEnabled = os.time()
+				Variables.Whitelist.Moderator = plr.Name or "Unknown"
 
 				Functions.Hint("Server Whitelisted", Service.Players:GetPlayers())
 			elseif args[1]:lower() == "off" or args[1]:lower() == "disable" then
-				Variables.WhitelistData.Enabled = false
+				Variables.Whitelist.Enabled = false
                 Functions.Hint("Server Unwhitelisted", Service.Players:GetPlayers())
 			elseif args[1]:lower() == "add" then
 				if args[2] then
 					local plrs = Service.GetPlayers(plr, args[2])
 					if #plrs > 0 then
 						for i, v in pairs(plrs) do
-							table.insert(Variables.WhitelistData.List, v.Name .. ":" .. v.userId)
+							table.insert(Variables.Whitelist.Lists.Settings, v.Name .. ":" .. v.userId)
 							Functions.Hint(`Whitelisted {v.Name}`, { plr })
 						end
 					else
-						table.insert(Variables.WhitelistData.List, args[2])
+						table.insert(Variables.Whitelist.Lists.Settings, args[2])
 					end
 				else
 					error("Missing name to whitelist")
 				end
 			elseif args[1]:lower() == "remove" then
 				if args[2] then
-					for i, v in pairs(Variables.WhitelistData.List) do
+					for i, v in pairs(Variables.Whitelist.Lists.Settings) do
 						if v:lower():sub(1, #args[2]) == args[2]:lower() then
-							table.remove(Variables.WhitelistData.List, i)
+							table.remove(Variables.Whitelist.Lists.Settings, i)
 							Functions.Hint(`Removed {tostring(v)} from the whitelist`, { plr })
 						end
 					end
@@ -91,13 +97,22 @@ return function(Vargs)
 			elseif args[1]:lower() == "reason" then
 				if args[2] then
 					local Reason = Service.Filter(args[2], plr, plr)
-					Variables.WhitelistData.Reason = Reason
+					Variables.Whitelist.Reason= Reason
 					Functions.Hint(`Reason set "{Reason}"`, { plr })
 				end
 			elseif args[1]:lower() == "list" then
+				local Data = {}
+				
+				for Key, List in Variables.Whitelist.Lists do
+					local Prefix = Key == "Settings" and "" or `[{Key}] `
+					for _, User in List do
+						table.insert(Data, {Text = Prefix .. User, Desc = User})
+					end
+				end
+				
 				Remote.MakeGui(plr, "List", {
 					Title = "Whitelist";
-					Table = Variables.WhitelistData.List;
+					Table = Data;
 
 				})
 			elseif args[1]:lower() == "open" then
@@ -110,7 +125,6 @@ return function(Vargs)
 				end
 				Remote.MakeGui(plr, "Whitelist", {
 					List = Data;
-
 				})
 			else
 				error(`Invalid action; ({Actions})`)
