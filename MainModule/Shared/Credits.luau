@@ -1,7 +1,7 @@
 return {
     Astra = {
         { Text = "EasternBloxxer", Desc = "Founder of Astra Incorporated + Astra Maintainer" },
-		{ Text = "8ch_32bit", Desc = "Astra Maintainer" },
+		{ Text = "8ch99", Desc = "Astra Maintainer" },
 		{ Text = "Purple_Creativity", Desc = "Astra Maintainer" },
         { Text = "H0nzzzz", Desc = "Helped with some code, ideas and testing" },
         { Text = "Irreflexive", Desc = "Kronos Developer (Track command etc)" },

@@ -3,13 +3,14 @@
 	Author: Coasterteam
 	Description: A temporary addition of the Banning API to allow Adonis to communicate with it. 
 		This plugin should be used temporarily until Adonis fully implements the rewritten moderation systems (TBD)
+		Modified for Astra (as a built in plugin still) 
 	Last Updated: June 26th, 2024
 	Version: 1.0
 --]]
 
 return function(Vargs)
 	local server, service = Vargs.Server, Vargs.Service
-	
+
 	local Functions = server.Functions;
 	-- Check if Adonis has this already, if so don't load! The main Adonis officially supports this now.
 
@@ -66,13 +67,14 @@ return function(Vargs)
 			expireTime = "9999 days";
 			remainingTime = "9999 days"
 		}
+		local PublicBanMessage = Functions.GetKickMessage("GameBanMessage",banData);
 		service.Queue("BanningAPI", function()
 			success, errMessage = pcall(function()
 				service.Players:BanAsync({
 					UserIds = userIds;
-					DisplayReason = Functions.GetKickMessage("GameBan",banData);
+					DisplayReason = Functions.GetKickMessage("GameBanMessage",banData);
 					Duration = options.Duration or -1;
-					PrivateReason = `Moderated by {tostring(moderator)} via Adonis for: {reason}`;
+					PrivateReason = `Moderated by {tostring(moderator)} via Astra for: {reason}`;
 					ApplyToUniverse = if options.ApplyToUniverse ~= nil then options.ApplyToUniverse else true;
 					ExcludeAltAccounts = if options.ExcludeAltAccounts ~= nil then options.ExcludeAltAccounts else not server.Variables.BanAPIConfig.BanAltAccounts;
 				})
@@ -296,7 +298,7 @@ return function(Vargs)
 			end
 
 			local answer = server.Remote.MakeGuiGet(plr, "YesNoPrompt", {
-				Question = `Do you want to start migrating data? We found a total of {TotalPerm} permanent ban(s) and {TotalTemp} temporary ban(s).`
+				Question = `Do you want to start migrating data? We found a total of {TotalPerm} permanent ban(s) and {TotalTemp} temporary ban(s). \n** THIS WILL GET RID OF ANY ORIGINAL PRIVATE NOTES FOR EXISTING BANS **`
 			})
 			if answer == "Yes" then
 				-- about 1200 a minute-ish when doing 50, so let's assume 25 a chunk and go 600 is what my average was (unconfirmed)
@@ -317,7 +319,7 @@ return function(Vargs)
 						for index,UserIdChunk in chunks(UserIds, 50) do 
 							if #UserIdChunk == 0 then continue end 
 							Total += #UserIdChunk
-							server.Admin.BanAsync(UserIdChunk, BanReason, `Adonis System Migration`)
+							server.Admin.BanAsync(UserIdChunk, BanReason, `Astra System Migration`)
 							Functions.Hint(`Permanently BanAsync'd {Total}/{TotalPerm} users`, {plr})
 						end
 					end
