@@ -210,7 +210,7 @@ return function(Vargs, env)
 			AdminLevel = "Donors";
 			Function = function(plr: Player, args: {string})
 				assert(args[1], "Missing TextureId")
-
+				assert(tonumber(args[1]), "Texture must be a number")
 				local torso = plr.Character:FindFirstChild("HumanoidRootPart")
 				if torso then
 					local startColor = {}
@@ -239,7 +239,7 @@ return function(Vargs, env)
 					Functions.RemoveParticle(torso, "DONOR_PARTICLE")
 					Functions.NewParticle(torso, "ParticleEmitter", {
 						Name = "DONOR_PARTICLE";
-						Texture = `rbxassetid://{Functions.GetTexture(args[1])}`;
+						Texture = `rbxthumb://type=Asset&id={args[1]}&w=420&h=420`;
 						Size = NumberSequence.new({
 							NumberSequenceKeypoint.new(0,0);
 							NumberSequenceKeypoint.new(.1,.25,.25);

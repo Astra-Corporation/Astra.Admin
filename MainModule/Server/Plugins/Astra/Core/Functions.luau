@@ -171,7 +171,7 @@ return function(Vargs)
 			time = "0",
 			name = "nil",
 			id = "nil",
-			moderator = Data.moderator and Data.moderator.Name or "Server",
+			moderator = (Data.moderator and Data.moderator.Name) or "Game",
 			type = Data.kickType or "nil",
 			expiretime = "Not set",
 			remainingtime = "Not set",
@@ -188,7 +188,7 @@ return function(Vargs)
 		return Message
 	end;
 
-	Functions.GetSlockMessage = function()
+	Functions.GetSlockMessage = function() --TODO: Get rid of this
 		local SlockData = Variables.SlockData
 		local Data = {
 			reason = SlockData.Reason;
@@ -202,21 +202,5 @@ return function(Vargs)
 		}
 
 		return Functions.GetKickMessage("Lock", Data)
-	end;
-
-	Functions.GetWhitelistMessage = function()
-		local WhitelistData = Variables.WhitelistData
-		local Data = {
-			reason = WhitelistData.Reason;
-			time = WhitelistData.TimeEnabled;
-			name = "nil";
-			id = 0;
-			moderator = WhitelistData.Moderator;
-			kickType = "nil";
-			expireTime = "nil";
-			remainingTime = "nil";
-		}
-
-		return Functions.GetKickMessage("Whitelist", Data)
 	end;
 end

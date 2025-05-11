@@ -643,7 +643,7 @@ return function(data, env)
 
 								local img = pWindow:Add("ImageLabel", {
 									BackgroundTransparency = 1;
-									Image = `rbxassetid://{Functions.GetTexture(currentTexture)}`;
+									Image = `rbxthumb://type=Asset&id={currentTexture}&w=420&h=420`;
 									Size = UDim2.new(1, -10, 1, -80);
 									Position = UDim2.new(0, 5, 0, 35);
 								})
@@ -663,7 +663,7 @@ return function(data, env)
 												local num = tonumber(text)
 												if num then
 													lastValid = num
-													img.Image = `rbxassetid://{Functions.GetTexture(num)}`;
+													img.IImage = `rbxthumb://type=Asset&id={num}&w=420&h=420`;
 												else
 													new.Text = lastValid
 												end
