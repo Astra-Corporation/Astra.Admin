@@ -428,7 +428,7 @@ return function(ErrorHandler, fenceSpecific, env)
 			local lines = Service.ExtractLines(str)
 			for i = 1,#lines do
 				local ran,newl = pcall(function()
-					return Service.TextService:FilterStringAsync(lines[i],from.UserId):GetChatForUserAsync(to.UserId)
+					return Service.TextService:FilterStringAsync(lines[i],from.UserId):GetNonChatStringForUserAsync(to.UserId)
 				end)
 				newl = (ran and newl) or lines[i] or ""
 				if i > 1 then
