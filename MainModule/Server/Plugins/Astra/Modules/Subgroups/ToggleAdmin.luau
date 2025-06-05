@@ -1,25 +1,12 @@
 return function(Vargs)
 	local Server = Vargs.Server;
-	local Service = Vargs.Service;
-
-	-- Modules used
 
 	local Variables = Server.Variables;
 	local Commands = Server.Commands;
-	local Admin = Server.Admin;
-	local Core = Server.Core;
-	local HTTP = Server.HTTP;
+
 	local Settings = Server.Settings;
 	local Functions = Server.Functions;
-	local Logs = Server.Logs;
-	local Remote = Server.Remote;
 
-	-- Some vars
-	local Prefix = Settings.Prefix;
-	local DoCheck = Admin.DoCheck;
-	local TrackTask = Service.TrackTask
-	local AddLog = Logs.AddLog;
-	
 	Variables.OptedOutOfAdmin = {};
 
 	Commands.ToggleAdmin = {
