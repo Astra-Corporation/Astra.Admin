@@ -8,13 +8,16 @@ Astra is a modified version of Adonis by Sceleratis with edits, patches, and mor
 ### TODO: Update the section below.<br>
 <br>If you get stuck, feel free to ask for assistance in our [Discord server](https://discord.gg/YqCfhnqRvP).
 
-### Method 1: GitHub Releases
+### Method 1: Discord releases channel
+* Join the Discord server linked before and download a release from the releases channel (I may sometimes be too lazy to make a new release on github)
+
+### Method 2: GitHub Releases
 
 * Download the `rbxm` file snapshot from the [latest release](https://github.com/Astra-Corporation/Astra.Admin/releases/latest)
 * Import the model file into Studio
   * Note: By default, snapshots included in releases have <a href="#debug-mode">`DebugMode`</a> enabled.
 
-### Method 2: Filesystem
+### Method 3: Filesystem
 
 * Download the repository to your computer's file system
 * Install and use a plugin like [Rojo](https://rojo.space/) to compile Adonis into a `rbxmx` file

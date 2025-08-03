@@ -1,9 +1,6 @@
 --[==[
-				    ___    ____  ________
-				   /   |  / __ \/  _/ __ \___
-				  / /| | / /_/ // // / / / _ \
-				 / ___ |/ _, _// // /_/ /  __/
-				/_/  |_/_/ |_/___/_____/\___/
+
+		                Astra
                   For lack of a better name.
 
 		@Description: Astra Remote Integrated Defense | MainModule
