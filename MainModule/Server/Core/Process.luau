@@ -2,15 +2,14 @@ return function(Vargs, GetEnv)
 	local server = Vargs.Server
 	local service = Vargs.Service
 
-	local Commands, Decrypt, Encrypt, AddLog, TrackTask, Pcall
-	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Defaults, Permissions
+	local Commands, Decrypt, AddLog, TrackTask, Pcall
+	local Functions, Admin, Anti, Core, Logs, Remote, Process, Variables, Settings, Defaults, Permissions
 	local logError = server.LogError
 	local function Init()
 		Functions = server.Functions
 		Admin = server.Admin
 		Anti = server.Anti
 		Core = server.Core
-		HTTP = server.HTTP
 		Logs = server.Logs
 		Remote = server.Remote
 		Process = server.Process
@@ -20,7 +19,6 @@ return function(Vargs, GetEnv)
 		Permissions = server.Permissions
 		Commands = Remote.Commands
 		Decrypt = Remote.Decrypt
-		Encrypt = Remote.Encrypt
 		AddLog = Logs.AddLog
 		TrackTask = service.TrackTask
 		Pcall = server.Pcall
@@ -303,10 +301,9 @@ return function(Vargs, GetEnv)
 			end
 
 			if Anti.KickedPlayers[p] then
-				p:Kick(
-					"ARIDe // Communication following disconnect. \n Something wants you gone from this server but you are still sending requests. Have to remove you. Sorry!"
-				)
-				Anti.Detected(p, "Crash", `Communication Following Disconnect`)
+				p:Kick("▬▬▬▬ Astra ▬▬▬▬\n Communication following disconnect.\n Something wants you gone from this server but you are still sending requests. Have to remove you. Sorry.\n▬▬▬▬ BinaryBridge ▬▬▬▬\n")
+				Anti.Detected(p, "Crash", "Communication Following Disconnect")
+				return
 			elseif not com or type(com) ~= "string" or #com > 50 or cliData == "WorseMemes" or com == "WorseMemes" then
 				Anti.Detected(
 					p,
@@ -315,9 +312,11 @@ return function(Vargs, GetEnv)
 				)
 				Anti.RemovePlayer(p)
 				Anti.Detected(p, "Crash", "Invalid Remote Data")
+				return
 			elseif cliData and type(cliData) ~= "table" then
 				Anti.RemovePlayer(p)
 				Anti.Detected(p, "Crash", "Invalid Remote Data")
+				return
 				--elseif cliData and keys and cliData.Module ~= keys.Module then
 				--	Anti.Detected(p, "Kick", "Invalid Client Module (r10006)")
 			else
@@ -745,7 +744,7 @@ return function(Vargs, GetEnv)
 				end)
 
 				local PlayerData = Core.GetPlayer(p)
-				local level = Admin.GetLevel(p)
+				-- local level = Admin.GetLevel(p)
 				local banned, reason = Admin.CheckBan(p)
 
 				if banned then
@@ -765,7 +764,7 @@ return function(Vargs, GetEnv)
 
 				do
 					local Removed = false
-					local success, err = pcall(function()
+					pcall(function()
 						for filter, func in pairs(server.Variables.PlayerJoinFilters) do
 							local success, res, message = pcall(func, p, PlayerData)
 							if success and res == false then
@@ -805,7 +804,7 @@ return function(Vargs, GetEnv)
 
 			if not ran then
 				AddLog("Errors", `{p.Name} PlayerAdded Failed: {err}`)
-				warn("~! :: ARIDe :: SOMETHING FAILED DURING PLAYERADDED:")
+				warn("~! :: ASTRA :: SOMETHING FAILED DURING PLAYERADDED:")
 				warn(tostring(err))
 			end
 

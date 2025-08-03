@@ -6,21 +6,15 @@
 Astra is a modified version of Adonis by Sceleratis with edits, patches, and more!
 ## Installation
 ### TODO: Update the section below.<br>
-<br>If you get stuck, feel free to ask for assistance in our [Discord server](https://discord.gg/5XYP5B9YHB).
+<br>If you get stuck, feel free to ask for assistance in our [Discord server](https://discord.gg/YqCfhnqRvP).
 
-### Method 1: Official Roblox Model
-
-* [Take a copy](https://www.roblox.com/library/7510622625/) of the Adonis loader model from the Roblox library
-
-* Insert the model into Studio using the Toolbox into `ServerScriptService`
-
-### Method 2: GitHub Releases
+### Method 1: GitHub Releases
 
 * Download the `rbxm` file snapshot from the [latest release](https://github.com/Astra-Corporation/Astra.Admin/releases/latest)
 * Import the model file into Studio
   * Note: By default, snapshots included in releases have <a href="#debug-mode">`DebugMode`</a> enabled.
 
-### Method 3: Filesystem
+### Method 2: Filesystem
 
 * Download the repository to your computer's file system
 * Install and use a plugin like [Rojo](https://rojo.space/) to compile Adonis into a `rbxmx` file
@@ -38,15 +32,12 @@ The Adonis loader provides a `DebugMode` option which will load a local copy of 
 * Change `DebugMode` at the end of the `data` table to the desired value (e.g. `DebugMode = false`)
 
 ## Links
-* Official Adonis Loader: https://www.roblox.com/library/7510622625/Adonis-Loader
-* Official MainModule: https://www.roblox.com/library/7510592873/Adonis-MainModule
-* Documentation: https://github.com/Astra-Corporation/Astra.Admin/wiki
-* Discord Server: https://discord.gg/5XYP5B9YHB
-* Plugins Repository: https://github.com/Astra-Corporation/Astra.Admin-Plugins
+* Documentation (Unfinished): easternbloxxer.github.io/Adonis/
+* Discord Server: https://discord.gg/YqCfhnqRvP
 
 ## Contributing
 
-The purpose of this repository is to allow others to contribute and make improvements to Adonis. Even if you've never contributed on GitHub before, we would appreciate any contributions that you can provide.
+The purpose of this repository is to allow others to contribute and make improvements to Astra. Even if you've never contributed on GitHub before, we would appreciate any contributions that you can provide.
 
 ### [Contributing Guide](https://github.com/Astra-Corporation/Astra.Admin/blob/master/CONTRIBUTING.md)
 

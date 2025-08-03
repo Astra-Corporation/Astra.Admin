@@ -597,7 +597,7 @@ return function(Vargs, GetEnv)
 			newLoad.Parent = script
 			lbi.Parent = newLoad
 			
-			print(script, newLoad, lbi)
+			-- print(script, newLoad, lbi)
 
 			return newLoad
 		end;
