@@ -587,18 +587,34 @@ return function(Vargs, GetEnv)
 					Description = "Loads and runs the given lua string";
 					Function = function(p,args,data)
 						local oError = error
-						local newenv = GetEnv(getfenv(),{
-							print = function(...) local args, str = table.pack(...), "" for i = 1, args.n do str ..= `{(i > 1 and " " or "")}{args[i]}` end Remote.Terminal.LiveOutput(p, `PRINT: {str}`) end;
-							warn = function(...) local args, str = table.pack(...), "" for i = 1, args.n do str ..= `{(i > 1 and " " or "")}{args[i]}` end Remote.Terminal.LiveOutput(p, `WARN: {str}`) end;
-							error = function(reason, level)
-								if level ~= nil and type(level) ~= "number" then
-									oError(string.format("bad argument #2 to 'error' (number expected, got %s)", type(level)), 2)
-								end
-
-								Remote.Terminal.LiveOutput(p, `LUA_DEMAND_ERROR: {reason}`)
-								oError(`Adonis terminal error: {reason}`, (level or 1) + 1)
-							end;
+						local env = setmetatable({}, {
+							__index = function(_, k)
+								return GetEnv()[k] or _G[k]
+							end
 						})
+
+						env.print = function(...)
+							local args, str = table.pack(...), ""
+							for i = 1, args.n do
+								str ..= `{(i > 1 and " " or "")}{args[i]}`
+							end
+							Remote.Terminal.LiveOutput(p, `PRINT: {str}`)
+						end
+						env.warn = function(...)
+							local args, str = table.pack(...), ""
+							for i = 1, args.n do
+								str ..= `{(i > 1 and " " or "")}{args[i]}`
+							end
+							Remote.Terminal.LiveOutput(p, `WARN: {str}`)
+						end
+						env.error = function(reason, level)
+							if level ~= nil and type(level) ~= "number" then
+								oError(string.format("bad argument #2 to 'error' (number expected, got %s)", type(level)), 2)
+							end
+
+							Remote.Terminal.LiveOutput(p, `LUA_DEMAND_ERROR: {reason}`)
+							oError(`Adonis terminal error: {reason}`, (level or 1) + 1)
+						end
 
 						if not server.Remote.RemoteExecutionConfirmed[p.UserId] then
 							local ans = Remote.GetGui(p, "YesNoPrompt", {
@@ -615,11 +631,11 @@ return function(Vargs, GetEnv)
 							end
 						end
 
-						local func,err = Core.Loadstring(args[1], newenv)
+						local func, err = Core.Loadstring(args[1], env)
 						if func then
 							func()
 						else
-							Remote.Terminal.LiveOutput(p,`ERROR: {string.match(err, ":(.*)") or err}`)
+							Remote.Terminal.LiveOutput(p, `ERROR: {string.match(err, ":(.*)") or err}`)
 						end
 					end
 				};

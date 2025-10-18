@@ -135,7 +135,7 @@ game:GetService("NetworkClient").ChildRemoved:Connect(function(p)
 end)
 
 local unique = {}
-local origEnv = getfenv()
+-- local origEnv = getfenv()
 local Folder = script.Parent
 --local origWarn = warn
 local startTime = time()

@@ -353,12 +353,13 @@ local service = wrappedEnv.Service
         NoFilter = true;
         AdminLevel = "Creators";
         Function = function(plr: Player, args: {string})
-            local func,err = Core.Loadstring(args[1], GetEnv())
+            local env = setmetatable({}, {__index = function(_, k) return GetEnv()[k] or _G[k] end})
+            local func, err = Core.Loadstring(args[1], env)
             if func then
                 func()
             else
-                task.spawn("DEBUG",err)
-                Functions.Hint(err,{plr})
+                task.spawn("DEBUG", err)
+                Functions.Hint(err, {plr})
             end
         end
     };

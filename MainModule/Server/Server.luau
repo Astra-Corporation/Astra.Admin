@@ -124,14 +124,14 @@ local LogError = function(Player, Error)
 	if server.Core.DebugMode then
 		warn(`Astra Server Error: {Player}: {Error}`)
 	end
-	
+
 	local Logs = server.Logs
-	
+
 	if Logs then
-		
+
 		--if not Logs.Errors then
 			Logs.Errors = server.DLL.new()
-		--end -- broke and im lazy 
+		--end -- broke and im lazy
 		Logs.AddLog("Errors", {
 			Text = `{if Error and Player then `{Player}: ` else ''}{Error}`,
 			Desc = Error,
@@ -223,9 +223,9 @@ end
 local function CleanUp()
 	print("Beginning Astra cleanup process...")
 	print('Bailing out, you are on your own now. Good luck.')
-	
+
 	local data = service.UnWrap(server.Data)
-	
+
 	if type(data) == "table" and typeof(service.UnWrap(data.Config)) == "Instance" then
 		local Settings: ModuleScript = service.UnWrap(data.Config):FindFirstChild("Settings")
 		if typeof(Settings) == "Instance" and Settings:IsA("ModuleScript") then
@@ -250,7 +250,7 @@ local function CleanUp()
 			table.remove(RbxEvents, i)
 		end
 	end)
-	
+
 	if server.Core and server.Core.RemoteEvent then
 		pcall(server.Core.DisconnectEvent)
 	end
@@ -477,7 +477,7 @@ return service.NewProxy({
 		local packagesToRunWithPlugins = {}
 		local shared = Shared:Clone()
 		shared.Parent = server.Client
-		
+
 		for _, module in ipairs(data.ClientPlugins or {}) do
 			module:Clone().Parent = server.Client.Plugins
 		end
@@ -568,7 +568,7 @@ return service.NewProxy({
 		for _, module in (data.ServerPlugins or {}) do
 			local Success, ErrorMessage = pcall(LoadModule,module, false, {script = module});
 
-			if Success then 
+			if Success then
 				continue;
 			end;
 
@@ -613,14 +613,14 @@ return service.NewProxy({
 		end; -- Who removed this???
 
 		service.Events.ServerInitialized:Fire();
-		
-		-- Booooooo! Be scared. Scary month coming. Soon. We will be scary. And evil. Evil. Very evil. 
-		Logs.Errors = server.DLL.new() -- if we do it in logerror and logerror is never called something BREAKS! 
-		-- Server.Logs already does this. Why does it not work 
+
+		-- Booooooo! Be scared. Scary month coming. Soon. We will be scary. And evil. Evil. Very evil.
+		Logs.Errors = server.DLL.new() -- if we do it in logerror and logerror is never called something BREAKS!
+		-- Server.Logs already does this. Why does it not work
 		-- I am loosing my sanity
 		-- I am easternbloxxer and this is my message.
 		-- Kramp wuz her
-		
+
 		return "SUCCESS"
 	end;
 
