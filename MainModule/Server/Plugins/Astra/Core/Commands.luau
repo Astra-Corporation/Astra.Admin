@@ -15,6 +15,57 @@ return function(Vargs)
 
 	local TrackTask = service.TrackTask
 
+	Commands.NewTeam = {
+		Prefix = Settings.Prefix;
+		Commands = {"newteam", "createteam", "maketeam"};
+		Args = {"name", "BrickColor"};
+		Filter = true;
+		Description = "Make a new team with the specified name and color";
+		AdminLevel = "Moderators";
+		Function = function(plr: Player, args: {string})
+			local teamName = assert(args[1], "Missing team name (argument #1)")
+			local teamColor = Functions.ParseBrickColor(args[2])
+			service.New("Team", {
+				Parent = service.Teams;
+				Name = teamName;
+				TeamColor = teamColor;
+				AutoAssignable = false;
+			})
+			if Settings.CommandFeedback then
+				Functions.Hint(string.format("Created new team '%s' (%s)", teamName, teamColor.Name), {plr})
+			end
+		end
+	};
+
+	Commands.RemoveTeam = {
+		Prefix = Settings.Prefix;
+		Commands = {"removeteam", "deleteteam"};
+		Args = {"names"}; -- Argument can now be one or more names
+		Description = "Remove one or more teams, separated by a comma (e.g., team a, team b)";
+		AdminLevel = "Moderators";
+		Function = function(plr: Player, args: {string})
+			local teamNamesString = args[1]
+
+			for teamNameToRemove in string.gmatch(teamNamesString, "([^,]+)") do
+				local trimmedName = teamNameToRemove:match("^%s*(.-)%s*$")
+				local wasTeamFound = false
+				for _, team in service.Teams:GetTeams() do
+					if string.sub(string.lower(team.Name), 1, #trimmedName) == string.lower(trimmedName) then
+						Functions.Hint(`Removed team {team.Name}`, {plr})
+						team:Destroy()
+
+						wasTeamFound = true
+						break
+					end
+				end
+
+				if not wasTeamFound then
+					Functions.Hint(`Could not find a team matching "{trimmedName}"`, {plr})
+				end
+			end
+		end
+	};
+
 	Commands.Thaw = {
 		Prefix = Settings.Prefix;
 		Commands = {"thaw", "unfreeze", "unice"};
@@ -62,7 +113,7 @@ return function(Vargs)
 						end
 					end
 
-					--// Handle tool saving
+					--// Handle tool saving1
 					pBackpack = p:FindFirstChildOfClass("Backpack")
 
 					local ev
@@ -127,6 +178,9 @@ return function(Vargs)
 						if hasfullGod then
 							Admin.RunCommandAsPlayer(`{Settings.Prefix}fullgod {p.Name}`,p)
 						end
+						if hasGod then
+							Admin.RunCommandAsPlayer(`{Settings.Prefix}god {p.Name}`,p)
+						end
 					end
 
 				end)
@@ -134,7 +188,7 @@ return function(Vargs)
 		end
 	};
 
-	Commands.God = {
+	Commands.FullGod = {
 		Prefix = Settings.Prefix;
 		Commands = {"fullgod", "totalgod","god","immortal"};
 		Args = {"player"};
@@ -154,6 +208,28 @@ return function(Vargs)
 					})
 					if Settings.CommandFeedback then
 						Functions.Hint("You have been fullgodded.", {v}, 15)
+					end
+				end
+			end
+		end
+	};
+
+	Commands.God = {
+		Prefix = Settings.Prefix;
+		Commands = {"oldgod"};
+		Args = {"player"};
+		Description = "Makes the target player(s) immortal, makes their health so high that normal non-explosive weapons can't kill them";
+		AdminLevel = "Moderators";
+		Hidden = true;
+		Function = function(plr: Player, args: {string})
+			for _, v in service.GetPlayers(plr, args[1]) do
+				local hum = v.Character and v.Character:FindFirstChildOfClass("Humanoid")
+				if hum then
+					hum:AddTag('ADONIS_GOD')
+					hum.MaxHealth = math.huge
+					hum.Health = 9e9
+					if Settings.CommandFeedback then
+						Functions.Hint("You have been godded.", {v}, 15)
 					end
 				end
 			end
@@ -200,15 +276,15 @@ return function(Vargs)
 			local teleportOptions = if reservedServerInfo then service.New("TeleportOptions", {
 				ReservedServerAccessCode = reservedServerInfo.Code
 			}) else nil
-			for _, v in service.GetPlayers(plr, args[1]) do
+			for _, Player : Player in service.GetPlayers(plr, args[1]) do
 				task.spawn(function()
-					local ans = Remote.GetGui(plr, "YesNoPrompt", { Question = if reservedServerInfo then string.format("Do you want to teleport to server %s.", args[2]) else string.format("Do you want to teleport to place %d.", placeId); })
+					local ans = Remote.GetGui(Player, "YesNoPrompt", { Question = if reservedServerInfo then string.format("Do you want to teleport to server %s.", args[2]) else string.format("Do you want to teleport to place %d.", placeId); })
 					if
 						string.lower(ans) == "yes"
 					then
-						service.TeleportService:TeleportAsync(placeId, {v}, teleportOptions)
+						service.TeleportService:TeleportAsync(placeId, {Player}, teleportOptions)
 					else
-						Functions.Hint(`{service.FormatPlayer(v)} declined to teleport`, {plr})
+						Functions.Hint(`{service.FormatPlayer(Player)} declined to teleport`, {plr})
 					end
 				end)
 			end
