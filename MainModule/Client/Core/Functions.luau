@@ -1049,7 +1049,7 @@ return function(Vargs, GetEnv)
 
 			Variables.KeyBinds = keybinds or (data and data.Keybinds) or {}
 
-			service.UserInputService.InputBegan:Connect(function(input)
+			service.UserInputService.InputBegan:Connect(function(input, gameProcessedEvent:boolean)
 				local key = tostring(input.KeyCode.Value)
 				local textbox = service.UserInputService:GetFocusedTextBox()
 
