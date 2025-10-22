@@ -995,6 +995,14 @@ return function(Vargs, GetEnv)
 
 				Functions.SendJoinNotif(p)
 
+				if PlayerData.NeedsDataWarning then
+					Remote.MakeGui(p, "Notify",{
+						Title = "IMPORTANT",
+						Message = "Your data did not load correctly and will not be saved this session"
+					})
+					PlayerData.NeedsDataWarning = nil
+				end
+
 				if level > 0 then
 					local oldVer = (level > 300) and Core.GetData("VersionNumber")
 					local newVer = (level > 300) and tonumber(string.match(server.Changelog[1], "Version: (.*)"))
@@ -1101,7 +1109,7 @@ return function(Vargs, GetEnv)
 							local plr = service.Players:GetPlayerByUserId(]] .. v.UserId .. [[)
 							if plr then
 								plr:Destroy()
-								if plr.Character then 
+								if plr.Character then
 								plr.Character.Parent = nil
 								end
 							end

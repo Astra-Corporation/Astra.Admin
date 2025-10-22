@@ -264,17 +264,16 @@ return function(Vargs, GetEnv)
 							cliData.Mode = "Get"
 							return Process.Remote(p, cliData, com, ...)
 						else
-							log("BOOO",p, cliData, com, ...)
+							Anti.Detected(p, "Log", "Client is sending the server invalid data")
 						end
 						return nil
 					end;
-					rTable.Events.ProcessEvent = service.RbxEvent(event.OnServerEvent, function(p, cliData, com, ...)
+					rTable.Events.ProcessEvent = event.OnServerEvent:Connect(function(p, cliData, com, ...)
 						if server.Typechecker.interface({Mode = server.Typechecker.string})(cliData) then
 							cliData.Mode = "Fire"
 							Process.Remote(p, cliData, com, ...)
-						
 						else
-						log("Someone will die",p, cliData, com, ...)
+							Anti.Detected(p, "Log", "Client is sending the server invalid data")
 						end
 					end)
 
@@ -593,11 +592,11 @@ return function(Vargs, GetEnv)
 		GetLoadstring = function()
 			local newLoad = Deps.Loadstring:Clone()
 			local lbi = server.Shared.FiOne:Clone()
-			
+
 			newLoad.Parent = script
 			lbi.Parent = newLoad
-			
-			-- print(script, newLoad, lbi)
+
+			--print(script, newLoad, lbi) -- Someone forgot to remove a debug print before release and it took me way longer than i want to admit to find it
 
 			return newLoad
 		end;
@@ -678,9 +677,10 @@ return function(Vargs, GetEnv)
 				Core.PlayerData[key] = PlayerData;
 
 				if Core.DataStore and p.UserId > 0 then
-					local data = Core.GetData(key);
+					local data,ok = Core.GetData(key, nil, true);
+					--local ok, data = pcall(Core.GetData,key)
 
-					if typeof(data) == "table" then
+					if typeof(data) == "table" and ok then
 						data.AdminNotes = if data.AdminNotes then Functions.DSKeyNormalize(data.AdminNotes, true) else {}
 						data.Warnings = if data.Warnings then Functions.DSKeyNormalize(data.Warnings, true) else {}
 
@@ -694,6 +694,16 @@ return function(Vargs, GetEnv)
 
 						Core.SavedPlayerData[p.UserId] = service.DeepCopy(data)
 					end;
+
+					PlayerData.PlayerDataLoaded = true
+
+					if not ok then
+						--TODO: Make this a scriptlog later - Keeping it as a warn for now as its not done yet
+						warn(`The player data for {key} failed to load and their data will not be saved because {data}`)
+						-- TODO: A notification for the user
+						PlayerData.PlayerDataLoaded = false
+						PlayerData.NeedsDataWarning = true
+					end
 				end;
 			end;
 
@@ -709,11 +719,11 @@ return function(Vargs, GetEnv)
 			local pData = customData or Core.PlayerData[key];
 
 			if Core.DataStore then
-				if pData and p.UserId > 0 then
+				if pData and p.UserId > 0 and pData.PlayerDataLoaded then
 					local data = service.DeepCopy(pData);
 
 					--// Temporary junk that will be removed on save.
-					for _, blacklistedData in ({"Groups", "LastChat", "AdminRank", "AdminLevel", "LastLevelUpdate", "LastDataSave"}) do
+					for _, blacklistedData in ({"Groups", "LastChat", "AdminRank", "AdminLevel", "LastLevelUpdate", "LastDataSave","PlayerDataLoaded","NeedsDataWarning","ClientVersion"}) do
 						data[blacklistedData] = nil
 					end
 
@@ -743,8 +753,13 @@ return function(Vargs, GetEnv)
 							Desc = "Player data was not saved to the datastore due to it having default values";
 						})
 					end
-
 					pData.LastDataSave = os.time()
+				end
+				if not pData.PlayerDataLoaded then
+					AddLog(Logs.Script, {
+						Text = `Didn't save data for {p.Name}`;
+						Desc = "Player data did not load correctly so their data wont be saved";
+					})
 				end
 			end
 		end;
@@ -815,10 +830,12 @@ return function(Vargs, GetEnv)
 			local reqPerMin = 60 + #service.Players:GetPlayers() * 10
 			local reqDelay = 60 / reqPerMin
 
+
+
 			local budget
 			repeat
 				budget = service.DataStoreService:GetRequestBudgetForRequestType(reqType);
-			until budget > 0 and task.wait(1)
+			until budget > 0 and task.wait(if server.Settings.LowDataStoreUsage and budget < 100 then 1 else nil) -- nil for a 1/60th wait
 
 			return reqDelay + 0.5
 		end;
@@ -868,8 +885,6 @@ return function(Vargs, GetEnv)
 						else
 							logError(`DataStore SetAsync Failed: {ret}`);
 						end
-
-						task.wait(6)
 					end, 120, true)
 
 					if not ran2 then
@@ -904,7 +919,6 @@ return function(Vargs, GetEnv)
 						return error(ret)
 					end
 
-					task.wait(6)
 				end, 120, true) --// 120 timeout, yield until this queued function runs and completes
 
 				if not ran2 then
@@ -923,7 +937,7 @@ return function(Vargs, GetEnv)
 			end
 		end;
 
-		GetData = function(key: string, repeatCount: number?)
+		GetData = function(key: string, repeatCount: number?, showStatus: boolean?)
 			if repeatCount then
 				warn(`Retrying GetData request for {key}`)
 			end
@@ -931,15 +945,15 @@ return function(Vargs, GetEnv)
 			local DataStore = Core.DataStore
 			if DataStore then
 				local ran2, err2 = Queue("DataStoreReadData", function()
-					--wait(Core.DS_GetRequestDelay("Read")) -- TODO: re-implement this effectively and without an unnecessary delay
+					wait(Core.DS_GetRequestDelay("Read"))
 					local ran, ret = pcall(DataStore.GetAsync, DataStore, Core.DataStoreEncode(key))
 					if ran then
 						Core.DataCache[key] = ret
-						return ret
+						return ret, ran
 					else
 						logError(`DataStore GetAsync Failed: {ret}`)
 						if Core.DataCache[key] then
-							return Core.DataCache[key]
+							return Core.DataCache[key], true
 						else
 							error(ret)
 						end
@@ -951,11 +965,21 @@ return function(Vargs, GetEnv)
 					--// Attempt 3 times, with slight delay between if failed
 					task.wait(1)
 					if not repeatCount then
-						return Core.GetData(key, 3)
+						return Core.GetData(key, 3, showStatus)
 					elseif repeatCount > 0 then
-						return Core.GetData(key, repeatCount - 1)
+						return Core.GetData(key, repeatCount - 1, showStatus)
 					end
+
+					if showStatus then
+						return nil, false
+					end
+					return nil
+
 				else
+					if showStatus then
+						return err2, true
+					end
+
 					return err2
 				end
 			end
@@ -1022,16 +1046,21 @@ return function(Vargs, GetEnv)
 		end;
 
 		GetTableKey = function(indList: {string})
-			local tabs = Core.GetData("SavedTables") or {}
+			local tabs, SuccessSavedTables = Core.GetData("SavedTables", nil, true)
 			local realTable, tableName = Core.IndexPathToTable(indList)
 
 			local foundTable = nil
 
-			for _, v in tabs do
+			for _, v in tabs or {} do
 				if type(v) == "table" and v.TableName and v.TableName == tableName then
 					foundTable = v
 					break
 				end
+			end
+
+			if not tableName then
+				-- No table found, ditch data! Malicious maybe?
+				return false;
 			end
 
 			if not foundTable then
@@ -1041,10 +1070,14 @@ return function(Vargs, GetEnv)
 				}
 
 				table.insert(tabs, foundTable)
-				Core.SetData("SavedTables", tabs)
+				if SuccessSavedTables then
+					Core.SetData("SavedTables", tabs)
+				end
+				--Core.SetData("SavedTables", tabs)
 			end
 
-			if not Core.GetData(foundTable.TableKey) then
+			local Data, Success = Core.GetData(foundTable.TableKey, nil, true)
+			if not Success then
 				Core.SetData(foundTable.TableKey, {})
 			end
 
@@ -1068,6 +1101,11 @@ return function(Vargs, GetEnv)
 				local tab = data.Table
 				local val = data.Value
 				local key = Core.GetTableKey(tab)
+
+				if not key then
+					-- No key found? Can't update !
+					return
+				end
 
 				--// Storing an old reference of data.Table as we may override it later on.
 				local originalTable = tab
@@ -1119,6 +1157,11 @@ return function(Vargs, GetEnv)
 				local originalTable = tab
 				local val = data.Value
 				local key = Core.GetTableKey(tab)
+
+				if not key then
+					-- No key found? Can't update !
+					return
+				end
 
 				if type(tab) == "string" then
 					tab = {"Settings", tab}
@@ -1254,16 +1297,17 @@ return function(Vargs, GetEnv)
 				local SavedTables
 
 				if Core.DataStore and Settings.DataStoreEnabled then
+					local SuccessSettings, SuccessTables = false, false
 
 					local GetData, LoadData, SaveData, DoSave = Core.GetData, Core.LoadData, Core.SaveData, Core.DoSave
 					if not key then
-						SavedSettings = GetData("SavedSettings")
-						SavedTables = GetData("SavedTables")
+						SavedSettings, SuccessSettings = GetData("SavedSettings", nil, true)
+						SavedTables, SuccessTables = GetData("SavedTables", nil, true)
 					elseif key and not data then
 						if key == "SavedSettings" then
-							SavedSettings = GetData("SavedSettings")
+							SavedSettings, SuccessSettings = GetData("SavedSettings", nil, true)
 						elseif key == "SavedTables" then
-							SavedTables = GetData("SavedTables")
+							SavedTables, SuccessTables = GetData("SavedTables", nil, true)
 						end
 					elseif key and data then
 						if key == "SavedSettings" then
@@ -1274,12 +1318,12 @@ return function(Vargs, GetEnv)
 					end
 
 					if not key and not data then
-						if not SavedSettings then
+						if not SavedSettings and SuccessSettings then
 							SavedSettings = {}
 							SaveData("SavedSettings", {})
 						end
 
-						if not SavedTables then
+						if not SavedTables and SuccessTables then
 							SavedTables = {}
 							SaveData("SavedTables", {})
 						end
@@ -1361,8 +1405,6 @@ return function(Vargs, GetEnv)
 			local ipairs = ipairs
 			local next = next
 			local table = table
-			local getfenv = getfenv
-			local setfenv = setfenv
 			local require = require
 			local tostring = tostring
 			local tonumber = tonumber
@@ -1383,8 +1425,6 @@ return function(Vargs, GetEnv)
 				ClearSavedSettings = Settings.Allowed_API_Calls.DataStore and Settings.Allowed_API_Calls.Settings;
 				SetSetting = Settings.Allowed_API_Calls.Settings;
 			}
-
-			setfenv(1,setmetatable({}, {__metatable = getmetatable(getfenv())}))
 
 			local API_Specific = {
 				API_Specific = {
@@ -1543,7 +1583,7 @@ return function(Vargs, GetEnv)
 							end
 							return RealEnvResult, false
 						end
-					end	
+					end
 
 					local AdonisDebugAPIBindable = service.New("BindableFunction")
 					AdonisDebugAPIBindable.Name = "Adonis_Debug_API"
@@ -1611,7 +1651,7 @@ return function(Vargs, GetEnv)
 							if table.isfrozen and not table.isfrozen(_G) or not table.isfrozen then
 								rawset(_G, "Adonis", AdonisGTable)
 							else
-								pcall(task.defer, function() Functions.ExploitLog({Name = "ARIDe_Bot", UserId = 5798880644,AccountAge = 0,MembershipType={Name="None"}},"SOMETHING CHANGED THE ADONIS _G API - SHUT DOWN  THIS SERVER ASAP",{})  end)
+								pcall(task.defer, function() Functions.ExploitLog({Name = "Astra", UserId = 5798880644,AccountAge = 0,MembershipType={Name="None"}},"SOMETHING CHANGED THE ADONIS _G API!",{})  end)
 
 								warn("⚠️ ADONIS CRITICAL WARNING! MALICIOUS CODE IS TRYING TO CHANGE THE ADONIS _G API AND IT CAN'T BE SET BACK! PLEASE SHUTDOWN THE SERVER AND REMOVE THE MALICIOUS CODE IF POSSIBLE!")
 							end
