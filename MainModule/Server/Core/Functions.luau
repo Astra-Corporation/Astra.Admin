@@ -136,7 +136,7 @@ return function(Vargs, GetEnv)
 						local p = getplr(v)
 						local hasAdmin = Admin.CheckAdmin(p,false)
 						local hasBypass = table.find(Variables.OptedOutOfAdmin,p)
-						
+
 						if p and not hasAdmin or hasBypass then
 							table.insert(players, p)
 							plus()
@@ -454,11 +454,11 @@ return function(Vargs, GetEnv)
 
 		GetChatService = function(waitTime)
 			local isTextChat = service.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService
-			
+
 			if isTextChat then
 				return nil
 			end
-			
+
 			local chatHandler = service.ServerScriptService:WaitForChild("ChatServiceRunner", waitTime or isTextChat and 0.2 or 145)
 			local chatMod = chatHandler and chatHandler:WaitForChild("ChatService", waitTime or isTextChat and 0.2 or 145)
 
@@ -540,7 +540,7 @@ return function(Vargs, GetEnv)
 
 				--// This is for player commands that take in service.GetPlayers() to make sure someone isnt passing in a message that is insanely long
 				local PlrLevel = if plr then Admin.GetLevel(plr) else 0
-				local AllowUnsafeSelectors = PlrLevel > 0 or options.AllowUnsafeSelectors 
+				local AllowUnsafeSelectors = PlrLevel > 0 or options.AllowUnsafeSelectors
 				local MaxSelectors = Variables.MaxSafeSelectors or 400 -- 400 seems like a good "max" that won't ever be reached
 
 				local index = 0
@@ -916,7 +916,7 @@ return function(Vargs, GetEnv)
 				})
 			end
 		end;
-		
+
 		Output = function(Players:Player?, Message:string)
 			if typeof(Players) == "Player" then Players = {Players} end
 			for _, v in Players do
@@ -925,7 +925,7 @@ return function(Vargs, GetEnv)
 				})
 			end
 		end;
-		
+
 		Message = function(sender, title, message, image, players, scroll, duration)
 
 			-- Currently not used
@@ -1336,7 +1336,7 @@ return function(Vargs, GetEnv)
 				end
 
 				if not buf then
-					local result = string.gsub(string.gsub(string.gsub(arg, spat, ""), epat, ""), escquotpat, "%2")	
+					local result = string.gsub(string.gsub(string.gsub(arg, spat, ""), epat, ""), escquotpat, "%2")
 					str ..= result .. key
 					table.insert(tab,result)
 				end
@@ -1466,7 +1466,7 @@ return function(Vargs, GetEnv)
 			end
 		end;
 
-		AddJoinFilter = function(name, func) 
+		AddJoinFilter = function(name, func)
 			if server.Variables.PlayerJoinFilters[name] then
 				error(string.format("The Join Filter %s already exists!", name))
 			else
@@ -1474,7 +1474,7 @@ return function(Vargs, GetEnv)
 			end
 		end;
 
-		RemoveJoinFilter = function(name) 
+		RemoveJoinFilter = function(name)
 			if server.Variables.PlayerJoinFilters[name] then
 				server.Variables.PlayerJoinFilters[name] = nil
 			end
@@ -1657,6 +1657,33 @@ return function(Vargs, GetEnv)
 			end
 			return if allowNil then nil else BrickColor.random()
 		end;
+
+		GetPlaceName = function()
+			local Cache = Variables.PlaceName
+
+			if Cache then
+				return Cache
+			end
+
+			local S, PlaceInfo = pcall(function() return service.MarketplaceService:GetProductInfo(game.PlaceId) end)
+
+			if S and PlaceInfo then
+				if PlaceInfo.Name then  -- I dont know
+					Variables.PlaceName = PlaceInfo.Name
+					return Variables.PlaceName
+				end
+			end
+
+			return "Failed to get place name"
+		end;
+
+		SendJoinNotif = function()
+			return
+		end,
+
+		SendLeaveNotif = function()
+			return
+		end,
 	};
 
 	task.spawn(xpcall, function()

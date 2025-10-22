@@ -6,28 +6,18 @@ return function(Vargs)
 	local service = Vargs.Service
 	local Core = server.Core;
 	local Admin = server.Admin;
-	local Process = server.Process;
 	local Settings = server.Settings;
 	local Functions = server.Functions;
 	local Commands = server.Commands;
 	local Remote = server.Remote;
-	local Logs = server.Logs;
 	local Variables = server.Variables;
-	local Permission = server.Permission;
 	local HTTP = server.HTTP;
 	local Anti = server.Anti;
 
-	local TextService = service.TextService
-	local MarketplaceService = service.MarketplaceService
-
-	local PrivateServerId = game.PrivateServerId
-	local PrivateServerOwnerId = game.PrivateServerOwnerId
-
-	local Asset = { Name = "Failed to fetch Place Info" } --// Fallback incase roblox is having issues
 	local placeId = game.PlaceId
 
 	local PluginSettings = {
-		CallCooldown = 60,
+		CallCooldown = 200,
 		Reasons = Settings.CallReasons,
 		BaseURL = Settings.BaseURL,
 		Webhook = Settings.MainCallWebhook,
@@ -35,20 +25,17 @@ return function(Vargs)
 		TextContent = Settings.CallTextContent
 	}
 
-	pcall(function()
-		Asset = MarketplaceService:GetProductInfo(game.PlaceId)
-	end)
-
-	server.Commands.Call = {
+	Commands.Call = {
 		Prefix = Settings.PlayerPrefix,
 		Commands = { "call", "report" },
 		Args = {},
 		Fun = false,
 		Hidden = false,
+		HideFromChat = true;
 		Description = "Report a player to moderators",
 		AdminLevel = "Players",
 		Function = function(plr, args)
-			if cooldowndata[plr.UserId] then
+			if cooldowndata[plr.UserId] and cooldowndata[plr.UserId] + PluginSettings.CallCooldown > os.clock() then
 				return Remote.MakeGui(plr, "Hint", { Message = "Your call cooldown has not ended!" })
 			end
 
@@ -70,70 +57,88 @@ return function(Vargs)
 	};
 
 
-
-	server.Commands.ClearCallCooldown = {
+	Commands.ClearCallCooldown = {
 		Prefix = Settings.Prefix,
-		Commands = { "ClearCooldown" },
+		Commands = { "clearcallcooldown" },
 		Args = {},
 		Fun = false,
 		Hidden = false,
-		Disabled = true,
 		Description = "Clears the cooldown of the current user.",
 		AdminLevel = "Admins",
 		Function = function(plr, args)
-			table.remove(cooldowndata, plr.UserId)
-			server.Remote.MakeGui(plr, "Hint", {
+			cooldowndata[plr.UserId] = nil
+
+			Remote.MakeGui(plr, "Hint", {
 				Message = "Your call cooldown has been reset",
 			})
 		end,
 	}
-	server.Remote.Commands.SendReport = function(plr, args)
+
+	server.Remote.Commands.SendReport = function(plr :Player, args)
 		-- Checking if we have the args before continuing further
 		assert(args[1], "Missing player name")
 		assert(args[2], "Missing reason")
 		assert(args[3], "Missing extra notes")
+		assert(plr.AccountAge > 2, "You silly goose!")
+		assert(plr.AccountAge > 10, "You may not send reports!")
+
+		if Admin.CheckTable(plr, HTTP.Trello.ReportBlacklists) then
+			Remote.MakeGui(plr, "Output", {
+				Message = "You may not send reports!",
+			})
+			return
+		end
+
+		if cooldowndata[plr.UserId] and cooldowndata[plr.UserId] + PluginSettings.CallCooldown > os.clock() then
+			return Remote.MakeGui(plr, "Hint", { Message = "Your call cooldown has not ended!" })
+		end
+
+		cooldowndata[plr.UserId] = os.clock()
 
 		--// Variables
 		local userId = plr.UserId
-		local filtered = TextService:FilterStringAsync(args[2], plr.UserId)
-		local extranotes = TextService:FilterStringAsync(args[3], plr.UserId)
-		local admins = service.GetPlayers(plr, "admins")
+		local reason = args[2]
+		local clean = string.sub(service.SanitizeString(args[3]),1, 350)
+		local extranotes = service.Filter(clean,plr,plr)
+		local admins = service.GetPlayers(plr, "admins",{NoFakePlayer=true,DontError=true})
 		local InGameAdmins = {}
 
-		local reportedplr = nil
+		local reportedplr = service.GetPlayers(plr, args[1])[1]
 
-
-		--// Main Code
-
-		for i, v in service.GetPlayers(plr, args[1]) do
-			reportedplr = v
-			break
+		if not table.find(Settings.CallReasons, reason) then
+			plr:Kick("You tried, that's what mattered.")
+			return Anti.Detected(plr,"log","Tried setting a custom call reason")
 		end
 
 		if not reportedplr and args[1] ~= "Server" then
-			Anti.Detected(plr,"log",`Attempted to report a player not in the server`)
+			cooldowndata[plr.UserId] = nil
 			return Remote.MakeGui(plr, "Output", {
 				Message = "Player you reported is not in the server!",
-		})
-
-		elseif Admin.GetLevel(reportedplr) > 1 then
-			Anti.Detected(plr,"log",`Attempted to report an moderator: {reportedplr.Name}`)
+			})
+		elseif not service.Players:FindFirstChild(args[1]) and args[1] ~= "Server" then
+			--Anti.Detected(plr,"log",`Attempted to report a player not in the server`)
+			-- Shouldnt flag players!
+			cooldowndata[plr.UserId] = nil
 			return Remote.MakeGui(plr, "Output", {
-				Message = "No.",
-		})
+				Message = "Player you reported is not in the server!",
+			})
+		elseif Admin.CheckAdmin(reportedplr) then
+			Anti.Detected(plr,"log",`Attempted to report a moderator: {reportedplr.Name}\nEither the player is exploiting or the player being reported got mod after they ran !call`)
+			return Remote.MakeGui(plr, "Output", {
+				Message = "Why would you do that...",
+			})
 
 		elseif plr.Name and plr.Name == reportedplr.Name then
 			return server.Remote.MakeGui(plr, "Output", {
 				Message = "You cannot report yourself!",
-		})
-
+			})
 		end
 
 		local EmbedData = {}
-		
+
 		local reportedstring = (args[1] == "Server") and "Server" or `[{reportedplr}](https://www.roblox.com/users/{reportedplr.UserId}/profile)`
 
-		EmbedData.title = Asset.Name or "Something went wrong!"
+		EmbedData.title = Functions.GetPlaceName()
 		EmbedData.url = "https://www.roblox.com/games/" .. placeId .. "/redirect"
 		EmbedData.description = "["
 			.. plr.Name
@@ -141,7 +146,7 @@ return function(Vargs)
 			.. plr.UserId
 			.. "/profile) has sent in a report\n\n"
 		EmbedData.thumbnail = {
-			url = "https://www.astracorp.xyz/headshot-thumbnail/image?userId=" 
+			url = "https://www.astracorp.xyz/headshot-thumbnail/image?userId="
 				.. userId
 				.. "&width=420&height=420&format=png",
 		}
@@ -151,9 +156,9 @@ return function(Vargs)
 				name = "Reporting",
 				value = reportedstring
 			},
-			{ name = "Reason", value = filtered:GetNonChatStringForUserAsync(plr.UserId) },
-			{ name = "Extra notes", value = extranotes:GetNonChatStringForUserAsync(plr.UserId) },
-			{ name = "Join Command", value = `{Settings.Prefix}jplace me {game.JobId}`},
+			{ name = "Reason", value = reason },
+			{ name = "Extra notes", value = extranotes },
+			--{ name = "Join Command", value = `{Settings.Prefix}joinserver  {game.JobId}`},
 			{
 				name = "Join Link",
 				value = `https://www.astracorp.xyz/game-launch?placeId={placeId}&jobId={game.JobId}`
@@ -163,14 +168,13 @@ return function(Vargs)
 				value = #service.GetPlayers() or 0 .. "/" .. service.Players.MaxPlayers or 0,
 				inline = true,
 			},
-			{ name = "Time Reported", value = "<t:" .. tostring(os.time()) .. ":R>", inline = true },
+			{ name = "Time Reported", value = `<t:{tostring(os.time())}:R>`, inline = true },
 			{
 				name = "Server type",
 				value = tostring(Functions.getServerType() or "Something failed when fetching the server type"),
 				inline = true,
 			},
 		}
-
 
 		if #admins >= 1 then
 			for i, v in ipairs(admins) do
@@ -179,6 +183,11 @@ return function(Vargs)
 			table.insert(
 				EmbedData.fields,
 				{ name = "Admins In-Game", value = table.concat(InGameAdmins, ", "), inline = false }
+			)
+		else
+			table.insert(
+				EmbedData.fields,
+				{ name = "Admins In-Game", value = "None", inline = false }
 			)
 		end
 
@@ -207,20 +216,20 @@ return function(Vargs)
 				},
 				Body = service.HttpService:JSONEncode(Data),
 			})
+			return request
 		end)
 
 		if success then
-
 			if request.StatusCode == 200 or request.StatusCode == 204 then
-				cooldowndata[plr.UserId] = true
+				cooldowndata[plr.UserId] = os.clock()
 				server.Remote.MakeGui(plr, "Output", {
 					Message = "Your report was successfully sent!",
 				})
-				table.insert(cooldowndata, plr.UserId)
 			else
 				server.Remote.MakeGui(plr, "Output", {
 					Message = "Something went wrong while sending your call!",
 				})
+				cooldowndata[plr.UserId] = nil
 				warn('Something went wrong with a call! ')
 				warn(msg)
 			end
@@ -229,17 +238,13 @@ return function(Vargs)
 				Message = "Something went wrong while sending your call!",
 			})
 			warn('Something went wrong with a call! ')
+			cooldowndata[plr.UserId] = nil
 			warn(msg)
 		end
 
 		task.spawn(function()
-			cooldowndata[plr.UserId] = true
-
 			task.wait(PluginSettings.CallCooldown)
-
 			cooldowndata[plr.UserId] = nil
-		end)-- Now that i think about it this is a dumb way to do it
-			-- Next release i will make it save the time and check the time whenever the next call is made.
-			-- Possibly will be stored in PlayerData and the webserver so it saves in every server
+		end)
 	end
 end;
