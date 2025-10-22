@@ -11,19 +11,19 @@ local TestService = game:GetService("TestService")
 
 local print = function(...)
 	for _, Value in ipairs({...}) do
-		TestService:Message(`ARIDe ServerLoader // INFO: {Value}`)
+		TestService:Message(`Astra ServerLoader // INFO: {Value}`)
 	end
 end
 
 local error = function(...)
 	for _, Value in ipairs({...}) do
-		warn(`ARIDe ServerLoader !! ERROR: {Value} Traceback:\n{debug.traceback()}`)
+		warn(`Astra ServerLoader !! ERROR: {Value} Traceback:\n{debug.traceback()}`)
 	end
 end
 
 local warn = function(...)
 	for _, Value in ipairs({...}) do
-		warn(`ARIDe ServerLoader // INFO: {Value}`)
+		warn(`Astra ServerLoader // INFO: {Value}`)
 	end
 end
 
@@ -38,7 +38,7 @@ local pcall = function(func, ...)
 end
 
 local function AbortLoad(Reason)
-	warn(`ARIDe aborted loading. Reason: {Reason}`)
+	warn(`Astra aborted loading. Reason: {Reason}`)
 	if script then script:Destroy() end
 	return false
 end
@@ -79,10 +79,10 @@ local Data = {
 	Loader = Loader,
 	Runner = Loader,
 
-	ModuleID = Model:FindFirstChild('MainModule'),
+	ModuleID = Model:FindFirstChild('MainModule'), -- Maybe one day..
 	LoaderID = 7510622625,
 
-	DebugMode = true    
+	DebugMode = true
 }
 
 --// BEgin loading
