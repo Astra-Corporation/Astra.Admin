@@ -2,6 +2,7 @@ return function(Vargs, GetEnv)
 	local server = Vargs.Server;
 	local service = Vargs.Service;
 
+	local env = GetEnv(nil, {script = script})
 	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Defaults, Commands
 --[[
 	// Astra Server-side
@@ -119,8 +120,8 @@ return function(Vargs, GetEnv)
 				return Process.RateLimits
 			end;
 			AdminListData = function(plr,args)
-				if server.Admin.CheckAdmin(plr) then 
-					return server.Functions.GetAdminListData() 
+				if server.Admin.CheckAdmin(plr) then
+					return server.Functions.GetAdminListData()
 				end
 			end,
 			Test = function(p: Player, args: {[number]: any})
@@ -452,11 +453,11 @@ return function(Vargs, GetEnv)
 				end
 				return tab
 			end;
-			
+
 			--ConsoleFormattedCommands = function(p: Player,args: {[number]: any})
 			--	local commands = Admin.SearchCommands(p, args[1] or "all")
 			--	local tab = {}
-			--	local infotab = 
+			--	local infotab =
 			--	for _,v in commands do
 			--		if not v.Hidden and not v.Disabled then
 			--			for a in v.Commands do
@@ -587,6 +588,7 @@ return function(Vargs, GetEnv)
 					Description = "Loads and runs the given lua string";
 					Function = function(p,args,data)
 						local oError = error
+						local oError = error
 						local env = setmetatable({}, {
 							__index = function(_, k)
 								return GetEnv()[k] or _G[k]
@@ -631,11 +633,11 @@ return function(Vargs, GetEnv)
 							end
 						end
 
-						local func, err = Core.Loadstring(args[1], env)
+						local func,err = Core.Loadstring(args[1], env)
 						if func then
 							func()
 						else
-							Remote.Terminal.LiveOutput(p, `ERROR: {string.match(err, ":(.*)") or err}`)
+							Remote.Terminal.LiveOutput(p,`ERROR: {string.match(err, ":(.*)") or err}`)
 						end
 					end
 				};
@@ -913,14 +915,20 @@ return function(Vargs, GetEnv)
 			end;
 
 			Detected = function(p: Player, args: {[number]: any})
-				if type(args[1]) ~= "string" then
+				local Action = args[1]
+
+				if type(Action) ~= "string" then
 					return Anti.Detected(
 						p,
 						"Crash",
-						`Got a detection from the client but the client but the action wasn't a string`
+						"Got a detection from the client but the client but the action wasn't a string"
 					)
 				end
-				
+
+				if Action == "respawn" then
+					Action = "kill"
+					-- We dont want the client being able to use LoadCharacter
+				end
 				-- if not table.find(Variables.ClientAntiDetectors,args[2]) then
 				-- 	return Anti.Detected(
 				-- 		p,
@@ -929,8 +937,8 @@ return function(Vargs, GetEnv)
 				-- 	)
 				-- end
 				local info = string.sub(string.gsub(tostring(args[2]), "\n", ""), 1, 350)
-				
-				Anti.Detected(p, args[1], info)
+				local filtered = service.Filter(info,p,p)
+				Anti.Detected(p, Action, filtered or info)
 			end;
 
 			TrelloOperation = function(p: Player, args: {[number]: any})
@@ -1004,21 +1012,17 @@ return function(Vargs, GetEnv)
 						Check = true
 					})
 				elseif Process.RateLimit(p, "RateLog") then
-					Anti.Detected(p, "Log", string.format("Running commands too quickly (>Rate: %s/sec)", 1/Process.RateLimits.Command));
-					warn(string.format("%s is running commands too quickly (>Rate: %s/sec)", p.Name, 1/Process.RateLimits.Command));
+					Remote.MakeGui(p, "Output", {
+						Message = "I'm not a slot machine. Mashing the button faster doesn't improve your chances.",
+					})
+					--Anti.Detected(p, "Log", string.format("Running commands too quickly (>Rate: %s/sec)", 1/Process.RateLimits.Command));
+					--warn(string.format("%s is running commands too quickly (>Rate: %s/sec)", p.Name, 1/Process.RateLimits.Command));
 				end
 			end;
 
 			ProcessChat = function(p: Player, args: {[number]: any})
 				if type(args[1]) == "string" then
 					Process.Chat(p, args[1])
-				end
-			end;
-
-			ProcessCustomChat = function(p: Player, args: {[number]: any})
-				if type(args[1]) == "string" and type(args[2]) == "string" then
-					Process.Chat(p,args[1],"CustomChat")
-					Process.CustomChat(p, args[1], args[2], true)
 				end
 			end;
 
@@ -1192,47 +1196,6 @@ return function(Vargs, GetEnv)
 			end
 		end;
 
-		OldGet = function(p: Player, com: string, ...)
-			local keys = Remote.Clients[tostring(p.UserId)]
-			if keys and keys.RemoteReady == true then
-				local returns, finished
-				local key = service.HttpService:GenerateGUID(false)
-				local Yield = service.Yield();
-				local event = service.Events[key]:Connect(function(...) print("WE ARE GETTING A RETURN!") finished = true returns = {...} Yield:Release() end)
-
-				Remote.PendingReturns[key] = true
-				Remote.Send(p,"GetReturn",com,key,...)
-
-				print("GETTING RETURN");
-				if not finished and not returns and p.Parent then
-					local pEvent = service.Players.PlayerRemoving:Connect(function(plr) if plr == p then event:Fire() end end)
-					task.delay(600, function() if not finished then event:Fire() end end)
-					print(string.format("WAITING FOR RETURN %s", tostring(returns)));
-					--returns = returns or {event:Wait()}
-					Yield:Wait();
-					Yield:Destroy();
-
-					print(string.format("WE GOT IT! %s", tostring(returns)));
-					pEvent:Disconnect()
-					pEvent = nil
-				end
-
-				print("GOT RETURN");
-				event:Disconnect()
-				event = nil
-
-				if returns then
-					if returns[1] == "__ADONIS_RETURN_ERROR" then
-						error(returns[2])
-					else
-						return unpack(returns)
-					end
-				else
-					return
-				end
-			end
-		end;
-
 		CheckClient = function(p: Player)
 			local ran,ret = pcall(function() return Remote.Get(p,"ClientHooked") end)
 			if ran and ret == Remote.Clients[tostring(p.UserId)].Special then
@@ -1275,7 +1238,6 @@ return function(Vargs, GetEnv)
 			if not p then return end
 			local theme = {Desktop = Settings.Theme; Mobile = Settings.MobileTheme}
 			if themeData then for ind,dat in themeData do theme[ind] = dat end end
-			
 			Remote.Send(p,"UI",GUI,theme,data or {})
 		end;
 
@@ -1315,7 +1277,7 @@ return function(Vargs, GetEnv)
 		end;
 
 		MakeLocal = function(p: Player, object: Instance, parent: string?, clone: boolean?)
-			object.Parent = p --TODO: make it use PlayerGui again and finish client support for that
+			object.Parent =  p
 			task.wait(0.5)
 			Remote.Send(p, "Function", "MakeLocal", object, parent, clone)
 		end;

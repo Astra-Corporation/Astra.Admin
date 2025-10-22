@@ -46,7 +46,8 @@ return function(Vargs, GetEnv)
 		ScriptBuilder = {},
 		CachedDonors = {},
 		BanMessage = "Banned",
-		DonorDisabledInServer = false;
+		DonorDisabledInServer = false,
+		ChatLocked = false,
 		PlayerJoinFilters = {
 
 		};

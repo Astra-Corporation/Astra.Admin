@@ -29,6 +29,8 @@ return function(Vargs, GetEnv)
 
 			local adminLevel = pDat.Level
 			local comLevel = cmd.AdminLevel
+			local Player = pDat.Player
+			local CustomCheck = cmd.CustomPermissionCheck or cmd.CustomCheck
 
 			if cmd.Disabled then
 				return false, "This command has been disabled."
@@ -78,22 +80,18 @@ return function(Vargs, GetEnv)
 				return isInGroup and (rankInGroup >= cmd.RequiredGroupRank)
 			end
 
-
-			
 			local permAllowed = (cmd.Donors and (pDat.isDonor and (Settings.DonorCommands or cmd.AllowDonors)))
 				or Admin.CheckComLevel(adminLevel, comLevel)
-			
-			if cmd.CustomPermissionCheck then
-				local customcheck = cmd.CustomPermissionCheck
-				local success, result = pcall(customcheck, pDat)
 
-				if success then
+			if CustomCheck and type(CustomCheck) == 'function' then
+				local success, result = pcall(function() return CustomCheck(Player, pDat) end)
+				if success and type(result) == 'boolean' then
 					if result == true then
 						permAllowed = true
 					end
 				end
 			end
-			
+
 			if permAllowed and not ignoreCooldown and type(pDat.Player) == "userdata" then
 				local playerCooldown = tonumber(cmd.PlayerCooldown)
 				local serverCooldown = tonumber(cmd.ServerCooldown)

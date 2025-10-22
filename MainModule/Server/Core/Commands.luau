@@ -90,14 +90,14 @@ return function(Vargs, GetEnv)
 			cmd.Args = cmd.Args or cmd.Arguments or {}
 
 			local lvl = cmd.AdminLevel
-			if type(lvl) == "string" and lvl ~= "Donors" then
+			if type(lvl) == "string" and lvl ~= "Donors" and string.lower(lvl) ~= "special" then
 				cmd.AdminLevel = Admin.StringToComLevel(lvl)
 			elseif type(lvl) == "table" then
 				for b, v in lvl do
 					lvl[b] = Admin.StringToComLevel(v)
 				end
 			elseif type(lvl) == "nil" then
-				cmd.AdminLevel = 0
+				cmd.AdminLevel = 900
 			end
 
 			if cmd.ListUpdater then
@@ -106,9 +106,9 @@ return function(Vargs, GetEnv)
 						if type(cmd.ListUpdater) == "function" then
 							return cmd.ListUpdater(plr, ...)
 						end
-						
+
 						local LogTable = Logs[cmd.ListUpdater]
-						
+
 						if LogTable then
 							return LogTable:GetAsTable()
 						end
@@ -117,7 +117,7 @@ return function(Vargs, GetEnv)
 			end
 
 			local isValid, fault = ValidateCommandDefinition(cmd)
-			
+
 			if not isValid then
 				logError(`Invalid command definition table {ind}:`, fault)
 				Commands[ind] = nil
@@ -189,7 +189,6 @@ return function(Vargs, GetEnv)
 		})
 		for ind, cmd in Settings.Commands or {} do
 			if type(cmd) == "table" and cmd.Function then
-				--setfenv(cmd.Function, commandEnv)
 				Commands[ind] = cmd
 			end
 		end

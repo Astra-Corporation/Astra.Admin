@@ -2,9 +2,6 @@ type Card = {id: string, name: string, desc: string, labels: {any}?}
 type List = {id: string, name: string, cards: {Card}}
 
 return function(Vargs, GetEnv)
-	--https://youtu.be/P7AMH2Eplbk?si=XeDiISwCrffbdHK4
-	-- What
-
 	local server = Vargs.Server;
 	local service = Vargs.Service;
 
@@ -33,8 +30,6 @@ return function(Vargs, GetEnv)
 	server.HTTP = {
 		Init = Init;
 
-		LoadstringEnabled = pcall(loadstring, "");
-
 		CheckHttp = function()
 			return service.HttpService.HttpEnabled
 		end;
@@ -61,7 +56,7 @@ return function(Vargs, GetEnv)
 			Bans = {};
 			Music = {};
 			InsertList = {};
-
+			ReportBlacklists = {};
 			Overrides = {
 				{
 					Lists = {"Banlist", "Ban List", "Bans"},
@@ -174,6 +169,12 @@ return function(Vargs, GetEnv)
 					end,
 				},
 				{
+					Lists = {"Report Blacklists", "Call Blacklists", "Report Blacklist"},
+					Process = function(card, data)
+						table.insert(data.ReportBlacklists, card.name)
+					end,
+				},
+				{
 					Lists = {"Whitelist"},
 					Process = function(card, data)
 						table.insert(data.Whitelist, card.name)
@@ -183,7 +184,7 @@ return function(Vargs, GetEnv)
 
 			Update = function()
 				if not HTTP.Trello.API or not Settings.Trello_Enabled then
-					return;
+					return warn('Either trello api doesnt exist or trello is disabled but Update() was called!');
 				end
 
 				if not HTTP.CheckHttp() then
@@ -197,6 +198,7 @@ return function(Vargs, GetEnv)
 						Whitelist = {};
 						Blacklist = {};
 						InsertList = {};
+						ReportBlacklists = {};
 						Ranks = {
 							["Moderators"] = {},
 							["Admins"] = {},
@@ -248,7 +250,7 @@ return function(Vargs, GetEnv)
 						end
 						local ran, err = pcall(grabData, v)
 						if not ran then
-							warn("Unable to reach Trello. Ensure your board IDs, Trello key, and token are all correct. If issue persists, try increasing HttpWait in your Adonis settings.")
+							warn("Unable to reach Trello. Ensure your board IDs, Trello key, and token are all correct. If issue persists, try increasing HttpWait in your Adonis settings.",err)
 							success = false
 							break
 						end
@@ -260,6 +262,7 @@ return function(Vargs, GetEnv)
 						HTTP.Trello.Music = data.Music
 						HTTP.Trello.InsertList = data.InsertList
 						HTTP.Trello.Mutes = data.Mutes
+						HTTP.Trello.ReportBlacklists = data.ReportBlacklists
 
 						Variables.Blacklist.Lists.Trello = data.Blacklist
 						Variables.Whitelist.Lists.Trello = data.Whitelist

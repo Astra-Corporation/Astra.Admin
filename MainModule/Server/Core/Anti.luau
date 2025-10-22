@@ -128,7 +128,7 @@ return function(Vargs, GetEnv)
 				if remainingActions > 0 then
 					Anti.lastActionTimes[player] = os.clock()
 				else
-					return 
+					return
 				end
 			else
 				Anti.lastActionTimes[player] = os.clock()
