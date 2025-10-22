@@ -147,7 +147,7 @@ return function(data)
             local i = 1
             content:Add("TextLabel", {
                 Text = "  ".."Alias"..": ";
-                ToolTip = "Set the alias ARIDe should check for in chat";
+                ToolTip = "Set the alias Astra should check for in chat";
                 BackgroundTransparency = (i%2 == 0 and 0) or 0.2;
                 Size = UDim2.new(1, -10, 0, 30);
                 Position = UDim2.new(0, 5, 0, (30*(i-1))+5);
@@ -157,7 +157,7 @@ return function(data)
 						Text = data.Alias or "";
 						PlaceholderText = ";flygod";
                         Size = UDim2.new(0, 200, 1, 0);
-                        Position = UDim2.new(1, -200, 0, 0); 
+                        Position = UDim2.new(1, -200, 0, 0);
                         ClearTextOnFocus = false;
                         BackgroundTransparency = 1;
                         TextChanged = not data.ExistingAlias and function(text, enter, new)
@@ -169,7 +169,7 @@ return function(data)
             i = i + 1
             content:Add("TextLabel", {
                 Text = "  ".."Command"..": ";
-                ToolTip = "Set the command(s) ARIDe should execute when finding the alias";
+                ToolTip = "Set the command(s) Astra should execute when finding the alias";
                 BackgroundTransparency = (i%2 == 0 and 0) or 0.2;
                 Size = UDim2.new(1, -10, 0, 30);
                 Position = UDim2.new(0, 5, 0, (30*(i-1))+5);
@@ -179,7 +179,7 @@ return function(data)
 						Text = data.Command or "";
 						PlaceholderText = ";fly <player> | ;god <player>";
                         Size = UDim2.new(0, 200, 1, 0);
-                        Position = UDim2.new(1, -200, 0, 0); 
+                        Position = UDim2.new(1, -200, 0, 0);
                         BackgroundTransparency = 1;
                         ClearTextOnFocus = false;
                         TextChanged = function(text, enter, new)
@@ -201,7 +201,7 @@ return function(data)
 						Text = data.Description or "";
 						PlaceholderText = "Gods and flies the selected player";
                         Size = UDim2.new(0, 200, 1, 0);
-                        Position = UDim2.new(1, -200, 0, 0); 
+                        Position = UDim2.new(1, -200, 0, 0);
                         ClearTextOnFocus = false;
                         BackgroundTransparency = 1;
                         TextChanged = function(text, enter, new)
@@ -267,7 +267,7 @@ return function(data)
                 OnClicked = function(button)
                     if data.Alias == "" or data.Command == "" then
                         client.UI.Make("Output", {Message = "A required field is missing!"})
-                    else                      
+                    else
                         client.Functions.SetAlias(data.Alias, data)
                         client.UI.Remove("UserPanel")
                         client.UI.Make("UserPanel", {Tab = "Aliases"})

@@ -19,14 +19,15 @@ return function(Vargs)
 	local TrackTask = Service.TrackTask
 	local AddLog = Logs.AddLog;
 	local UseNewChat = Service.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService
-	
+
 	local function GetTextToSend(Text)
-		return `<font size="15" color="rgb(255,255,255)" face="SourceSansLight">{Service.SanitizeXML(Text)}</font>`
+		--return `<font size="15" color="rgb(255,255,255)" face="SourceSansLight">{Service.SanitizeXML(Text)}</font>`
+		return `<i>{Service.SanitizeXML(Text)}</i>`
 	end
-	
+
 	Variables.JoinMessagesEnabled = true
-	
-	Functions.ChangeStat = function(plr,stat,value)	
+
+	Functions.ChangeStat = function(plr,stat,value)
 		local statName = assert(stat, "Missing stat name (argument #2)")
 		local valueToAdd = assert(tonumber(value), "Missing/invalid numerical value to add (argument #3)")
 
@@ -89,7 +90,7 @@ return function(Vargs)
 		if not Variables.JoinMessagesEnabled then
 			return
 		end
-		
+
 		for i,v in Service.GetPlayers() do
 			if UseNewChat then
 				Remote.Send(v, "Function", "DisplaySystemMessageInTextChat", nil, GetTextToSend(`{player.Name} has joined`))
@@ -147,11 +148,11 @@ return function(Vargs)
 		local Message = Settings.CustomKickMessages[Type] or Variables.DefaultKickMessages[Type];
 
 		if not Message then
-			Message = Variables.DefaultKickMessage	
+			Message = Variables.DefaultKickMessage
 		end
-		
+
 		if type(Message) == "table" then
-			Message = table.concat(Message, "\n")	
+			Message = table.concat(Message, "\n")
 		end
 
 		if tonumber(Data.time) then
@@ -161,17 +162,17 @@ return function(Vargs)
 		if tonumber(Data.expiretime) then
 			Data.expiretime = Functions.EpochToHuman(Data.expiretime)
 		end
-		
+
 		if tonumber(Data.remainingtime) then
 			Data.remainingtime = Functions.EpochToHuman(Data.remainingtime)
 		end
-		
+
 		local placeholders = {
 			reason = "No Reason Provided",
 			time = "0",
 			name = "nil",
 			id = "nil",
-			moderator = (Data.moderator and Data.moderator.Name) or "Game",
+			moderator = (Data.moderator and Data.moderator.Name) or "Server",
 			type = Data.kickType or "nil",
 			expiretime = "Not set",
 			remainingtime = "Not set",
@@ -188,7 +189,7 @@ return function(Vargs)
 		return Message
 	end;
 
-	Functions.GetSlockMessage = function() --TODO: Get rid of this
+	Functions.GetSlockMessage = function()
 		local SlockData = Variables.SlockData
 		local Data = {
 			reason = SlockData.Reason;
@@ -203,4 +204,37 @@ return function(Vargs)
 
 		return Functions.GetKickMessage("Lock", Data)
 	end;
+
+	Functions.GetWhitelistMessage = function()
+		local WhitelistData = Variables.WhitelistData
+		local Data = {
+			reason = WhitelistData.Reason;
+			time = WhitelistData.TimeEnabled;
+			name = "nil";
+			id = 0;
+			moderator = WhitelistData.Moderator;
+			kickType = "nil";
+			expireTime = "nil";
+			remainingTime = "nil";
+		}
+
+		return Functions.GetKickMessage("Whitelist", Data)
+	end;
+
+	--Functions.GetJoinFilterMessage = function()
+	--	local WhitelistData = Variables.WhitelistData
+	--	local Data = {
+	--		reason = WhitelistData.Reason;
+	--		time = WhitelistData.TimeEnabled;
+	--		name = "nil";
+	--		id = 0;
+	--		moderator = WhitelistData.Moderator;
+	--		kickType = "nil";
+	--		expireTime = "nil";
+	--		remainingTime = "nil";
+	--	}
+
+	--	return Functions.GetKickMessage("Whitelist", Data)
+	--end;
+
 end

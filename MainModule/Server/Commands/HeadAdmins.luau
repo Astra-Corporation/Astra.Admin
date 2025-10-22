@@ -492,7 +492,7 @@ return function(Vargs, env)
 							local plr = service.Players:GetPlayerByUserId(]] .. v.UserId .. [[)
 							if plr then
 								plr:Destroy()
-								if plr.Character then 
+								if plr.Character then
 									plr.Character.Parent = nil
 								end
 							end

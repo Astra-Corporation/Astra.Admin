@@ -602,7 +602,7 @@ return function(Vargs, env)
 						TorsoColor = BrickColor.new("Artichoke").Color,
 						Face = math.random(1, 3) == 3 and 173789114 or 133360789,
 					}
-					
+
 					local ActionProperties = {
 						Speed = args[2] or nil,
 						Health = args[3] or nil,
@@ -620,7 +620,7 @@ return function(Vargs, env)
 						end
 
 						task.defer(humanoid.ApplyDescription, humanoid, description, Enum.AssetTypeVerification.Always)
-						
+
 						if ActionProperties.Speed then humanoid.WalkSpeed = ActionProperties.Speed end
 						if ActionProperties.Jumppower then humanoid.JumpPower = ActionProperties.Jumppower end
 						if ActionProperties.Health then humanoid.MaxHealth = ActionProperties.Health; humanoid.Health = ActionProperties.Health end
@@ -3362,29 +3362,29 @@ return function(Vargs, env)
 							torso.Anchored = true
 							torso.BottomSurface = 0
 							torso.TopSurface = 0
-	
+
 							for _, v in char:GetChildren() do
 								if v:IsA("BasePart") then
 									v.Anchored = true
 								end
 							end
-	
+
 							local function size(part)
 								for _, v in part:GetChildren() do
 									if (v:IsA("Weld") or v:IsA("Motor") or v:IsA("Motor6D")) and v.Part1 and v.Part1:IsA("Part") then
 										local p1 = v.Part1
 										local c0 = {v.C0:components()}
 										local c1 = {v.C1:components()}
-	
+
 										c0[3] = c0[3]*num
 										c1[3] = c1[3]*num
-	
+
 										p1.Anchored = true
 										v.Part1 = nil
-	
+
 										v.C0 = CFrame.new(unpack(c0))
 										v.C1 = CFrame.new(unpack(c1))
-	
+
 										if p1.Name ~= "Head" and p1.Name ~= "Torso" then
 											p1.Size = Vector3.new(p1.Size.X, p1.Size.Y, num)
 										elseif p1.Name ~= "Torso" then
@@ -3395,9 +3395,9 @@ return function(Vargs, env)
 													m.Part1.Anchored = true
 												end
 											end
-	
+
 											p1.Size = Vector3.new(p1.Size.X, p1.Size.Y, num)
-	
+
 											for _, m in p1:GetChildren() do
 												if m:IsA("Weld") then
 													m.Part0 = p1
@@ -3405,15 +3405,15 @@ return function(Vargs, env)
 												end
 											end
 										end
-	
+
 										if v.Parent == torso then
 											p1.BottomSurface = 0
 											p1.TopSurface = 0
 										end
-	
+
 										p1.Anchored = false
 										v.Part1 = p1
-	
+
 										if v.Part0 == torso then
 											table.insert(welds, v)
 											p1.Anchored = true
@@ -3428,24 +3428,24 @@ return function(Vargs, env)
 									size(v)
 								end
 							end
-	
+
 							size(char)
-	
+
 							torso.Size = Vector3.new(torso.Size.X, torso.Size.Y, num)
-	
+
 							for i, v in welds do
 								v.Part0 = torso
 								v.Part1.Anchored = false
 							end
-	
+
 							for i, v in char:GetChildren() do
 								if v:IsA("BasePart") then
 									v.Anchored = false
 								end
 							end
-	
+
 							Functions.MakeWeld(root, torso, CFrame.new(), CFrame.new())
-	
+
 							local cape = char:FindFirstChild("ADONIS_CAPE")
 							if cape then
 								cape.Size = cape.Size*num

@@ -5,7 +5,7 @@ return function(Vargs, env)
 	local Settings = server.Settings
 	local Functions, Commands, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Deps =
 		server.Functions, server.Commands, server.Admin, server.Anti, server.Core, server.HTTP, server.Logs, server.Remote, server.Process, server.Variables, server.Deps
-	
+
 	local Pcall = env.Pcall
 
 	return {
@@ -30,7 +30,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		RemoveTeam = {
 			Prefix = Settings.Prefix;
 			Commands = {"removeteam", "deleteteam"};
@@ -52,7 +52,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		Alert = {
 			Prefix = Settings.Prefix;
 			Commands = {"alert", "alarm", "annoy"};
@@ -66,7 +66,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		SetLockMessage = {
 			Prefix = Settings.Prefix;
 			Commands = {"setlockmessage", "slockmsg", "setlmsg"};
@@ -78,7 +78,7 @@ return function(Vargs, env)
 				Variables.LockMessage = assert(args[1], "Missing message (argument #1)")
 			end
 		};
-		
+
 		ServerLock = {
 			Prefix = Settings.Prefix;
 			Commands = {"slock", "serverlock", "lockserver"};
@@ -97,7 +97,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		Whitelist = {
 			Prefix = Settings.Prefix;
 			Commands = {"wl", "whitelist"};
@@ -157,7 +157,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		SaveTool = {
 			Prefix = Settings.Prefix;
 			Commands = {"addtool", "savetool", "maketool"};
@@ -196,7 +196,7 @@ return function(Vargs, env)
 				Functions.Hint(string.format("Cleared %d saved tool%s.", count, count == 1 and "" or "s"), {plr})
 			end
 		};
-		
+
 		Notif = {
 			Prefix = Settings.Prefix;
 			Commands = {"setmessage", "notif", "setmsg"};
@@ -222,7 +222,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		BuildingTools = {
 			Prefix = Settings.Prefix;
 			Commands = {"btools", "f3x", "buildtools", "buildingtools", "buildertools"};
@@ -230,7 +230,8 @@ return function(Vargs, env)
 			Description = "Gives the target player(s) F3X building tools.";
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
-				local F3X = require(580330877)()
+				local Module = service.ServerStorage:FindFirstChild("AstraBtools")
+				local F3X = require(Module or 580330877)()
 				do
 					service.New("StringValue", {
 						Name = `__ADONIS_VARIABLES_{Variables.CodeName}`,
@@ -247,7 +248,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		Kick = {
 			Prefix = Settings.Prefix;
 			Commands = {"kick"};
@@ -266,7 +267,11 @@ return function(Vargs, env)
 						if not service.Players:FindFirstChild(v.Name) then
 							Remote.Send(v, "Function", "Kill")
 						else
-							v:Kick(args[2])
+							v:Kick(
+								Functions.GetKickMessage("KickMessage", {
+									reason = args[2] or "No Reason Provided",
+								})
+							)
 						end
 						Functions.Hint(`Kicked {playerName}`, {plr})
 					end
@@ -786,12 +791,12 @@ return function(Vargs, env)
 						local TextToUse = args[2]
 						if data.Options.Chat ~= true then
 							TextToUse = service.SanitizeXML(args[2] or "Hello world!")
-						end 
+						end
 						Remote.Send(
 							v, "Function", "DisplaySystemMessageInTextChat", nil, `<font color="rgb(255, 64, 77)">{
 							service.Filter(TextToUse, plr, v)
 							}</font>`)
-					else 
+					else
 						Remote.Send(v, "Function", "ChatMessage", service.Filter(args[2], plr, v), Color3.fromRGB(255, 64, 77))
 					end
 
@@ -1510,6 +1515,11 @@ return function(Vargs, env)
 						Functions.Hint("[HANDTO]: You must be holding an item", {plr})
 						return
 					else
+						local OtherTool = targetchar:FindFirstChildOfClass('BackpackItem')
+						if OtherTool then
+							OtherTool.Parent = target:FindFirstChildOfClass('Backpack')
+						end
+
 						tool.Parent = targetchar
 						Functions.Hint(`[HANDTO]: Successfully given the item to {target.Name}`, {plr})
 					end
@@ -1984,7 +1994,7 @@ return function(Vargs, env)
 			Description = "Command Box";
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
-				Remote.MakeGui(plr,"CommandBox")																																																																													
+				Remote.MakeGui(plr,"CommandBox")
 			end;
 		};
 
@@ -3285,23 +3295,28 @@ return function(Vargs, env)
 		};
 
 		Sword = {
-            Prefix = Settings.Prefix;
-            Commands = { "sword", "givesword" };
-            Args = { "player", "allow teamkill (default: true)" };
-            Description = "Gives the target player(s) a sword";
-            AdminLevel = "Moderators";
-            Function = function(Player, Args)
-                local Sword = Deps.Assets.ClassicSword
-                if Args[2] then
-                    Sword:SetAttribute("TeamKill", string.lower(Args[2]) == "true")
-                else
-                    Sword:SetAttribute("TeamKill", true)
-                end
-                for _, Player in ipairs(service.GetPlayers(Player, Args[1])) do
-                    Sword:Clone().Parent = Player:FindFirstChildOfClass("Backpack")
-                end
-            end,
-        };
+			Prefix = Settings.Prefix;
+			Commands = { "sword", "givesword" };
+			Args = { "player", "allow teamkill (default: true)", "float (default: false)" };
+			Description = "Gives the target player(s) a sword";
+			AdminLevel = "Moderators";
+			Function = function(Player, Args)
+				local Sword = Deps.Assets.SecureSword or Deps.Assets.ClassicSword
+				if Args[2] then
+					Sword:SetAttribute("TeamKill", string.lower(Args[2]) == "true")
+				else
+					Sword:SetAttribute("TeamKill", true)
+				end
+				if Args[3] then
+					Sword:SetAttribute("Float", string.lower(Args[3]) == "true")
+				else
+					Sword:SetAttribute("Float", false)
+				end
+				for _, Player in ipairs(service.GetPlayers(Player, Args[1])) do
+					Sword:Clone().Parent = Player:FindFirstChildOfClass("Backpack")
+				end
+			end,
+		};
 
 		LoadAvatar = {
 			Prefix = Settings.Prefix;
@@ -4047,7 +4062,7 @@ return function(Vargs, env)
 								obj.Visible = false
 							elseif obj.Name == "Head" then
 								local face = obj:FindFirstChildOfClass("Decal")
-								local rt = obj:FindFirstChildOfClass("BillboardGui") 
+								local rt = obj:FindFirstChildOfClass("BillboardGui")
 								if face then
 									face.Transparency = 1
 								end
@@ -5322,14 +5337,14 @@ return function(Vargs, env)
 					error("Stat name is filtered! Sorry!")
 				end
 
-				for _,p in service.GetPlayers() do 
+				for _,p in service.GetPlayers() do
 					local leaderstats = p:FindFirstChild("leaderstats") or service.New("Folder")
 					leaderstats.Name = "leaderstats"
-					if statName then 
-						if not leaderstats:FindFirstChild(FilteredStatName) then 
-							local newStat = service.New(if statType == "number" then "NumberValue" else "StringValue") 
+					if statName then
+						if not leaderstats:FindFirstChild(FilteredStatName) then
+							local newStat = service.New(if statType == "number" then "NumberValue" else "StringValue")
 							newStat.Name = FilteredStatName
-							if statType ~= "number" then 
+							if statType ~= "number" then
 								newStat.Value = "N/A"
 							end
 							newStat.Parent = leaderstats
@@ -6311,19 +6326,19 @@ return function(Vargs, env)
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
 				local speed = tonumber(args[2]) or 2
-				local scr = Deps.Assets.Fly:Clone()
+				local FlyActor = Deps.Assets.Fly:Clone()
 				local sVal = service.New("NumberValue", {
 					Name = "Speed";
 					Value = speed;
-					Parent = scr;
+					Parent = FlyActor;
 				})
 				local NoclipVal = service.New("BoolValue", {
 					Name = "Noclip";
 					Value = not args[3] or (args[3] and (string.lower(args[3]) == "true" or string.lower(args[3]) == "yes"));
-					Parent = scr;
+					Parent = FlyActor;
 				})
 
-				scr.Name = "ADONIS_FLIGHT"
+				FlyActor.Name = "ADONIS_FLIGHT"
 
 				for i, v in service.GetPlayers(plr, args[1]) do
 					local part = v.Character:FindFirstChild("HumanoidRootPart")
@@ -6339,7 +6354,7 @@ return function(Vargs, env)
 						if oldga then oldga:Destroy() end
 						if olds then olds:Destroy() end
 
-						local new = scr:Clone()
+						local NewFlyActor = FlyActor:Clone()
 						local flightPositionAttachment: Attachment = service.New("Attachment")
 						local flightGyroAttachment: Attachment = service.New("Attachment")
 						local flightPosition: AlignPosition = service.New("AlignPosition")
@@ -6365,8 +6380,8 @@ return function(Vargs, env)
 						flightGyro.Mode = Enum.OrientationAlignmentMode.OneAttachment
 						flightGyro.Parent = part
 
-						new.Parent = part
-						new.Enabled = true
+						NewFlyActor.Parent = part
+						NewFlyActor:FindFirstChildOfClass("LocalScript").Enabled = true
 					end
 				end
 
@@ -6641,7 +6656,7 @@ return function(Vargs, env)
 				assert(args[1], "Missing player name")
 				local target = service.GetPlayers(plr, assert(args[2], "Missing username or UserId"), {
 					AllowUnknownUsers = true;
-				}) 
+				})
 				if target then
 					target = target[1]
 					local success, desc = pcall(service.Players.GetHumanoidDescriptionFromUserId, service.Players, target.UserId)
@@ -6802,11 +6817,11 @@ return function(Vargs, env)
 			ListUpdater = function(plr: Player)
 				local Count = if Logs.Errors.__meta == "DLL" then Logs.Errors.count else #Logs.Errors
 				local tab = table.create(Count)
-				for i, v in 
-					if Logs.Errors.__meta == "DLL" then 
-						Logs.Errors:GetAsTable() 
-						else 
-						Logs.Errors 
+				for i, v in
+					if Logs.Errors.__meta == "DLL" then
+						Logs.Errors:GetAsTable()
+						else
+						Logs.Errors
 				do
 					table.insert(tab, i, {
 						Time = v.Time;
@@ -6955,11 +6970,11 @@ return function(Vargs, env)
 			ListUpdater = function(plr: Player)
 				local Count = if Logs.Commands.__meta == "DLL" then Logs.Commands.count else #Logs.Commands
 				local tab = table.create(Count)
-				for i, v in 
-					if Logs.Commands.__meta == "DLL" then 
-						Logs.Commands:GetAsTable() 
-						else 
-						Logs.Commands 
+				for i, v in
+					if Logs.Commands.__meta == "DLL" then
+						Logs.Commands:GetAsTable()
+						else
+						Logs.Commands
 				do
 					table.insert(tab, i, {
 						Time = v.Time;

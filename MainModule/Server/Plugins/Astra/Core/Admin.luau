@@ -13,14 +13,7 @@ return function(Vargs)
 	local HTTP = server.HTTP;
 	local Anti = server.Anti;
 	local GroupService = server.GroupService;
-	
-	local Realtypes = game:GetService('ServerScriptService'):FindFirstChild('AstraTypes')
-	if Realtypes then
-		local types = require(Realtypes)
-		type Admin = types.CoreAdmin
-		type Server = types.Server
-	end
-	
+
 	local TrackTask = service.TrackTask
 
 	Admin.AddBan = function(p, reason, doSave, moderator)
@@ -43,24 +36,22 @@ return function(Vargs)
 
 		table.insert(Settings.Banned, value)--`{p.Name}:{p.UserId}`
 
-		task.spawn(function()
-			if doSave then
-				Core.DoSave({
-					Type = "TableAdd";
-					Table = "Banned";
-					Value = value;
-				})
-
-				Core.CrossServer("RemovePlayer", p.Name, Variables.BanMessage, value.Reason or "No reason provided")
-			end
-		end)
-
 		if type(p) ~= "table" then
 			if not service.Players:FindFirstChild(p.Name) then
 				Remote.Send(p,'Function','KillClient')
 			else
 				if p then pcall(function() p:Kick(Functions.GetKickMessage("GameBan",banData)) end) end
 			end
+		end
+
+		if doSave then
+			Core.DoSave({
+				Type = "TableAdd";
+				Table = "Banned";
+				Value = value;
+			})
+
+			Core.CrossServer("RemovePlayer", p.Name, Variables.BanMessage, value.Reason or "No reason provided")
 		end
 
 		service.Events.PlayerBanned:Fire(p, reason, doSave, moderator)
@@ -96,7 +87,7 @@ return function(Vargs)
 		end;
 
 		local Lowered = string.lower(Message);
-		
+
 		for Alias, Data in PlayerAliases do
 			if string.match(Lowered, `^{Alias}%s+`) or string.match(Lowered,`^{Alias}$`) then
 				return Alias, Data;
@@ -113,44 +104,27 @@ return function(Vargs)
 			local Lowered = string.lower(Cmd);
 			local Alias = string.lower(Alias)
 			local noSpace = string.gsub(Cmd," ","")
-			local isAlias = Admin.IsAlias(Player, noSpace) 
-			
-			if isAlias then 
+			local isAlias = Admin.IsAlias(Player, noSpace)
+
+			if isAlias then
 				Aliases +=1
 			end
-			
+
 			if string.match(Lowered, `^%s*{Alias}%s*$`) or string.match(Lowered,`^{Alias}$`)  then
 				return true
 			end
 		end
-		
+
 		if Aliases >= 5 then
 			return "Your alias ran more than 5 aliases and has not been run for security reasons!"
 		end
-		
+
 		--print(`{Alias} had {Aliases} aliases in it!`)
 		return false
 	end
 
-	Admin.DoHideChatCmd = function(p: Player, message: string, data: {[string]: any}?)
-		local pData = data or Core.GetPlayer(p)
-		if pData.Client.HideChatCommands then
-			if Variables.BlankPrefix and
-				(string.sub(message,1,1) ~= Settings.Prefix or string.sub(message,1,1) ~= Settings.PlayerPrefix) then
-				local isCMD = Admin.GetCommand(message)
-				local isAlias = Admin.IsAlias(p,message)
-				if isCMD or isAlias then
-					return true
-				else
-					return false
-				end
-			elseif (string.sub(message,1,1) == Settings.Prefix or string.sub(message,1,1) == Settings.PlayerPrefix)
-				and string.sub(message,2,2) ~= string.sub(message,1,1) then
-				return true;
-			end
-		end
-	end;
-	
+	-- if ur looking for DoHideChatCmd then i put it back in module itself. Not the plugin.
+
 	Admin.GetAdmins = function()
 		local ret = {}
 		for _,v in pairs(service.GetPlayers()) do
@@ -158,7 +132,7 @@ return function(Vargs)
 		end
 		return ret
 	end
-	
+
 	Admin.AddAdmin = function(p, level, temp)
 		local current, rank = Admin.GetLevel(p)
 		local list = rank and Settings.Ranks[rank];
@@ -220,20 +194,20 @@ return function(Vargs)
 				if newrank >= current then
 					Remote.MakeGui(p,"Notification",{
 						Title = "Admin Level";
-						Message = "Raised to "..(server.Admin.GetLevelName(server.Core.GetPlayer(p).AdminLevel) or "Custom").." ("..tostring(Core.GetPlayer(p).AdminLevel)..")";
+						Message = "Raised to "..(Admin.GetLevelName(Core.GetPlayer(p).AdminLevel) or "Custom").." ("..tostring(Core.GetPlayer(p).AdminLevel)..")";
 						Time = 15;
 					})
 				else
 					Remote.MakeGui(p,"Notification",{
 						Title = "Admin Level";
-						Message = "Lowered to "..Core.GetPlayer(p).AdminRank.." ("..(server.Admin.GetLevelName(server.Core.GetPlayer(p).AdminLevel) or "Custom")..")";
+						Message = "Lowered to "..Core.GetPlayer(p).AdminRank.." ("..(Admin.GetLevelName(Core.GetPlayer(p).AdminLevel) or "Custom")..")";
 						Time = 15;
 					})
 				end
-				server.Remote.RemoveGui(p,"Console")
-				server.Remote.MakeGui(p,"Console")
+				Remote.RemoveGui(p,"Console")
+				Remote.MakeGui(p,"Console")
 			end)
-		end	
+		end
 	end;
 
 end

@@ -48,7 +48,7 @@ return function(Vargs)
 
 				new.Parent = part
 				new.Disabled = false
-				v.Character.Humanoid:AddTag('ARIDe_FLIGHT')
+				v.Character.Humanoid:AddTag('Adonis_Fly')
 				Remote.MakeGui(v, "Hint", {
 					Title = "Flight";
 					Message = "You now have flight - press E to toggle flight";

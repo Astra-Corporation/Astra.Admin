@@ -34,7 +34,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		RestoreMap = {
 			Prefix = Settings.Prefix;
 			Commands = {"restoremap", "maprestore", "rmap"};
@@ -106,7 +106,7 @@ return function(Vargs, env)
 			Function = function(plr: Player, args: {string})
 				assert(Settings.CodeExecution, "CodeExecution config must be enabled for this command to work")
 				assert(args[1], "Missing Script code (argument #2)")
-				
+
 				local bytecode = Core.Bytecode(args[1])
 				assert(string.find(bytecode, "\27Lua"), `Script unable to be created: {string.gsub(bytecode, "Loadstring%.LuaX:%d+:", "")}`)
 
@@ -235,7 +235,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		Insert = {
 			Prefix = Settings.Prefix;
 			Commands = {"insert", "ins"};
@@ -268,7 +268,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		LockMap = {
 			Prefix = Settings.Prefix;
 			Commands = {"lockmap"};
@@ -298,7 +298,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		SetCoreGuiEnabled = {
 			Prefix = Settings.Prefix;
 			Commands = {"setcoreguienabled", "setcoreenabled", "showcoregui", "setcoregui", "setcgui", "setcore", "setcge"};
@@ -318,7 +318,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		ShutdownLogs = {
 			Prefix = Settings.Prefix;
 			Commands = {"shutdownlogs", "shutdownlog", "slogs", "shutdowns"};
@@ -345,7 +345,7 @@ return function(Vargs, env)
 				})
 			end
 		};
-		
+
 		SystemMessage = {
 			Prefix = Settings.Prefix;
 			Commands = {"sm", "systemmessage", "sysmsg"};
@@ -357,7 +357,7 @@ return function(Vargs, env)
 				Functions.Message(Settings.SystemTitle, service.BroadcastFilter(assert(args[1], "Missing message (argument #1)"), plr), service.GetPlayers(), true)
 			end
 		};
-		
+
 		SystemNotify = {
 			Prefix = Settings.Prefix;
 			Commands = {"sn", "systemnotify", "sysnotif", "sysnotify", "systemsmallmessage", "snmessage", "snmsg", "ssmsg", "ssmessage"};
@@ -373,7 +373,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		SetBanMessage = {
 			Prefix = Settings.Prefix;
 			Commands = {"setbanmessage", "setbmsg"};
@@ -385,7 +385,7 @@ return function(Vargs, env)
 				Variables.BanMessage = assert(args[1], "Missing message (argument #1)")
 			end
 		};
-		
+
 		Crash = {
 			Prefix = Settings.Prefix;
 			Commands = {"crash"};
@@ -461,7 +461,7 @@ return function(Vargs, env)
 				end
 			end
 		};
-		
+
 		DirectBan = {
 			Prefix = Settings.Prefix;
 			Commands = {"directban"};
@@ -675,7 +675,7 @@ return function(Vargs, env)
 			end
 		};
 		--]]
-		
+
 		StarlightLogs = {
 			Prefix = Settings.Prefix;
 			Commands = {"starlightlogs"};

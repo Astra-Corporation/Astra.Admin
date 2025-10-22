@@ -8,7 +8,7 @@ return function(Vargs, env)
 
 	local Pcall = env.Pcall
 	local quotes = require(Deps.Assets.Quotes)
-	
+
 	return {
 		ViewCommands = {
 			Prefix = Settings.Prefix;

@@ -20,7 +20,7 @@ return function(Vargs, env)
 				Humanoid.Sit = true
 			end
 		};
-		
+
 		DonorUncape = {
 			Prefix = Settings.PlayerPrefix;
 			Commands = {"uncape", "removedonorcape"};
@@ -211,6 +211,7 @@ return function(Vargs, env)
 			Function = function(plr: Player, args: {string})
 				assert(args[1], "Missing TextureId")
 				assert(tonumber(args[1]), "Texture must be a number")
+
 				local torso = plr.Character:FindFirstChild("HumanoidRootPart")
 				if torso then
 					local startColor = {}
@@ -240,6 +241,7 @@ return function(Vargs, env)
 					Functions.NewParticle(torso, "ParticleEmitter", {
 						Name = "DONOR_PARTICLE";
 						Texture = `rbxthumb://type=Asset&id={args[1]}&w=420&h=420`;
+						--Texture = `rbxassetid://{Functions.GetTexture(args[1])}`;
 						Size = NumberSequence.new({
 							NumberSequenceKeypoint.new(0,0);
 							NumberSequenceKeypoint.new(.1,.25,.25);

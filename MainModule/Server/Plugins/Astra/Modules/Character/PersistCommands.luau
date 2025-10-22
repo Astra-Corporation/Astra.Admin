@@ -12,7 +12,7 @@ return function(Vargs)
 	-- Some vars
 	local Prefix = Settings.Prefix;
 
-	Service.HookEvent("CharacterAdded",function(Player: Player) 		
+	Service.HookEvent("CharacterAdded",function(Player: Player)
 		if Player:GetAttribute("ASTRA_PersistGod") then
 			Commands.God.Function(Player,{"me"})
 		end
@@ -23,31 +23,32 @@ return function(Vargs)
 	end)
 
 	Commands.PersistFly = {
-		Prefix = Server.Settings.Prefix;    
-		Commands = {"persistfly";"pfly"};    
+		Prefix = Server.Settings.Prefix;
+		Commands = {"persistfly";"pfly"};
 		Args = {"player"};
 		Description = "Gives the specified people persistant fly, gives fly back on respawn";
 		Hidden = false;
 		Fun = false;
-		AdminLevel = "Moderators";        
-		Function = function(plr,args)   
+		AdminLevel = "Moderators";
+		Function = function(plr,args)
 			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
 
 				Player:SetAttribute("ASTRA_PersistFly",true)
+				Commands.Fly.Function(Player,{"me"},true)
 				Functions.Hint("You will now persist fly on next spawn",{Player})
 			end
 		end
 	};
 
 	Commands.unPersistFly = {
-		Prefix = Server.Settings.Prefix;    
+		Prefix = Server.Settings.Prefix;
 		Commands = {"unpersistfly";"unpfly"};
 		Args = {"player"};
 		Description = "Removes persistant fly of pepole";
 		Hidden = false;
 		Fun = false;
-		AdminLevel = "Moderators";        
-		Function = function(plr,args)   
+		AdminLevel = "Moderators";
+		Function = function(plr,args)
 			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
 
 				Player:SetAttribute("ASTRA_PersistFly",nil)
@@ -57,16 +58,16 @@ return function(Vargs)
 	};
 
 	Commands.PersistGod = {
-		Prefix = Server.Settings.Prefix;    
-		Commands = {"persistgod";"pgod"};    
+		Prefix = Server.Settings.Prefix;
+		Commands = {"persistgod";"pgod"};
 		Args = {"player"};
 		Description = "Gives the specified people persistant god, gives god back on respawn";
 		Hidden = false;
 		Fun = false;
-		AdminLevel = "Moderators";        
-		Function = function(plr,args) 
+		AdminLevel = "Moderators";
+		Function = function(plr,args)
 			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
-
+				Commands.God.Function(Player,{"me"})
 				Player:SetAttribute("ASTRA_PersistGod",true)
 				Functions.Hint("You will now persist god on next spawn",{Player})
 			end
@@ -74,14 +75,14 @@ return function(Vargs)
 	};
 
 	Commands.unPersistGod = {
-		Prefix = Server.Settings.Prefix;    
-		Commands = {"unpersistgod";"unpgod"};    
+		Prefix = Server.Settings.Prefix;
+		Commands = {"unpersistgod";"unpgod"};
 		Args = {"player"};
 		Description = "Removes persistant god of pepole";
 		Hidden = false;
 		Fun = false;
-		AdminLevel = "Moderators";        
-		Function = function(plr,args)   
+		AdminLevel = "Moderators";
+		Function = function(plr,args)
 			for i,Player :Player in pairs(Service.GetPlayers(plr,args[1])) do
 
 				Player:SetAttribute("ASTRA_PersistGod",nil)

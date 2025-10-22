@@ -19,7 +19,7 @@ return function(Vargs, env)
 				local rankName = assert(args[2], "Missing rank name (argument #2)")
 
 				local newRank = Settings.Ranks[rankName]
-				
+
 				if not newRank then
 					for thisRankName, thisRank in Settings.Ranks do
 						if thisRankName:lower() == rankName:lower() then
@@ -29,7 +29,7 @@ return function(Vargs, env)
 						end
 					end
 				end
-				
+
 				assert(newRank, `No rank named '{rankName}' exists`)
 
 				local newLevel = newRank.Level
@@ -130,8 +130,8 @@ return function(Vargs, env)
 
 				if not string.find(target, ":") then
 					for _, v in service.GetPlayers(plr, target, {
-							UseFakePlayer = true;
-							DontError = true;
+						UseFakePlayer = true;
+						DontError = true;
 						})
 					do
 						userFound = true
@@ -362,7 +362,7 @@ return function(Vargs, env)
 				for _, v in service.GetPlayers(plr, args[1]) do
 					service.StopLoop(`{v.UserId}LOOPKILL`)
 					local count = 0
-					
+
 					task.spawn(service.StartLoop, `{v.UserId}LOOPKILL`, 3, function()
 						local hum = v.Character and v.Character:FindFirstChildOfClass("Humanoid")
 						if hum and hum.Health > 0 then
@@ -399,21 +399,24 @@ return function(Vargs, env)
 			AdminLevel = "Admins";
 			Function = function(plr: Player, args: {string})
 				if Core.DataStore then
-					Core.UpdateData("ShutdownLogs", function(logs)
-						table.insert(logs, 1, {
-							User = plr and plr.Name or "[Server]",
-							Time = os.time(),
-							Reason = args[1] or "N/A"
-						})
+					task.spawn(function()
+						Core.UpdateData("ShutdownLogs", function(logs)
+							table.insert(logs, 1, {
+								User = plr and plr.Name or "[Server]",
+								Time = os.time(),
+								Reason = args[1] or "N/A"
+							})
 
-						local nlogs = #logs
-						if nlogs > 1000 then
-							table.remove(logs, nlogs)
-						end
+							local nlogs = #logs
+							if nlogs > 1000 then
+								table.remove(logs, nlogs)
+							end
 
-						return logs
+							return logs
+						end)
 					end)
 				end
+
 
 				Functions.Shutdown(args[1])
 			end
@@ -619,10 +622,15 @@ return function(Vargs, env)
 					if Variables.DisguiseBindings[v.UserId] then
 						Variables.DisguiseBindings[v.UserId].Rename:Disconnect()
 						Variables.DisguiseBindings[v.UserId].Rename = nil
-           				if ChatService then
-						  ChatService:RemoveSpeaker(Variables.DisguiseBindings[v.UserId].TargetUsername)
-						  ChatService:UnregisterProcessCommandsFunction(`Disguise_{v.Name}`)
+						if ChatService then
+							ChatService:RemoveSpeaker(Variables.DisguiseBindings[v.UserId].TargetUsername)
+							ChatService:UnregisterProcessCommandsFunction(`Disguise_{v.Name}`)
 						end
+						plr:SetAttribute('DG_NAME',nil)
+					end
+
+					if plr then
+						plr:SetAttribute('DG_NAME',username)
 					end
 
 					Variables.DisguiseBindings[v.UserId] = {
@@ -676,6 +684,7 @@ return function(Vargs, env)
 						end)
 					end
 					Variables.DisguiseBindings[v.UserId] = nil
+					v:SetAttribute('DG_NAME',nil)
 				end
 				Commands.UnChar.Function(plr, args)
 				Commands.UnDisplayName.Function(plr, args)
