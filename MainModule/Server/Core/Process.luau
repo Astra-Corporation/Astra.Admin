@@ -434,6 +434,20 @@ return function(Vargs, GetEnv)
 				cmdlimit += Variables.BatchCommandLimit.Donor
 			end
 
+			for filter, func in pairs(server.Variables.CommandFilters) do
+				if not string.match(msg, filter) then
+					continue
+				end
+
+				local success, res = pcall(func, p, msg, opts, noYield)
+				if success and res then
+					msg = res
+					continue
+				elseif not success then
+					Logs:AddLog(Logs.Errors, `{filter} failed for {msg}`)
+				end
+			end
+
 			for cmd in string.gmatch(msg, `[^{Settings.BatchKey}]+`) do
 				if hasAdmin then
 					break

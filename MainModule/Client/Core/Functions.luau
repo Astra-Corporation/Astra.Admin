@@ -114,7 +114,7 @@ return function(Vargs, GetEnv)
 		Round = function(x, y)
 			return math.round(x / y) * y
 		end;
-		
+
 		CharacterESP = function(mode, target, color)
 			color = color or Color3.new(1, 0, 0.917647)
 
@@ -866,7 +866,7 @@ return function(Vargs, GetEnv)
 			if Functions.SendToChat then
 				Functions.SendToChat({Name = "::Adonis::"},msg,"Private")
 			end
-		end;  
+		end;
 
 		DisplaySystemMessageInTextChat = function(channel: TextChannel?, message, meta)
 			if service.TextChatService then
@@ -902,7 +902,7 @@ return function(Vargs, GetEnv)
 				end)
 			end
 		end;
-		
+
 		RestoreFPS = function()
 			service.StopLoop("SetFPS")
 		end;
@@ -1238,7 +1238,7 @@ return function(Vargs, GetEnv)
 					local ang = 0.1
 					local oldmag = torso.AssemblyLinearVelocity.Magnitude
 					local mv = .002
-					if wave then 
+					if wave then
 						ang += ((torso.AssemblyLinearVelocity.Magnitude/10)*.05)+.05
 						wave = false
 					else

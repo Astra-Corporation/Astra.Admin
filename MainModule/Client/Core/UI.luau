@@ -1,40 +1,8 @@
-client = nil
-service = nil
-Pcall = nil
-Routine = nil
-GetEnv = nil
-origEnv = nil
-logError = nil
-
---// Processing
+--// UI
 return function(Vargs, GetEnv)
 	local env = GetEnv(nil, {script = script})
-	setfenv(1, env)
-	-- Last module remaining using setfenv.... 
-	-- Sadly the UI code is so horrible we cannot get rid of it right now
-	-- Sorry Roblox and anyone who wants open source Astra
-	-- :(
-	local _G, game, script, getfenv, setfenv, workspace,
-	getmetatable, setmetatable, loadstring, coroutine,
-	rawequal, typeof, print, math, warn, error,  pcall,
-	xpcall, select, rawset, rawget, ipairs, pairs,
-	next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-	newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-	NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-	NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-	Vector3int16, require, table, type, wait,
-	Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay =
-		_G, game, script, getfenv, setfenv, workspace,
-		getmetatable, setmetatable, loadstring, coroutine,
-		rawequal, typeof, print, math, warn, error,  pcall,
-		xpcall, select, rawset, rawget, ipairs, pairs,
-		next, Rect, Axes, os, time, Faces, unpack, string, Color3,
-		newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor,
-		NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint,
-		NumberSequenceKeypoint, PhysicalProperties, Region3int16,
-		Vector3int16, require, table, type, wait,
-		Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay
 
+	-- Something is gone but i cant tell what it is...
 
 	local service = Vargs.Service
 	local client = Vargs.Client
@@ -45,7 +13,7 @@ return function(Vargs, GetEnv)
 
 	local GetEnv = env.GetEnv
 
-	local Anti, Core, Functions, Process, Remote, UI, Variables, Deps
+	local Anti, Core, Deps, Functions, Process, Remote, UI, Variables, log, Pcall, Routine, Require
 	local CloneTable, TrackTask
 	local function Init()
 		UI = client.UI;
@@ -56,6 +24,10 @@ return function(Vargs, GetEnv)
 		Process = client.Process;
 		Remote = client.Remote;
 		Deps = client.Deps;
+		log = env.log
+		Pcall = env.Pcall
+		Routine = client.Routine
+		Require = env.require
 
 
 		CloneTable = service.CloneTable;
@@ -63,9 +35,7 @@ return function(Vargs, GetEnv)
 
 		UI.Init = nil;
 	end
-	
-	local exp_noenv = true 
-	
+
 	local function RunLast()
 		UI.DefaultTheme = Remote.Get("Setting","DefaultTheme");
 		UI.RunLast = nil;
@@ -119,7 +89,7 @@ return function(Vargs, GetEnv)
 		LoadModule = function(module, data, env)
 			data = data or {}
 
-			local ran, func = pcall(require, module)
+			local ran, func = pcall(Require, module)
 			local newEnv = GetEnv(env, {
 				script = module,
 				client = CloneTable(client),
@@ -135,20 +105,37 @@ return function(Vargs, GetEnv)
 			if ran then
 				--// Temporarily disabled NoEnv; it seems to be causing some issues(?)
 				--// ~ Expertcoderz
+				data.modNoEnv = false
+				data.NoEnv = false
+				-- I have disabled it in the public version because
+				-- A lot of themes for some reason have NoEnv while not fully supporting it
+				-- smh... It'll be forced soon tho don't worry...
+				local rets = {}
 
-				--[[if (data.isModifier and not data.modNoEnv) or (not data.isModifier and data.isCode and not data.NoEnv) then
-					setfenv(func, env)
-				end]]
-
-				local rets = {
-					TrackTask(`UI: {module:GetFullName()}`,
-					--	func,
-						setfenv(func, newEnv),
-						false,
-						data,
-						newEnv
-					)
-				}
+				if (not data.modNoEnv) or (not data.NoEnv) then
+					setfenv(func, newEnv)
+				end
+				--if not data.NoEnv or not data.modNoEnv then
+				--	rets = {
+				--		TrackTask(`UI: {module:GetFullName()}`,
+				--			setfenv(func, newEnv),
+				--			false,
+				--			data,
+				--			newEnv,
+				--			GetEnv
+				--		)
+				--	}
+				--else
+					rets = {
+						TrackTask(`UI: {module:GetFullName()}`,
+							func,
+							false,
+							data,
+							newEnv,
+							GetEnv
+						)
+					}
+				--end -- old env code ew
 
 				if rets[1] then
 					return unpack(rets, 2)
@@ -166,7 +153,7 @@ return function(Vargs, GetEnv)
 			local endConfig = {}
 			local endConfValues = {}
 
-			local confFolder = Instance.new("Folder")
+			local confFolder = service.New("Folder")
 			local debounce = false
 
 			local function func(theme, name, depth)
@@ -261,7 +248,7 @@ return function(Vargs, GetEnv)
 
 			--// Check for any childs with 'NoEnv' and trigger NoEnv
 			--// Enforce NoEnv to ensure theme is using it.
-			if not data.NoEnv and folder:FindFirstChild("NoEnv") then
+			if not data.NoEnv and folder:FindFirstChild("NoEnv") or folder:GetAttribute("NOENV") then
 				data.NoEnv = true
 				data.modNoEnv = true
 			end
@@ -299,7 +286,7 @@ return function(Vargs, GetEnv)
 						local gTable,gIndex = UI.Register(newGui)
 
 						if folder:IsA("ModuleScript") then
-							local folderNoEnv = false --string.sub(folder.Name, 1, 5) == "NoEnv" or folder:FindFirstChild("NoEnv")
+							local folderNoEnv = string.sub(folder.Name, 1, 5) == "NoEnv" or folder:FindFirstChild("NoEnv")
 
 							local newEnv = GetEnv{{
 								script = folder,
@@ -309,8 +296,8 @@ return function(Vargs, GetEnv)
 							local ran, func = pcall(require, folder)
 							local rets = {
 								--// NoEnv temporarily disabled ~ Expertcoderz
-								if folderNoEnv then 
-									pcall(func, newGui, gTable, data, newEnv) 
+								if folderNoEnv then
+									pcall(func, newGui, gTable, data, newEnv)
 								else
 									pcall(setfenv(func, newEnv), newGui, gTable, data, newEnv)
 							}
@@ -321,7 +308,8 @@ return function(Vargs, GetEnv)
 									code = (ret:FindFirstChild("Config") and (ret.Config:FindFirstChild("Code") or ret.Config:FindFirstChild("NoEnv-Code"))) or code
 
 									if not data.NoEnv and code then
-										data.NoEnv = string.sub(code.Name, 1, 5) == "NoEnv"
+										--data.NoEnv = string.sub(code.Name, 1, 5) == "NoEnv"
+										data.NoEnv = code:GetAttribute("NoEnv")
 									end
 								else
 									return ret

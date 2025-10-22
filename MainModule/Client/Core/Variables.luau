@@ -52,8 +52,8 @@ return function(Vargs, GetEnv)
 		CapesEnabled = true;
 		HideChatCommands = false;
 		Particles = {};
-		UIColor1 = Color3.fromRGB(0,0,0);
-		UIColor2 = Color3.fromRGB(0, 0, 128);
+		CustomThemeColor1 = { 0;  0;  0;};
+		CustomThemeColor2 = { 0;  0;  0.501961;};
 		KeyBinds = {};
 		Aliases = {};
 		Capes = {};
@@ -61,7 +61,7 @@ return function(Vargs, GetEnv)
 		localSounds = {};
 		ESPObjects = {};
 		CommunicationsHistory = {};
-		
+
 		LightingSettings = {
 			Ambient = service.Lighting.Ambient;
 			Brightness = service.Lighting.Brightness;
@@ -78,7 +78,7 @@ return function(Vargs, GetEnv)
 			FogEnd = service.Lighting.FogEnd;
 			FogStart = service.Lighting.FogStart;
 		};
-		
+
 		KeycodeNames = require(service.UnWrap(client.Shared.KeycodeNames));
 	};
 end

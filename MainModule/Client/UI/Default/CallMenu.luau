@@ -1,33 +1,20 @@
-client = nil
-service = nil
+return function(data, vargs)
+	local client = vargs.client
+	local service = vargs.service
+	local UI = client.UI
 
-return function(data)
-
-	local gTable
-
-	local window = client.UI.Make("Window", {
+	local window = UI.Make("Window", {
 		Name = "Report",
 		Title = "Report",
 		Size = { 400, 300 },
 		AllowMultiple = false,
 	})
-	local playerData = client.Remote.Get("PlayerData")
-	local chatMod = client.Remote.Get(
-		"Setting",
-		{ "Prefix", "SpecialPrefix", "BatchKey", "AnyPrefix", "DonorCommands", "DonorCapes", "PlayerPrefix" }
-	)
-	local settingsData = client.Remote.Get("AllSettings")
-	local player = ""
-	local reason = ""
-	local division = " " --?????
 	local extranotes = "No extra notes provided."
-	local ranPlayers = {}
 	local Reasons = data.Reasons or {"No reasons specified!"}
 	local Players  = data.Players or {"Server"}
 	local player = ""
 	local reason = ""
 	local canclicksend = true
-	local ranPlayers = {}
 
 	local rframe = window:Add("ScrollingFrame", {
 
@@ -37,6 +24,8 @@ return function(data)
 		BackgroundColor3 = Color3.new(0.207843, 0.207843, 0.207843),
 	})
 	--// My hope is that this code is so awful I'm never allowed to write UI code again.
+	-- Years later and now I'm writing UI code again.
+	-- Also glad i stopped using that ugly // in the comments
 	rframe:Add("TextLabel", {
 		Text = "  Player: ",
 		Size = UDim2.new(1, -10, 0, 30),

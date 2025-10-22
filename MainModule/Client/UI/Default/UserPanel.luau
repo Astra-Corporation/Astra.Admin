@@ -55,7 +55,7 @@ return function(data, env)
 	local window = UI.Make("Window", {
 		Name  = "UserPanel";
 		Title = "User Control Panel";
-		--Icon = "rbxassetid://484211948";	
+		--Icon = "rbxassetid://484211948";
 		Size  = {465, 325};
 		AllowMultiple = false;
 		OnClose = function()
@@ -643,6 +643,7 @@ return function(data, env)
 
 								local img = pWindow:Add("ImageLabel", {
 									BackgroundTransparency = 1;
+									--Image = `rbxassetid://{Functions.GetTexture(currentTexture)}`;
 									Image = `rbxthumb://type=Asset&id={currentTexture}&w=420&h=420`;
 									Size = UDim2.new(1, -10, 1, -80);
 									Position = UDim2.new(0, 5, 0, 35);
@@ -663,7 +664,8 @@ return function(data, env)
 												local num = tonumber(text)
 												if num then
 													lastValid = num
-													img.IImage = `rbxthumb://type=Asset&id={num}&w=420&h=420`;
+													--img.Image = `rbxassetid://{Functions.GetTexture(num)}`;
+													img.Image = `rbxthumb://type=Asset&id={num}&w=420&h=420`;
 												else
 													new.Text = lastValid
 												end
@@ -1096,7 +1098,7 @@ return function(data, env)
 				Position = UDim2.new(0, 5, 0, 31);
 				BackgroundTransparency = 0.5;
 			})
-			--local balls = aliases:
+
 			local search = aliasTab:Add("TextBox", {
 				Size = UDim2.new(1, -10, 0, 20);
 				Position = UDim2.new(0, 5, 0, 5);
@@ -1109,7 +1111,13 @@ return function(data, env)
 			})
 
 			local function getAliases()
-				client.Variables.Aliases = client.Remote.Get("Aliases")
+				local AliasesServer = client.Remote.Get("Aliases")
+				if typeof(AliasesServer) == "table" then
+					client.Variables.Aliases = client.Remote.Get("Aliases")
+				else
+					warn("Aliases failed to load")
+				end
+
 
 				local filter = search.Text
 				filter = string.lower(tostring(filter)):gsub("%%", "%%%%"):gsub("%[", "%%["):gsub("%]", "%%]")
@@ -1131,11 +1139,11 @@ return function(data, env)
 									client.UI.Remove("Aliases")
 									client.UI.Make("Aliases", v)
 								end
-							})	
+							})
 							num +=1
 						end
-						
-						
+
+
 					else
 						warn('The client did not like an alias so it has been removed!')
 						warn(i,v)
@@ -1266,71 +1274,41 @@ return function(data, env)
 						toggle.Text = text
 					end
 				};
-				--{
-				--	Text = "Command box on spawn: ";
-				--	Desc = "- Should the command box appear on spawn";
-				--	Entry = "Boolean";
-				--	Setting = "ForceListsSelectable";
-				--	Value = Variables.CommandBoxonSpawn or true;
-				--	Function = function(enabled, toggle)
-				--		Variables.CommandBoxonSpawn = enabled
-
-				--		local text = toggle.Text
-				--		toggle.Text = "Saving.."
-				--		Remote.Get("UpdateClient", "CommandBoxonSpawn", enabled)
-				--		toggle.Text = text
-				--	end
-				--};
 				{
-					Text = "Chat channel tabs: ";
-					Desc = "- Whatever or not chat channel tabs are enabled";
+					Text = "Command box on spawn: ";
+					Desc = "- Should the command box appear on spawn";
 					Entry = "Boolean";
-					Setting = "EnableChatChannelTabs";
-					Value = Variables.EnableChatChannelTabs or false;
+					Setting = "CommandBoxOnSpawn";
+					Value = Variables.CommandBoxOnSpawn or true;
 					Function = function(enabled, toggle)
-						Variables.EnableChatChannelTabs = enabled
+						Variables.CommandBoxOnSpawn = enabled
 
 						local text = toggle.Text
 						toggle.Text = "Saving.."
-						Remote.Get("UpdateClient", "EnableChatChannelTabs", enabled)
+						Remote.Get("UpdateClient", "CommandBoxOnSpawn", enabled)
 						toggle.Text = text
-						local ans = UI.Make("YesNoPrompt", {Question = "You must rejoin for these changes to apply. Would you like to do that now?"})
-						if string.lower(ans) == "yes" then 
-							client.Remote.Send("ProcessCommand",`!rejoin`)
-							--// Hardcoded for now.
-						end
 					end
 				};
 				--{
-				--	Text = "Chat resizable: ";
-				--	Desc = "- Is the chat resizing enabled?";
+				--	Text = "Chat channel tabs: ";
+				--	Desc = "- Whatever or not chat channel tabs are enabled";
 				--	Entry = "Boolean";
-				--	Setting = "EnableChatResize";
-				--	Value = Variables.EnableChatResize or false;
+				--	Setting = "EnableChatChannelTabs";
+				--	Value = Variables.EnableChatChannelTabs or false;
 				--	Function = function(enabled, toggle)
-				--		Variables.EnableChatResize = enabled
+				--		Variables.EnableChatChannelTabs = enabled
 
 				--		local text = toggle.Text
 				--		toggle.Text = "Saving.."
-				--		Remote.Get("UpdateClient", "EnableChatResize", enabled)
+				--		Remote.Get("UpdateClient", "EnableChatChannelTabs", enabled)
 				--		toggle.Text = text
+				--		local ans = UI.Make("YesNoPrompt", {Question = "You must rejoin for these changes to apply. Would you like to do that now?"})
+				--		if string.lower(ans) == "yes" then
+				--			client.Remote.Send("ProcessCommand",`!rejoin`)
+				--			--// Hardcoded for now.
+				--		end
 				--	end
 				--};
-				--[[{ --// Not totally removing this as it may come back in a different capacity in the future ~ Scel
-					Text = "Privacy Mode: ";
-					Desc = "- Hide certain info from your profile";
-					Entry = "Boolean";
-					Setting = "PrivacyMode";
-					Value = Variables.PrivacyMode or false;
-					Function = function(enabled, toggle)
-						Variables.PrivacyMode = enabled
-
-						local text = toggle.Text
-						toggle.Text = "Saving.."
-						Remote.Get("UpdateClient","PrivacyMode", enabled)
-						toggle.Text = text
-					end
-				};--]]
 				{
 					Text = "Console Key: ";
 					Desc = "- Key used to open the console";
@@ -1386,6 +1364,57 @@ return function(data, env)
 							UI.Make("UserPanel", {Tab = "Client"})
 						end)
 					end
+				};
+				{
+					Text = "Main theme color: ";
+					Desc = "- TODO: Write a description";
+					Entry = "Color3";
+					Setting = "CustomThemeColor1";
+					Value = Color3.new(Variables.CustomThemeColor1[1], Variables.CustomThemeColor1[2], Variables.CustomThemeColor1[3]);
+					--Options = Color3.fromRGB(0,0,0);
+					Function = function(new)
+
+						local newColor = UI.Make("ColorPicker", {
+							Color = Color3.new(Variables.CustomThemeColor1[1], Variables.CustomThemeColor1[2], Variables.CustomThemeColor1[3]);
+						})
+
+						Variables.CustomThemeColor1 = { newColor.R;  newColor.G;  newColor.B;} or Variables.CustomThemeColor1
+
+						new.BackgroundColor3 = newColor
+
+						gTable.UIGradient.Color = ColorSequence.new(
+							Color3.new(Variables.CustomThemeColor1[1], Variables.CustomThemeColor1[2], Variables.CustomThemeColor1[3]),
+							Color3.new(Variables.CustomThemeColor2[1], Variables.CustomThemeColor2[2], Variables.CustomThemeColor2[3])
+						)
+
+						Remote.Get("UpdateClient", "CustomThemeColor1", { newColor.R;  newColor.G;  newColor.B;})
+					end
+				};
+				{
+					Text = "Second theme color: ";
+					Desc = "- TODO: Write a description";
+					Entry = "Color3";
+					Setting = "CustomThemeColor2";
+					Value = Color3.new(Variables.CustomThemeColor2[1], Variables.CustomThemeColor2[2], Variables.CustomThemeColor2[3]);
+					--Options = Color3.fromRGB(0,0,0);
+					Function = function(new)
+						local newColor = UI.Make("ColorPicker", {
+							Color = Color3.new(Variables.CustomThemeColor2[1], Variables.CustomThemeColor2[2], Variables.CustomThemeColor2[3]);
+						})
+
+						Variables.CustomThemeColor2 = { newColor.R;  newColor.G;  newColor.B;}
+						new.BackgroundColor3 = newColor
+
+						gTable.UIGradient.Color = ColorSequence.new(
+							Color3.new(Variables.CustomThemeColor1[1], Variables.CustomThemeColor1[2], Variables.CustomThemeColor1[3]),
+							Color3.new(Variables.CustomThemeColor2[1], Variables.CustomThemeColor2[2], Variables.CustomThemeColor2[3])
+						)
+
+						Remote.Get("UpdateClient", "CustomThemeColor2", { newColor.R;  newColor.G;  newColor.B;})
+						--Remote.Get("UpdateClient", "CustomThemeColor2", Variables.UIColor2)
+						--window.Drag.Main.UIGrandient.Color = ColorSequence.new(Variables.UIColor1,Variables.UIColor2)
+						--donorData.Cape.Color = {currentColor.R; currentColor.G; currentColor.B;}
+					end
 				}
 			}
 
@@ -1430,6 +1459,38 @@ return function(data, env)
 						--BackgroundColor3 = label.BackgroundColor3:lerp(Color3.new(1, 1, 1), 0.25);
 						BackgroundTransparency = 1;
 					})
+				elseif setData.Entry == "Color3" then
+					--label:Add("Dropdown", {
+					--	Size = UDim2.new(0, 120, 1, 0);
+					--	Position = UDim2.new(1, -120, 0, 0);
+					--	Selected = setData.Value;
+					--	OnSelect = setData.Function;
+					--	Options = setData.Options;
+					--	--BackgroundColor3 = label.BackgroundColor3:lerp(Color3.new(1, 1, 1), 0.25);
+					--	BackgroundTransparency = 1;
+					--})
+						label:Add("TextButton",{
+						Text = "";
+						Size = UDim2.new(0, 40, 1, -6);
+						Position = UDim2.new(1, -45, 0, 3);
+						BackgroundColor3 = setData.Value;
+						TextTransparency = 0;
+						BackgroundTransparency = 0;
+						BorderPixelSize = 1;
+						BorderColor3 = Color3.fromRGB(100, 100, 100);
+						OnClick = function(new)
+							service.Debounce("UIColorUpdate", function()
+								--local newColor = UI.Make("ColorPicker", {
+								--	Color = setData.Value;
+								--})
+
+								--currentColor = newColor or currentColor
+								--new.BackgroundColor3 = currentColor
+								--donorData.Cape.Color = {currentColor.R; currentColor.G; currentColor.B;}
+								setData.Function(new)
+							end)
+						end
+					});
 				end
 
 				--[[cliScroll:Add("TextLabel", {

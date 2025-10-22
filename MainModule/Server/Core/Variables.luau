@@ -34,7 +34,7 @@ return function(Vargs, GetEnv)
 	end
 
 	local Lighting = service.Lighting
-	
+
 	server.Variables = {
 		Init = Init,
 		RunAfterInit = AfterInit,
@@ -48,7 +48,10 @@ return function(Vargs, GetEnv)
 		BanMessage = "Banned",
 		DonorDisabledInServer = false;
 		PlayerJoinFilters = {
-			
+
+		};
+		CommandFilters = {
+
 		};
 		ClientAntiDetectors = {
 			"0x2 detector detected";
@@ -71,7 +74,7 @@ return function(Vargs, GetEnv)
 			Player = 50; -- default
 			Donor = 50; -- how many donor adds to default
 		};
-		
+
 		WhitelistData = {
 			Enabled = false;
 			TimeEnabled = 0;
@@ -79,15 +82,15 @@ return function(Vargs, GetEnv)
 			List = server.Settings.Whitelist or {};
 			Reason = server.Settings.WhitelistMessage or "No reason set"
 		};
-		
+
 		SlockData = {
 			Enabled = false;
 			TimeEnabled = 0;
 			Moderator = {Name = "SERVER"};
 			Reason = "The maze wasn't meant for you."
 		};
-		
-		DefaultKickMessage = { 
+
+		DefaultKickMessage = {
 			"";
 			"▬▬▬▬ Astra ▬▬▬▬";
 			"";
@@ -97,7 +100,7 @@ return function(Vargs, GetEnv)
 			"▬▬▬▬ BinaryBridge ▬▬▬▬";
 			"";
 		};
-		
+
 		DefaultKickMessages = {
 			BanMessage = { --// Shown if a player is server-banned in-game or databanned
 				"";
@@ -109,10 +112,10 @@ return function(Vargs, GetEnv)
 				"Moderator: {moderator}";
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
-			};		
+			};
 
 			TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
-				"";		
+				"";
 				"▬▬▬▬ Astra ▬▬▬▬";
 				"";
 				"You are Trello-Banned!";
@@ -120,7 +123,7 @@ return function(Vargs, GetEnv)
 				"Time: {time}";
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
-			};	
+			};
 
 			TimeBanMessage = {  --// Shown if a player is Timebanned in-game
 				"";
@@ -143,7 +146,7 @@ return function(Vargs, GetEnv)
 				"Reason: {reason}";
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
-			};	
+			};
 
 			KickMessage = { --// Shown if a player is banned in the `settings.Banned` table
 				"";
@@ -153,7 +156,7 @@ return function(Vargs, GetEnv)
 				"Reason: {reason}";
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
-			};	
+			};
 			ShutdownMessage = { --// Shown if a player is banned in the `settings.Banned` table
 				"";
 				"▬▬▬▬ Astra ▬▬▬▬";
@@ -162,9 +165,9 @@ return function(Vargs, GetEnv)
 				"{reason}";
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
-			};	
+			};
 
-			FailedJoinFilter = { 
+			FailedJoinFilter = {
 				"";
 				"▬▬▬▬ Astra ▬▬▬▬";
 				"";
@@ -174,9 +177,9 @@ return function(Vargs, GetEnv)
 				"";
 				"▬▬▬▬ BinaryBridge ▬▬▬▬";
 				"";
-			}		
+			}
 		};
-		
+
 		AntiKickMessage = {
 			"";
 			"▬▬▬▬ Astra ▬▬▬▬";
@@ -237,7 +240,7 @@ return function(Vargs, GetEnv)
 			Name = Lighting.Name,
 			Sky = Lighting:FindFirstChildOfClass("Sky") and Lighting:FindFirstChildOfClass("Sky"):Clone(),
 		},
-		
+
 		AtmosphereSettings = {},
 
 		OriginalAtmosphereSettings = {},
