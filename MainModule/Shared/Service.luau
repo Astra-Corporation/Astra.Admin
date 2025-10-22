@@ -375,7 +375,7 @@ return function(ErrorHandler, fenceSpecific, env)
 				end
 			})) or {}
 			for i,v in tab do
-				if typeof(v) == 'table' then 
+				if typeof(v) == 'table' then
 					new[i] = Service.DeepCopy(v)
 				else
 					new[i] = v
@@ -484,7 +484,7 @@ return function(ErrorHandler, fenceSpecific, env)
 		end;
 
 		RecursiveMtSearch = function(tab)
-			for index, val in tab do 
+			for index, val in tab do
 				if typeof(val) == "table" or typeof(val) == "userdata" then
 					if getmetatable(val) ~= nil or Service.RecursiveMtSearch(val) then
 						return true
@@ -504,7 +504,7 @@ return function(ErrorHandler, fenceSpecific, env)
 								return false
 							end
 							if argumentTypes then
-								for index, val in {...} do 
+								for index, val in {...} do
 									if argumentTypes[index] and not argumentTypes[index](val) then
 										return false
 									end
@@ -1102,7 +1102,7 @@ return function(ErrorHandler, fenceSpecific, env)
 		end;
 		ReadOnly = function(tabl, excluded, killOnError, noChecks)
 			local doChecks = (not noChecks) and Service.RunService:IsClient()
-			if Main.Core and Main.Core.DebugMode then 
+			if Main.Core and Main.Core.DebugMode then
 				doChecks = false
 			end
 			doChecks = false
@@ -1238,7 +1238,7 @@ return function(ErrorHandler, fenceSpecific, env)
 			end
 
 			-- If a non-whitelisted class is found, delete it
-			for i,v in item:GetDescendants() do 
+			for i,v in item:GetDescendants() do
 				local allowed = false
 				for _,x in whitelistedClasses do
 					if v:IsA(x) then

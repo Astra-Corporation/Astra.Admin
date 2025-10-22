@@ -135,7 +135,7 @@ game:GetService("NetworkClient").ChildRemoved:Connect(function(p)
 end)
 
 local unique = {}
--- local origEnv = getfenv()
+local origEnv = {}
 local Folder = script.Parent
 --local origWarn = warn
 local startTime = time()
@@ -226,7 +226,7 @@ do
 			task.wait(1)
 			service.Player:Kick(info)
 		end)
-		
+
 		if not isStudio then
 			spawn(pcall, function()
 				task.wait(5)
@@ -282,7 +282,7 @@ local LoadModule = function(module, yield, envVars, noEnv)
 					GetVargTable(),
 					GetEnv
 				)
-				if not ran then 
+				if not ran then
 					warn(err)
 				end
 			else
@@ -295,7 +295,7 @@ local LoadModule = function(module, yield, envVars, noEnv)
 					GetVargTable(),
 					GetEnv
 				)
-				if not ran then 
+				if not ran then
 					warn(err) -- Never trust the error handlers. I spent so long trying to figure out why the above didnt run
 				end
 			end
