@@ -4539,7 +4539,7 @@ return function(Vargs, env)
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
 				for _, v in service.GetPlayers(plr, args[1]) do
-					Remote.LoadCode(v, [[for i, v in ipairs(service.PlayerGui:GetChildren()) do if not client.Core.GetGui(v) then pcall(v.Destroy, v) end end]])
+				    Remote.LoadCode(v, [[for i, v in ipairs(service.PlayerGui:GetChildren()) do if not client.Core.GetGui(v) and v.Name ~= "TouchGui" then pcall(v.Destroy, v) end end]])
 				end
 			end
 		};
@@ -7123,11 +7123,12 @@ return function(Vargs, env)
 			end
 		};
 
+
 		Freecam = {
 			Prefix = Settings.Prefix;
 			Commands = {"freecam"};
 			Args = {"player"};
-			Description = "Makes it so the target player(s)'s cam can move around freely (Press Space or Shift+P to toggle freecam)";
+			Description = "Makes it so the target player(s)'s cam can move around freely (Press Shift+P, F, or DPadLeft to toggle freecam)";
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
 				for _, v in service.GetPlayers(plr, args[1]) do
@@ -7140,12 +7141,9 @@ return function(Vargs, env)
 					local freecam = Deps.Assets.Freecam:Clone()
 					freecam.Enabled = true
 					freecam.ResetOnSpawn = false
-					freecam.Freecam.Enabled = true
+					freecam.Freecam.Disabled = false
 					freecam.Parent = plrgui
-
-					if Settings.CommandFeedback then
-						Functions.Notification("Notification", "Freecam has been enabled. Press Shift+P to toggle freecam on or off.", {v}, 15)
-					end
+					Functions.Notification("Notification", "Freecam has been enabled. Press Shift+P, F, or DPadLeft to toggle freecam on or off.", {v}, 15)
 				end
 			end
 		};
@@ -7161,16 +7159,16 @@ return function(Vargs, env)
 					local plrgui = v:FindFirstChildOfClass("PlayerGui")
 					local freecam = plrgui and plrgui:FindFirstChild("Freecam")
 					if freecam then
-						if freecam:FindFirstChildOfClass("RemoteFunction") then
-							freecam:FindFirstChildOfClass("RemoteFunction"):InvokeClient(v, "End")
-						end
+						task.defer(function()
+							local remote: RemoteFunction? = freecam:FindFirstChildOfClass("RemoteFunction")
+							if remote then
+								pcall(remote.InvokeClient, remote, v, "End")
+							end
 
-						Remote.Send(v, "Function", "SetView", "reset")
-						service.Debris:AddItem(freecam, 2)
-
-						if Settings.CommandFeedback then
+							Remote.Send(v, "Function", "SetView", "reset")
+							service.Debris:AddItem(freecam, 2)
 							Functions.Notification("Notification", "Freecam has been disabled.", {v}, 15)
-						end
+						end)
 					end
 				end
 			end
@@ -7186,10 +7184,10 @@ return function(Vargs, env)
 				for _, v in service.GetPlayers(plr, args[1]) do
 					local plrgui = v:FindFirstChildOfClass("PlayerGui")
 					local freecam = plrgui and plrgui:FindFirstChild("Freecam")
-					local remote = freecam and freecam:FindFirstChildOfClass("RemoteFunction")
+					local remote: RemoteFunction? = freecam and freecam:FindFirstChildOfClass("RemoteFunction")
 
 					if remote then
-						remote:InvokeClient(v, "Toggle")
+						task.defer(pcall, remote.InvokeClient, remote, v, "Toggle")
 					end
 				end
 			end
