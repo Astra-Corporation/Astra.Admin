@@ -1,4 +1,14 @@
 return {
+    "[v3.1.0 - 2025-10-23]";
+    "Theres a lot more changes i cant remember right now";
+    "Added back the dex command";
+    "Fixed a lot of UI issues";
+    "Fixed console and keybind typing checks";
+    "Updated GroupService and credits";
+    "Updated UI and added window ui coloring for the default theme";
+    "Call system fixes and improvements";
+    "Better data saving. Credits to Coasterteam for his datastore queue fixes";
+    "";
 	"[v3.0.2 - 2025-01-26]";
 	"Kick message improvements";
 	"New chat support";
