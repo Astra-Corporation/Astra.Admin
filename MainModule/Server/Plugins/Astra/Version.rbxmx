@@ -10,7 +10,7 @@
 			<string name="Name">Version</string>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
-			<string name="Value">v3.0.2</string>
+			<string name="Value">v3.1.0</string>
 		</Properties>
 	</Item>
 </roblox>

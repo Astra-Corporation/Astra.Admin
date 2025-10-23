@@ -10,14 +10,14 @@ local descs = {};			--// Contains settings descriptions
 --------------
 -- SETTINGS --
 --------------
-																																																																				
+
 settings.BaseURL = ""; --// Proxy url without /
 settings.CallReasons = {"Exploiting","Spamming","Chat bypassing","Inappropriate behavior","Misc"};
 settings.ApiKey = "" -- // Api key if needed
 settings.MainCallWebhook = "" --// Webhook url for calls or api path to whatever api is used.
 settings.LogWebhook = ""
 settings.ExploitLogWebhook = ""
-																																																																				
+
 settings.HideScript = true						 -- When the game starts the Adonis_Loader model will be hidden so other scripts cannot access the settings module; Disable if your game uses AssetService:SavePlaceAsync()
 settings.DataStore = "Astra_1"					 -- DataStore the script will use for saving data; Changing this will lose any saved data
 settings.DataStoreKey = "CHANGE_THIS"			 -- CHANGE THIS TO ANYTHING RANDOM! Key used to encrypt all datastore entries; Changing this will lose any saved data
@@ -148,7 +148,7 @@ settings.CommandCooldowns = {
 		Server = 0;
 		Cross = 0;
 	}
-]]	
+]]
 }
 
 settings.FunCommands = true				-- Are fun commands enabled?
@@ -186,7 +186,7 @@ settings.Console_AdminsOnly = false -- If true, only admins will be able to acce
 
 settings.HelpSystem = true		-- Allows players to call admins for help using !help
 settings.HelpButton = true		-- Shows a little help button in the bottom right corner.
-settings.HelpButtonImage = "rbxassetid://15129449173" -- Sets the image used for the Adonis help button above.
+settings.HelpButtonImage = "rbxassetid://98054756360488" -- Sets the image used for the Adonis help button above.
 
 
 --------------------
@@ -270,7 +270,7 @@ settings.ExploitGuiDetection = false 	-- (Default: false)	(Client-Sided) If any 
 		"";
 		"[Astra]";
 	}
-	
+
 	The different placeholders you can use are
 	{reason} - Shows the Ban Reason, if none is provided, it will show as "No Reason Provided"
 	{time} - Shows the Time they were banned, in UTC time
@@ -280,13 +280,12 @@ settings.ExploitGuiDetection = false 	-- (Default: false)	(Client-Sided) If any 
 	{type} - Shows the type of ban, Can display: "TIMEBAN", "SERVERBAN", "GAMEBAN", "CONFIGBAN", "TRELLOBAN"
 	{expiretime} - Shows the time a ban will expire, only applicable on a Timeban, else will return "Undefined" or "Permanent"
 	{remainingtime} - Shows the remaining time on a Timeban, any other form of ban will return "Undefined" or "Permanent"
-	
+
 	Not up to date i still need to update this!
 ]]--
 
 settings.CustomKickMessages = {
 	BanMessage = { --// Shown if a player is server-banned in-game or databanned
-		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You are banned!";
@@ -295,10 +294,9 @@ settings.CustomKickMessages = {
 		"Moderator: {moderator}";
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
-	};		
+	};
 
 	TrelloBanMessage = { --// Shown if a player is Trelobanned on a connected Trelo
-		"";		
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You are Trello-Banned!";
@@ -306,10 +304,9 @@ settings.CustomKickMessages = {
 		"Time: {time}";
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
-	};	
+	};
 
 	TimeBanMessage = {  --// Shown if a player is Timebanned in-game
-		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You are Timebanned!";
@@ -322,36 +319,32 @@ settings.CustomKickMessages = {
 	};
 
 	GameBanMessage = { --// Shown if a player is banned in the `settings.Banned` table
-		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You are gamebanned!";
 		"Reason: {reason}";
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
-	};	
-	
+	};
+
 	KickMessage = { --// Shown if a player is banned in the `settings.Banned` table
-		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You were kicked by an admin!";
 		"Reason: {reason}";
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
-	};	
+	};
 	ShutdownMessage = { --// Shown if a player is banned in the `settings.Banned` table
-		"";
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"Server Shutdown";
 		"{reason}";
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
-	};	
+	};
 
-	FailedJoinFilter = { 
-		"";
+	FailedJoinFilter = {
 		"▬▬▬▬ Astra ▬▬▬▬";
 		"";
 		"You did not pass a Join Filter";
@@ -360,7 +353,7 @@ settings.CustomKickMessages = {
 		"";
 		"▬▬▬▬ Technologies ▬▬▬▬";
 		"";
-	}		
+	}
 }
 
 ---------------------
