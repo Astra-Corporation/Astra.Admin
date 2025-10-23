@@ -66,7 +66,7 @@ local SERVICES_WE_USE = table.freeze({
 })
 
 local unique = {};
-local origEnv = getfenv();
+local origEnv = {};
 
 local locals = {}
 local server = {}

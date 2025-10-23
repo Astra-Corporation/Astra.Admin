@@ -178,7 +178,7 @@ return function(Vargs)
 			table.insert(newList,value)
 
 			if Settings.SaveAdmins and levelName and not temp then
-				TrackTask("Thread: SaveAdmin", Core.DoSave, {
+				TrackTask("Thread: SaveAdmin", Core.DoSave, false, {
 					Type = "TableAdd";
 					Table = {"Settings", "Ranks", levelName, "Users"};
 					Value = value

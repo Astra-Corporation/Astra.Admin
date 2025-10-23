@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="ScreenGui" referent="RBX67D115377DDB41398D53C14B1C2BF1F5">
+	<Item class="ScreenGui" referent="RBX241188DB1536483F8AE71E27FF5FDDD0">
 		<Properties>
 			<bool name="ClipToDeviceSafeArea">true</bool>
 			<int name="DisplayOrder">9000000</int>
@@ -18,14 +18,14 @@
 			<token name="SelectionBehaviorRight">0</token>
 			<token name="SelectionBehaviorUp">0</token>
 			<bool name="SelectionGroup">false</bool>
-			<BinaryString name="AttributesSerialize"></BinaryString>
+			<BinaryString name="AttributesSerialize">AQAAAAUAAABOT0VOVgMA</BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
 			<string name="Name">Console</string>
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Frame" referent="RBXC96CD1CFAC7F41DF9A441B5B60211CDE">
+		<Item class="Frame" referent="RBX252FC95A145647F4840CD05EBD270B1C">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -88,7 +88,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="ScrollingFrame" referent="RBX2323A509E5804AD6BDB199CF40CC5B00">
+			<Item class="ScrollingFrame" referent="RBX44A726B06AB6412788B62E4969F191D8">
 				<Properties>
 					<token name="AutomaticCanvasSize">0</token>
 					<Content name="BottomImage"><url>http://roblox.com/asset?id=158348114</url></Content>
@@ -178,7 +178,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextBox" referent="RBX24E3C6C405E14D65B802B040854D06EC">
+			<Item class="TextBox" referent="RBX7C2E243E4EFB4FB88268591EB827BB82">
 				<Properties>
 					<bool name="ClearTextOnFocus">false</bool>
 					<Font name="FontFace">
@@ -283,7 +283,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX2F1FAF20F511434687B769F9FFF1D1F5">
+			<Item class="Frame" referent="RBX4A344CEC88044DF0932259D2D57E707E">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -347,7 +347,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="ScrollingFrame" referent="RBX0D827A08FCDB44608D8FF7AF60A06D60">
+			<Item class="ScrollingFrame" referent="RBXCEC6F33A87BE4CB49AC15907297A62CA">
 				<Properties>
 					<token name="AutomaticCanvasSize">0</token>
 					<Content name="BottomImage"><url>http://roblox.com/asset?id=158348114</url></Content>
@@ -437,7 +437,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UIGradient" referent="RBX787BBB1B72B44C2E9ADF7CDC5935DA78">
+			<Item class="UIGradient" referent="RBXCCFA924B8E04410C8B6D9A6F464642AC">
 				<Properties>
 					<ColorSequence name="Color">0 0 0 0 0 0.567474 0 0 0.223529 0 1 0 0 0.501961 0 </ColorSequence>
 					<bool name="Enabled">true</bool>
@@ -456,7 +456,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="TextButton" referent="RBX5889370F9A8248249AE5B66DD65906CB">
+		<Item class="TextButton" referent="RBXC2A82233D8714AE4A7CA2BC88D2E55E7">
 			<Properties>
 				<Font name="FontFace">
 					<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -557,7 +557,7 @@
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
 		</Item>
-		<Item class="Folder" referent="RBX690A90E3A6E64D16AA712FB50CF13690">
+		<Item class="Folder" referent="RBX103BC4BB0D434FD095E2365F926C091A">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -566,19 +566,14 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="ModuleScript" referent="RBXE6472055124D4757807F41A289CAE681">
+			<Item class="ModuleScript" referent="RBXC0EED510BA804DE4BEFD81BA1BAC7123">
 				<Properties>
 					<Content name="LinkedSource"><null></null></Content>
-					<ProtectedString name="Source"><![CDATA[client = nil
-Pcall = nil
-Routine = nil
-service = nil
-gTable = nil
-
---// All global vars will be wiped/replaced except script
---// All guis are autonamed codeName..gui.Name
-
-return function(data, env)
+					<ProtectedString name="Source"><![CDATA[return function(data, vargs)
+	local client = vargs.client
+	local service = vargs.service
+	local UI = client.UI
+	local gTable = data.gTable
 
 	local player = service.Players.LocalPlayer
 	local playergui = player.PlayerGui
@@ -616,13 +611,13 @@ return function(data, env)
 		local Settings = Remote.Get("Setting", {"SplitKey", "ConsoleKeyCode", "BatchKey", "Prefix"})
 
 		consoleKey = Settings.ConsoleKeyCode
-		splitKey = Settings.SplitKey 
+		splitKey = Settings.SplitKey
 		commands = Remote.Get("FormattedCommands")
 		batchKey = Settings.BatchKey
 		prefix = Settings.Prefix
 
 	end)
-	
+
 	local opened = false
 	local scrolling = false
 	local scrollOpen = false
@@ -784,7 +779,7 @@ return function(data, env)
 				if players:FindFirstChild("Entry 0") then
 					local args = string.split(tostring(text.Text), " ") -- Get command args
 					local textWithoutLastArg = string.sub(text.Text, 1, string.len(text.Text) - string.len(args[#args])) -- Remove the last arg
-					
+
 					text.Text = `{textWithoutLastArg}{players["Entry 0"].Text} ` -- Combine the text witout the last arg and the player name
 				elseif scroll:FindFirstChild("Entry 0") then
 					text.Text = string.split(scroll["Entry 0"].Text, "<")[1]
@@ -869,17 +864,17 @@ return function(data, env)
 		Variables.ConsoleOpen = opened
 	end)
 
-	gTable.BindEvent(service.UserInputService.InputBegan, function(inputObject: InputObject)
+	gTable.BindEvent(service.UserInputService.InputBegan, function(inputObject: InputObject, gameProcessedEvent:boolean)
 		local textbox = service.UserInputService:GetFocusedTextBox()
-		if not textbox and rawequal(inputObject.UserInputType, Enum.UserInputType.Keyboard) and inputObject.KeyCode.Name == (Variables.CustomConsoleKey or consoleKey) then
+		if not textbox and not gameProcessedEvent and rawequal(inputObject.UserInputType, Enum.UserInputType.Keyboard) and inputObject.KeyCode.Name == (Variables.CustomConsoleKey or consoleKey) then
 			service.Events.ToggleConsole:Fire()
 		end
 	end)
-	
+
 	gTable:Ready()
 end
 ]]></ProtectedString>
-					<string name="ScriptGuid">{4C87C706-F610-4982-9185-BEE45AC9C1B7}</string>
+					<string name="ScriptGuid">{64B06F4B-C433-49FC-908A-6670D84FFD99}</string>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 					<bool name="DefinesCapabilities">false</bool>
@@ -888,7 +883,7 @@ end
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="BoolValue" referent="RBXF1A898CB71B04C1CA1414F65FB85C5F4">
+			<Item class="BoolValue" referent="RBX1B15C19CC8B74C66AB977AF8F5AC4B13">
 				<Properties>
 					<bool name="Value">false</bool>
 					<BinaryString name="AttributesSerialize"></BinaryString>
@@ -899,7 +894,7 @@ end
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="BoolValue" referent="RBX4CA26D1729D3461CA757B504153DAB80">
+			<Item class="BoolValue" referent="RBX6E006A33237C4F5A9000E4B9121EE42F">
 				<Properties>
 					<bool name="Value">false</bool>
 					<BinaryString name="AttributesSerialize"></BinaryString>

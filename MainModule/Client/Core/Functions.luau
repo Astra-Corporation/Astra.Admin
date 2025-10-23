@@ -1053,7 +1053,7 @@ return function(Vargs, GetEnv)
 				local key = tostring(input.KeyCode.Value)
 				local textbox = service.UserInputService:GetFocusedTextBox()
 
-				if Variables.KeybindsEnabled and not (textbox) and key and Variables.KeyBinds[key] and not Variables.WaitingForBind then
+				if Variables.KeybindsEnabled and not (textbox or gameProcessedEvent) and key and Variables.KeyBinds[key] and not Variables.WaitingForBind then
 					local isAdmin = Remote.Get("CheckAdmin")
 					if time() - timer > 5 or isAdmin then
 						Remote.Send('ProcessCommand',Variables.KeyBinds[key],false,true)

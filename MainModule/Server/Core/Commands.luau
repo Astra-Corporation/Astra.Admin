@@ -7,6 +7,8 @@ return function(Vargs, GetEnv)
 
 	local RegisterCommandDefinition
 
+	local env = GetEnv(nil, {script = script})
+
 	local function Init()
 		Functions = server.Functions;
 		Admin = server.Admin;
@@ -155,7 +157,7 @@ return function(Vargs, GetEnv)
 
 		--// Load command modules
 		if server.CommandModules then
-			local env = GetEnv()
+		    local env = GetEnv(nil, {script = script})
 			for i, module in server.CommandModules:GetChildren() do
 				local func = require(module)
 				local ran, tab = pcall(func, Vargs, env)
