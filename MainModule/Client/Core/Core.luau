@@ -4,7 +4,7 @@ return function(Vargs, GetEnv)
 	local client, service = Vargs.Client, Vargs.Service
 	local FiOne = service.UnWrap(client.Shared.FiOne)
 	local Anti, Core, Functions, Process, Remote, UI, Variables, log, Pcall, Routine
-
+	local t
 	local function Init(data)
 		UI = client.UI;
 		Anti = client.Anti;
@@ -16,6 +16,7 @@ return function(Vargs, GetEnv)
 		log = client.log
 		Pcall = client.Pcall
 		Routine = client.Routine
+		t = client.Typechecker;
 
 		Core.Name = "\0"
 		Core.Special = client.DepsName
@@ -26,8 +27,7 @@ return function(Vargs, GetEnv)
 		if data.DebugMode == true then
 			Core.DebugMode = true
 		end
-		
-		
+
 		Core.Init = nil;
 	end
 
@@ -235,7 +235,7 @@ return function(Vargs, GetEnv)
 						end
 						return RealEnvResult, false
 					end
-				end	
+				end
 
 				local AdonisDebugAPIBindable = ReplicatedStorage:FindFirstChild("Adonis_Debug_API")
 				if AdonisDebugAPIBindable then

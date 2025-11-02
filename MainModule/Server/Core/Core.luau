@@ -1558,8 +1558,6 @@ return function(Vargs, GetEnv)
 				Hint = MetaFunc(Functions.Hint, true);
 
 				Message = MetaFunc(Functions.Message, true);
-
-				RunCommandAsNonAdmin = MetaFunc(Admin.RunCommandAsNonAdmin, true);
 			}
 
 			if Core.DebugMode == true then
