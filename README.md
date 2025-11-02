@@ -8,8 +8,10 @@ Astra is a modified version of Adonis by Sceleratis with edits, patches, and mor
 ### TODO: Update the section below.<br>
 <br>If you get stuck, feel free to ask for assistance in our [Discord server](https://discord.gg/YqCfhnqRvP).
 
-### Method 1: Discord releases channel
-* Join the Discord server linked before and download a release from the releases channel (I may sometimes be too lazy to make a new release on github)
+### Method 1 (recommended): Official Roblox Model
+
+1. [Take a copy](https://create.roblox.com/store/asset/89984488815661/Astra-Admin-Loader) of the Adonis loader model from the Roblox Library.
+2. Insert the model into Studio using the Toolbox, and place it under `ServerScriptService`. (Do not leave it in the `Workspace`!)
 
 ### Method 2: GitHub Releases
 
