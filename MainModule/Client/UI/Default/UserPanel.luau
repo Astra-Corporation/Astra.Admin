@@ -412,7 +412,7 @@ return function(data, env)
 				BackgroundTransparency = 0.5;
 				Events = {
 					MouseButton1Down = function()
-						UI.Make("Credits", {})
+						donorTab:FocusTab()
 					end
 				}
 			})
