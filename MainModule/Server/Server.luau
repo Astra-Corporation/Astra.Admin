@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------
 --						   	Astra Remotely Integrated Defense v3 (ARIDe)		 	  --
 ----------------------------------------------------------------------------------------
---		 					By: krampsuzc - Engineering the future.				   	  --
+--		 				By: EasternBloxxer - Engineering the future.		   		  --
 --		 				  8ch_32bit was here lololololololololololo		   		 	  --
 ----------------------------------------------------------------------------------------
 
@@ -26,19 +26,11 @@ local CORE_LOADING_ORDER = table.freeze({
 })
 
 --// Todo:
---//   Fix a loooootttttttt of bugged commands
---//   Probably a lot of other stuff idk
---//   Transform from Sceleratis into Dr. Sceleratii; Evil alter-ego; Creator of bugs, destroyer of all code that is good
---//   Maybe add a celery command at some point (wait didn't we do this?)
---//   Say hi to people reading the script
---//   ...
---//   "Hi." - Me
---//	Your mom
---//	Astra will win.
---//	"ARIDe" was a joke release of this admin system with some features a lot of people requested
---// 	but werent useful for our usecase of the system
+--//  Win.
 
 --// Holiday roooaaAaaoooAaaooOod
+--// I WANT SUMMER
+--// ITS TOO COLD
 
 local SERVICES_WE_USE = table.freeze({
 	"Workspace";
@@ -68,9 +60,9 @@ local SERVICES_WE_USE = table.freeze({
 local unique = {};
 local origEnv = {};
 
-local locals = {}
-local server = {}
-local service = {}
+local locals
+local server
+local service
 local RbxEvents = {}
 local ErrorLogs = {}
 local HookedEvents = {}
@@ -80,16 +72,6 @@ local Folder = script.Parent
 local oldInstNew = Instance.new
 
 local __Modules = server.Modules;
-
-local isModule = function(module)
-	for ind, modu in (__Modules) do
-		if module == modu then
-			return true
-		end
-	end
-
-	return false
-end
 
 local print = function(...)
 	print("Astra Server :: ", ...)
@@ -175,10 +157,9 @@ local function GetVargTable()
 	};
 end;
 
-local function LoadModule(module, yield, envVars, noEnv, isCore)
-	noEnv = true --// Seems to make loading take longer when true (?)
+local function LoadModule(module, yield, envVars, _, isCore)
 	local isFunc = type(module) == "function"
-	local module = (isFunc and service.New("ModuleScript", {Name = "Non-Module Loaded"})) or module
+	local _module = (isFunc and service.New("ModuleScript", {Name = "Non-Module Loaded"})) or module
 	local plug = (isFunc and module) or require(module)
 
 	if server.Modules and type(module) ~= "function" then
@@ -186,8 +167,12 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 	end
 
 	if type(plug) == "function" then
+		-- local args = debug.info(plug, "a")
+		-- if args == 0 then
+		-- 	error("Plugins enforce a NoEnv policy, make sure your plugin has the 2nd argument defined!")
+		-- end
 		if isCore then
-			local ran, err = service.TrackTask(
+			local _ran, err = service.TrackTask(
 				`CoreModule: {module}`,
 				plug,
 				function(err)
@@ -198,7 +183,7 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 			)
 			return err
 		else
-			local ran, err = service.TrackTask(
+			local _ran, err = service.TrackTask(
 				`Plugin: {module}`,
 				plug,
 				function(err)
@@ -218,14 +203,15 @@ local function LoadModule(module, yield, envVars, noEnv, isCore)
 			Desc = "Astra loaded a core module or plugin";
 		})
 	end
+
+	return
 end
 
 local function CleanUp()
 	print("Beginning Astra cleanup process...")
-	print('Bailing out, you are on your own now. Good luck.')
 
 	local data = service.UnWrap(server.Data)
-
+	
 	if type(data) == "table" and typeof(service.UnWrap(data.Config)) == "Instance" then
 		local Settings: ModuleScript = service.UnWrap(data.Config):FindFirstChild("Settings")
 		if typeof(Settings) == "Instance" and Settings:IsA("ModuleScript") then
@@ -250,7 +236,7 @@ local function CleanUp()
 			table.remove(RbxEvents, i)
 		end
 	end)
-
+	
 	if server.Core and server.Core.RemoteEvent then
 		pcall(server.Core.DisconnectEvent)
 	end
@@ -299,36 +285,6 @@ service = require(Shared.Service)(function(eType, msg, desc, ...)
 	end
 end, ServiceSpecific, GetEnv(nil, {server = server}))
 
-
---// Localize
-local os = service.Localize(os)
-local math = service.Localize(math)
-local table = service.Localize(table)
-local string = service.Localize(string)
-local coroutine = service.Localize(coroutine)
-local Instance = service.Localize(Instance)
-local Vector2 = service.Localize(Vector2)
-local Vector3 = service.Localize(Vector3)
-local CFrame = service.Localize(CFrame)
-local UDim2 = service.Localize(UDim2)
-local UDim = service.Localize(UDim)
-local Ray = service.Localize(Ray)
-local Rect = service.Localize(Rect)
-local Faces = service.Localize(Faces)
-local Color3 = service.Localize(Color3)
-local NumberRange = service.Localize(NumberRange)
-local NumberSequence = service.Localize(NumberSequence)
-local NumberSequenceKeypoint = service.Localize(NumberSequenceKeypoint)
-local ColorSequenceKeypoint = service.Localize(ColorSequenceKeypoint)
-local PhysicalProperties = service.Localize(PhysicalProperties)
-local ColorSequence = service.Localize(ColorSequence)
-local Region3int16 = service.Localize(Region3int16)
-local Vector3int16 = service.Localize(Vector3int16)
-local BrickColor = service.Localize(BrickColor)
-local TweenInfo = service.Localize(TweenInfo)
-local Axes = service.Localize(Axes)
-local task = service.Localize(task)
-
 --// Wrap
 local Instance = {
 	new = function(obj, parent)
@@ -342,9 +298,6 @@ end;
 
 local rawequal = service.RawEqual
 
---service.Players = service.Wrap(service.Players)
---Folder = service.Wrap(Folder)
-
 server.Folder = Folder
 server.Deps = Folder.Dependencies;
 server.CommandModules = Folder.Commands;
@@ -354,15 +307,15 @@ server.PluginsFolder = Folder.Plugins;
 server.Service = service
 server.Typechecker = require(Shared.Typechecker)
 server.GroupService = oldReq(Shared.GroupService)
+-- server.SwitchNet = oldReq(Shared.SwitchNet) -- Actually can't be bothered to port over the support rn lol
 server.DLL = oldReq(Shared.DoubleLinkedList)
+
 --// Setting things up
 for ind, loc in ipairs({
 	_G = _G;
 	game = game;
-	spawn = spawn;
+	spawn = task.spawn;
 	script = script;
-	getfenv = getfenv;
-	setfenv = setfenv;
 	workspace = workspace;
 	getmetatable = getmetatable;
 	setmetatable = setmetatable;
@@ -408,7 +361,7 @@ for ind, loc in ipairs({
 	require = require;
 	table = table;
 	type = type;
-	wait = wait;
+	wait = task.wait;
 	Enum = Enum;
 	UDim = UDim;
 	UDim2 = UDim2;
@@ -423,24 +376,50 @@ for ind, loc in ipairs({
 	locals[ind] = loc
 end
 
-local RunService = service.RunService;
-
 --// Init
 return service.NewProxy({
 	__call = function(_, data)
-		--// Begin Script Loading
-		--data = service.Wrap(data or {})
-
+		
+		local mutex = service.RunService:FindFirstChild("__Adonis_MODULE_MUTEX")
+		local OtherMutex = _G["__Kronos_MODULE_MUTEX"] and type(_G["__Kronos_MODULE_MUTEX"])=="string" -- why not
+		-- you never know.
+		if mutex or OtherMutex then
+			warn("\n-----------------------------------------------"
+				.."\nAstra server is already running! Aborting..."
+				.."\n-----------------------------------------------")
+			script:Destroy()
+			return "FAILED"
+		else
+			mutex = service.New("StringValue", {Name = "__Adonis_MODULE_MUTEX", Value = "Running"})
+			local mutexBackup = mutex:Clone()
+			local function makePersistent(m)
+				local connection1, connection2 = nil, nil
+				connection1 = m:GetPropertyChangedSignal("Parent"):Connect(function()
+					if not m or m.Parent ~= service.RunService then
+						connection1:Disconnect()
+						connection2:Disconnect()
+						warn("Adonis module mutex removed; Regenerating...")
+						mutex = mutexBackup:Clone()
+						mutex.Archivable = false
+						mutex.Parent = service.RunService
+						makePersistent(mutex)
+					end
+				end)
+				connection2 = m:GetPropertyChangedSignal("Name"):Connect(function()
+					if m and m.Name ~= "__Adonis_MODULE_MUTEX" then
+						warn("Adonis module mutex renamed; Refreshing...")
+						m.Name = "__Adonis_MODULE_MUTEX"
+					end
+				end)
+			end
+			makePersistent(mutex)
+			mutex.Archivable = false
+			mutex.Parent = service.RunService
+		end
+		
 		if not (data and data.Loader) then
 			warn("WARNING: MainModule loaded without using the loader!")
 		end
-
-		--if data and data.DebugMode == true then
-		--	local ARIDeDebugEnabled = service.New("BoolValue");
-		--	ARIDeDebugEnabled.Name = "ASTRA_DEBUGMODE_ENABLED";
-		--	ARIDeDebugEnabled.Value = true;
-		--	ARIDeDebugEnabled.Parent = Folder.Parent.Client;
-		--end
 
 		--// Server Variables
 		local setTab = require(server.Deps.DefaultSettings);
@@ -474,10 +453,9 @@ return service.NewProxy({
 		end
 
 		--// Copy client themes, plugins, and shared modules to the client folder
-		local packagesToRunWithPlugins = {}
 		local shared = Shared:Clone()
 		shared.Parent = server.Client
-
+		
 		for _, module in ipairs(data.ClientPlugins or {}) do
 			module:Clone().Parent = server.Client.Plugins
 		end
@@ -503,7 +481,7 @@ return service.NewProxy({
 
 		--// Load services
 		for ind, serv in (SERVICES_WE_USE) do
-			local temp = service[serv]
+			local _temp = service[serv]
 		end
 
 		--// Load core modules
@@ -516,8 +494,6 @@ return service.NewProxy({
 
 		--// Server Specific Service Functions
 		ServiceSpecific.GetPlayers = server.Functions.GetPlayers
-		--// Experimental, may have issues with ARIDe tables that are protected metatables
-		--ServiceSpecific.CloneTable = CloneTable
 
 		--// Initialize Cores
 		local runLast = {}
@@ -552,8 +528,6 @@ return service.NewProxy({
 			end;
 		end;
 
-		--// Variables that rely on core modules being initialized
-		--server.Logs.Errors = ErrorLogs
 
 		--// Load any afterinit functions from modules (init steps that require other modules to have finished loading)
 		for _, f in (runAfterInit) do
@@ -562,22 +536,20 @@ return service.NewProxy({
 
 		--// Load Plugins; enforced NoEnv policy, make sure your plugins has the 2nd argument defined!
 		for _, module in (server.PluginsFolder:GetChildren()) do
-			LoadModule(module, false, {script = module}, true, true) --noenv
+			LoadModule(module, false, {script = module}, nil, true)
 		end
 
-		for _, module in (data.ServerPlugins or {}) do
-			local Success, ErrorMessage = pcall(LoadModule,module, false, {script = module});
-
-			if Success then
-				continue;
-			end;
-
-			warn(`Failed to load an astra plugin!\n{ErrorMessage}`)
-
-			server.Logs.AddLog(server.Logs.Errors, {
-				Text = "Failed to load an Astra plugin!";
-				Desc = ErrorMessage;
-			});
+		for _, module in ipairs(data.ServerPlugins or {}) do
+			task.defer(xpcall, LoadModule, function(reason)
+				warn(`The plugin {type(module) == "string" and string.sub(module, 1, 15) or module} failed to load! Reason: {reason}`)
+				LogError(`The plugin {type(module) == "string" and string.sub(module, 1, 15) or module} failed to load! Reason: {reason}`)
+				table.insert(server.Messages, {
+					Title = `The plugin {type(module) == "string" and string.sub(module, 1, 15) or module} failed to load!`,
+					Icon = "maticon://Dangerous",
+					Message = string.match(reason, "Requested module experienced an error while loading") and "The plugin has invalid code or the code fails before return!" or string.match(reason, "Module code did not return exactly one value") and "The plugin returns an invalid amount of values or returns nothing at all!" or `Reason {reason}`,
+					Time = 15
+				})
+			end, module, false, {script = module, cPcall = server.cPcall})
 		end
 
 		--// We need to do some stuff *after* plugins are loaded (in case we need to be able to account for stuff they may have changed before doing something, such as determining the max length of remote commands)
@@ -588,9 +560,6 @@ return service.NewProxy({
 		--// Below can be used to determine when all modules and plugins have finished loading; service.Events.AllModulesLoaded:Connect(function() doSomething end)
 		server.AllModulesLoaded = true
 		service.Events.AllModulesLoaded:Fire(os.time())
-
-		--// Queue handler
-		--service.StartLoop("QueueHandler","Heartbeat",service.ProcessQueue)
 
 		--// Stuff to run after absolutely everything else has had a chance to run and initialize and all that
 		for _, f in (runLast) do
@@ -610,22 +579,17 @@ return service.NewProxy({
 			});
 		else
 			warn("CRITICAL ERROR! SERVER.LOGS TABLE IS MISSING. THIS SHOULDN'T HAPPEN! SOMETHING WENT WRONG WHILE LOADING CORE MODULES(?)");
-		end; -- Who removed this???
+		end;
 
 		service.Events.ServerInitialized:Fire();
 
-		-- Booooooo! Be scared. Scary month coming. Soon. We will be scary. And evil. Evil. Very evil.
-		Logs.Errors = server.DLL.new() -- if we do it in logerror and logerror is never called something BREAKS!
-		-- Server.Logs already does this. Why does it not work
-		-- I am loosing my sanity
-		-- I am easternbloxxer and this is my message.
-		-- Kramp wuz her
+		Logs.Errors = server.DLL.new()
 
 		return "SUCCESS"
 	end;
 
 	__tostring = function()
-		return "ASTRA"
+		return "Astra"
 	end;
 
 	__metatable = nil; -- This is now set in __call if DebugMode isn't enabled.
