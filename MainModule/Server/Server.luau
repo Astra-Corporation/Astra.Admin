@@ -72,7 +72,6 @@ local oldReq = require
 local Folder = script.Parent
 local oldInstNew = Instance.new
 
-local __Modules = server.Modules;
 
 local print = function(...)
 	print("Astra Server :: ", ...)
