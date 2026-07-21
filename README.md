@@ -37,7 +37,7 @@ The Adonis loader provides a `DebugMode` option which will load a local copy of 
 * Change `DebugMode` at the end of the `data` table to the desired value (e.g. `DebugMode = false`)
 
 ## Links
-* Documentation (Unfinished): easternbloxxer.github.io/Adonis/
+* Documentation (Unfinished): krampuszc.github.io/Adonis/
 * Discord Server: https://discord.gg/YqCfhnqRvP
 
 ## Contributing
