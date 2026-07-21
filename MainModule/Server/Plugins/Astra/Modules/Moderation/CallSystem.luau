@@ -98,7 +98,7 @@ return function(Vargs)
 		--// Variables
 		local userId = plr.UserId
 		local reason = args[2]
-		local clean = string.sub(service.SanitizeString(args[3]),1, 350)
+		local clean = string.sub(service.SanitizeString(string.sub(args[3], 1, 1000)),1, 350)
 		local extranotes = service.Filter(clean,plr,plr)
 		local admins = service.GetPlayers(plr, "admins",{NoFakePlayer=true,DontError=true})
 		local InGameAdmins = {}

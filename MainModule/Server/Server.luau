@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------
---						   	Astra Remotely Integrated Defense v3 (ARIDe)		 	  --
+--						   	Astra Admin (public version) v3						 	  --
 ----------------------------------------------------------------------------------------
---		 				By: EasternBloxxer - Engineering the future.		   		  --
+--		 							By: krampuszc	   		 						  --
 --		 				  8ch_32bit was here lololololololololololo		   		 	  --
 ----------------------------------------------------------------------------------------
 

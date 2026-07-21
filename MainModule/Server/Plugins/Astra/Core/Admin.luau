@@ -89,7 +89,8 @@ return function(Vargs)
 		local Lowered = string.lower(Message);
 
 		for Alias, Data in PlayerAliases do
-			if string.match(Lowered, `^{Alias}%s+`) or string.match(Lowered,`^{Alias}$`) then
+			local Escaped = service.SanitizePattern(Alias)
+			if string.match(Lowered, `^{Escaped}%s+`) or string.match(Lowered,`^{Escaped}$`) then
 				return Alias, Data;
 			end;
 		end;
@@ -97,29 +98,32 @@ return function(Vargs)
 		return false;
 	end;
 
-	Admin.IsRecursiveAlias = function(Player, Alias, Exec)
-		local Aliases = 0
+	Admin.IsRecursiveAlias = function(Player, Alias, Exec, Path, Counter)
+		Counter = Counter or {Count = 0}
+		Path = Path and table.clone(Path) or {}
+		Path[string.lower(Alias)] = true
 
 		for Cmd in string.gmatch(Exec, `[^{Settings.BatchKey}]+`) do
-			local Lowered = string.lower(Cmd);
-			local Alias = string.lower(Alias)
-			local noSpace = string.gsub(Cmd," ","")
-			local isAlias = Admin.IsAlias(Player, noSpace)
+			local Trimmed = Functions.Trim(Cmd)
+			local cmdAlias, cmdData = Admin.IsAlias(Player, Trimmed)
 
-			if isAlias then
-				Aliases +=1
-			end
+			if cmdAlias then
+				Counter.Count += 1
+				if Counter.Count > 5 then
+					return "Your alias ran more than 5 aliases and has not been run for security reasons!"
+				end
 
-			if string.match(Lowered, `^%s*{Alias}%s*$`) or string.match(Lowered,`^{Alias}$`)  then
-				return true
+				if Path[string.lower(cmdAlias)] then
+					return true
+				end
+
+				local Nested = Admin.IsRecursiveAlias(Player, cmdAlias, cmdData.Command, Path, Counter)
+				if Nested then
+					return Nested
+				end
 			end
 		end
 
-		if Aliases >= 5 then
-			return "Your alias ran more than 5 aliases and has not been run for security reasons!"
-		end
-
-		--print(`{Alias} had {Aliases} aliases in it!`)
 		return false
 	end
 

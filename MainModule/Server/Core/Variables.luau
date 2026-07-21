@@ -74,6 +74,7 @@ return function(Vargs, GetEnv)
 		BatchCommandLimit = {
 			Player = 50; -- default
 			Donor = 50; -- how many donor adds to default
+			Admin = 500;
 		};
 
 		WhitelistData = {

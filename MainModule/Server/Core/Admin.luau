@@ -2,14 +2,14 @@ return function(Vargs, GetEnv)
 	local server = Vargs.Server;
 	local service = Vargs.Service;
 	local cloneTable = service.CloneTable;
-	local Functions, Admin, Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Commands, Permissions
+	local Functions, Admin, _Anti, Core, HTTP, Logs, Remote, Process, Variables, Settings, Commands, Permissions
 	local AddLog, TrackTask, Defaults
 	local CreatorId = game.CreatorType == Enum.CreatorType.User and game.CreatorId or service.GetGroupCreatorId(game.CreatorId)
 
 	local function Init()
 		Functions = server.Functions;
 		Admin = server.Admin;
-		Anti = server.Anti;
+		_Anti = server.Anti;
 		Core = server.Core;
 		HTTP = server.HTTP;
 		Logs = server.Logs;
@@ -40,7 +40,6 @@ return function(Vargs, GetEnv)
 							chatMessage.Status == Enum.TextChatMessageStatus.Success
 							or chatMessage.Status == Enum.TextChatMessageStatus.Sending
 						then
-							local Shadowmute = true
 							local SenderId = chatMessage.TextSource.UserId
 							local SenderPlayer = service.Players:GetPlayerByUserId(SenderId)
 							local Receiver = service.Players:GetPlayerByUserId(textSource.UserId)
