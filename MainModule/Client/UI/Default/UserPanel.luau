@@ -358,7 +358,7 @@ return function(data, env)
 				TextSize = 25.000;
 			})
 			infoTab:Add("TextLabel", {
-				Text = "Astra is a security and ease of use focused Adonis modification for the BinaryBridge series of experiences.\n\nIt is currently maintained by EasternBloxxer and the Astra maintainer team.\nFor full credits press the credits button below or run the command !credits.";
+				Text = "Astra is a security and ease of use focused administration and anti-exploit suite based off Adonis and created by krampuszc\n\n\nFor full credits press the credits button below or run the command !credits.";
 				--Text = "Astra, as its clumsy name suggests, is nothing more than a glorified modification of the popular Adonis admin commands that connects to a separate and independently managed server through Httpservice.\n\nCreated by EasternBloxxer\n\nFull credits can be found via !credits.";
 				TextWrapped = true;
 				Position = UDim2.new(0.011, 0,0.285, 0);

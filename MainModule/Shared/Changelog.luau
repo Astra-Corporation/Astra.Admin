@@ -1,4 +1,9 @@
 return {
+	"[v3.1.1 - 2026-08-03]";
+    "Security fixes";
+    "Pushfield command now works again";
+    "Donor mod command improvements";
+    "";
     "[v3.1.0 - 2025-10-23]";
     "Theres a lot more changes i cant remember right now";
     "Added back the dex command";
