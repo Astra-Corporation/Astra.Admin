@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://tr.rbxcdn.com/180DAY-dd3a999e71bc0101ae580fdab3ed28df/420/420/Decal/Webp/noFilter"/>
+    <img src="https://tr.rbxcdn.com/180DAY-120788c8675e3fcf3789dee19fabf08b/150/150/Decal/Webp/noFilter"/>
 </div>
 <hr/> 
 
