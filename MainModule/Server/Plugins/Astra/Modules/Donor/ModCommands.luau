@@ -23,8 +23,8 @@ return function(Vargs)
 
 	Variables.DonorDisabledInServer = false
 	
-	if type(Settings.BlacklistedCape) ~= "table" then
-		Settings.BlacklistedCape = {}
+	if type(Settings.BlacklistedCapes) ~= "table" then
+		Settings.BlacklistedCapes = {}
 	end
 	
 	local function CheckIdInTable(Table, Id)
