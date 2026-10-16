@@ -22,74 +22,6 @@ local CORE_LOADING_ORDER = table.freeze({
 	"Anti",
 })
 
---// Loccalllsssss
-local _G, game, script, getfenv,setfenv, workspace, getmetatable, setmetatable, loadstring, coroutine, rawequal, typeof, print, math, warn, error, pcall, xpcall, select, rawset, rawget, ipairs, pairs, next, Rect, Axes, os, time, Faces, unpack, string, Color3, newproxy, tostring, tonumber, Instance, TweenInfo, BrickColor, NumberRange, ColorSequence, NumberSequence, ColorSequenceKeypoint, NumberSequenceKeypoint, PhysicalProperties, Region3int16, Vector3int16, require, table, type, wait, Enum, UDim, UDim2, Vector2, Vector3, Region3, CFrame, Ray, delay, spawn, task, tick, assert =
-	_G,
-	game,
-	script,
-	getfenv,
-	setfenv,
-	workspace,
-	getmetatable,
-	setmetatable,
-	loadstring,
-	coroutine,
-	rawequal,
-	typeof,
-	print,
-	math,
-	warn,
-	error,
-	pcall,
-	xpcall,
-	select,
-	rawset,
-	rawget,
-	ipairs,
-	pairs,
-	next,
-	Rect,
-	Axes,
-	os,
-	time,
-	Faces,
-	table.unpack,
-	string,
-	Color3,
-	newproxy,
-	tostring,
-	tonumber,
-	Instance,
-	TweenInfo,
-	BrickColor,
-	NumberRange,
-	ColorSequence,
-	NumberSequence,
-	ColorSequenceKeypoint,
-	NumberSequenceKeypoint,
-	PhysicalProperties,
-	Region3int16,
-	Vector3int16,
-	require,
-	table,
-	type,
-	task.wait,
-	Enum,
-	UDim,
-	UDim2,
-	Vector2,
-	Vector3,
-	Region3,
-	CFrame,
-	Ray,
-	task.delay,
-	task.defer,
-	task,
-	tick,
-	function(cond, errMsg)
-		return cond or error(errMsg or "assertion failed!", 2)
-	end
-
 local SERVICES_WE_USE = table.freeze({
 	"Workspace",
 	"Players",
@@ -115,45 +47,25 @@ local SERVICES_WE_USE = table.freeze({
 --// Logging
 local clientLog = {}
 local dumplog = function()
-	warn("Astra Client :: Dumping client log...")
+	print("[ASTRA | DEBUG]: Dumping client log...")
 
 	for _, v in clientLog do
-		warn(":: Astra ::", v)
+		print("[ASTRA]:", v)
 	end
 end
 local log = function(...)
 	table.insert(clientLog, table.concat({ ... }, " "))
 end
 
---// Dump log on disconnect
-local isStudio = game:GetService("RunService"):IsStudio()
-game:GetService("NetworkClient").ChildRemoved:Connect(function(p)
-	if not isStudio then
-		warn("~! PLAYER DISCONNECTED/KICKED! DUMPING ADONIS CLIENT LOG!")
-		dumplog()
-	end
-end)
-
 local unique = {}
 local origEnv = {}
 local Folder = script.Parent
---local origWarn = warn
-local startTime = time()
 local oldInstNew = Instance.new
 local oldReq = require
 local locals = {}
 local client = {}
 local service = {}
 local ServiceSpecific = {}
-
-local function isModule(module)
-	for _, modu in client.Modules do
-		if rawequal(module, modu) then
-			return true
-		end
-	end
-	return false
-end
 
 local function logError(...)
 	warn("ERROR: ", ...)
@@ -168,12 +80,6 @@ print = function(...)
 	oldPrint(":: Astra ::", ...)
 end
 
---[[
-local warn = function(...)
-	warn(...)
-end
-]]
--- Use `task.spawn(pcall, ...)`, `task.spawn(Pcall, f, ...)` or `task.spawn(xpcall, f, handler, ...)` instead
 local cPcall = function(func, ...)
 	local ran, err = pcall(coroutine.resume, coroutine.create(func), ...)
 
@@ -214,7 +120,7 @@ local Fire, Detected = nil, nil
 do
 	Kill = Immutable(function(info)
 		--if true then print(info or "SOMETHING TRIED TO CRASH CLIENT?") return end
-		spawn(pcall, function()
+		task.spawn(pcall, function()
 			if Detected then
 				Detected("kick", info)
 			elseif Fire then
@@ -222,13 +128,13 @@ do
 			end
 		end)
 
-		spawn(pcall, function()
+		task.spawn(pcall, function()
 			task.wait(1)
 			service.Player:Kick(info)
 		end)
 
-		if not isStudio then
-			spawn(pcall, function()
+		if not game:GetService("RunService"):IsStudio() then
+			task.spawn(pcall, function()
 				task.wait(5)
 				while true do
 					pcall(task.spawn, function()
@@ -268,7 +174,7 @@ local GetVargTable = function()
 end
 
 local LoadModule = function(module, yield, envVars, noEnv)
-	local plugran, plug = pcall(require, module)
+	local plugran, plug = pcall(locals.require, module)
 	noEnv = true
 	if plugran then
 		if type(plug) == "function" then
@@ -282,7 +188,7 @@ local LoadModule = function(module, yield, envVars, noEnv)
 					GetVargTable(),
 					GetEnv
 				)
-				if not ran then
+				if not ran then 
 					warn(err)
 				end
 			else
@@ -295,8 +201,8 @@ local LoadModule = function(module, yield, envVars, noEnv)
 					GetVargTable(),
 					GetEnv
 				)
-				if not ran then
-					warn(err) -- Never trust the error handlers. I spent so long trying to figure out why the above didnt run
+				if not ran then 
+					warn(err)
 				end
 			end
 		else
@@ -325,8 +231,6 @@ client = setmetatable({
 	TestEvent = Instance.new("RemoteEvent"),
 	Disconnect = function(info)
 		service.Player:Kick(info or "Disconnected from server")
-		--wait(30)
-		--client.Kill()(info)
 	end,
 	log = log;
 	logError = logError;
@@ -363,63 +267,19 @@ locals = {
 	origEnv = origEnv,
 	log = log,
 	dumplog = dumplog,
-} -- Get rid of this if we ever finish getting rid of get/set-fenv stuff. I dont think anything else uses it
+}
 
 log("Create service metatable")
 
 service = require(Folder.Shared.Service)(function(eType, msg, desc, ...)
-	--warn(eType, msg, desc, ...)
-	local extra = { ... }
 	if eType == "MethodError" then
-		--Kill()("Shananigans denied")
-		--player:Kick("Method error")
-		--service.Detected("kick", "Method change detected")
 		logError("Client", `Method Error Occured: {msg}`)
 	elseif eType == "ServerError" then
 		logError("Client", tostring(msg))
 	elseif eType == "ReadError" then
-		--message("===== READ ERROR:::::::")
-		--message(tostring(msg))
-		--message(tostring(desc))
-		--message("    ")
-
 		Kill()(tostring(msg))
-		--if Detected then
-		--	Detected("log", tostring(msg))
-		--end
 	end
 end, ServiceSpecific, GetEnv(nil, { client = client }))
-
---// Localize
-log("Localize")
-local Localize = service.Localize
-os = Localize(os)
-math = Localize(math)
-table = Localize(table)
-string = Localize(string)
-coroutine = Localize(coroutine)
-Instance = Localize(Instance)
-Vector2 = Localize(Vector2)
-Vector3 = Localize(Vector3)
-CFrame = Localize(CFrame)
-UDim2 = Localize(UDim2)
-UDim = Localize(UDim)
-Ray = Localize(Ray)
-Rect = Localize(Rect)
-Faces = Localize(Faces)
-Color3 = Localize(Color3)
-NumberRange = Localize(NumberRange)
-NumberSequence = Localize(NumberSequence)
-NumberSequenceKeypoint = Localize(NumberSequenceKeypoint)
-ColorSequenceKeypoint = Localize(ColorSequenceKeypoint)
-PhysicalProperties = Localize(PhysicalProperties)
-ColorSequence = Localize(ColorSequence)
-Region3int16 = Localize(Region3int16)
-Vector3int16 = Localize(Vector3int16)
-BrickColor = Localize(BrickColor)
-TweenInfo = Localize(TweenInfo)
-Axes = Localize(Axes)
-task = Localize(task)
 
 --// Wrap
 log("Wrap")
@@ -427,27 +287,18 @@ log("Wrap")
 local service_Wrap = service.Wrap
 local service_UnWrap = service.UnWrap
 
---for i, val in service do
---	if type(val) == "userdata" then
---		service[i] = service_Wrap(val, true)
---	end
---end
-
---// Folder Wrap
---Folder = service_Wrap(Folder, true)
-
 --// Global Wrapping
-Enum = service_Wrap(Enum, true)
-rawequal = service.RawEqual
-script = service_Wrap(script, true)
-game = service_Wrap(game, true)
-workspace = service_Wrap(workspace, true)
-Instance = {
+local Enum = service_Wrap(Enum, true)
+local rawequal = service.RawEqual
+local script = service_Wrap(script, true)
+local game = service_Wrap(game, true)
+local workspace = service_Wrap(workspace, true)
+local Instance = {
 	new = function(obj, parent)
 		return service_Wrap(oldInstNew(obj, service_UnWrap(parent)), true)
 	end,
 }
-require = function(obj, noWrap: boolean?)
+local require = function(obj, noWrap: boolean?)
 	noWrap = true
 	return if noWrap == true then oldReq(service_UnWrap(obj)) else service_Wrap(oldReq(service_UnWrap(obj)), true)
 end
@@ -461,7 +312,7 @@ for ind, loc in
 	{
 		_G = _G,
 		game = game,
-		spawn = spawn,
+		spawn = task.spawn,
 		script = script,
 		getfenv = getfenv,
 		setfenv = setfenv,
@@ -490,7 +341,7 @@ for ind, loc in
 		os = os,
 		time = time,
 		Faces = Faces,
-		delay = delay,
+		delay = task.delay,
 		unpack = unpack,
 		string = string,
 		Color3 = Color3,
@@ -511,7 +362,7 @@ for ind, loc in
 		require = require,
 		table = table,
 		type = type,
-		wait = wait,
+		wait = task.wait,
 		Enum = Enum,
 		UDim = UDim,
 		UDim2 = UDim2,
@@ -554,9 +405,12 @@ return service.NewProxy({
 		client.LoadingTime = data.LoadingTime
 		client.RemoteName = remoteName
 		client.DebugMode = data.DebugMode
-
 		client.Typechecker = oldReq(service_UnWrap(client.Shared.Typechecker))
 		client.Changelog = oldReq(service_UnWrap(client.Shared.Changelog))
+		client.GetLocalLogs = function()
+			return clientLog
+		end
+
 		do
 			local MaterialIcons = oldReq(service_UnWrap(client.Shared.MatIcons))
 			client.MatIcons = setmetatable({}, {
@@ -607,17 +461,6 @@ return service.NewProxy({
 			end)
 		end
 
-		--[[
-		-- // Doesn't seem to be used anymore
-
-		ServiceSpecific.SafeTweenSize = function(obj, ...)
-			pcall(obj.TweenSize, obj, ...)
-		end;
-		ServiceSpecific.SafeTweenPos = function(obj, ...)
-			pcall(obj.TweenPosition, obj, ...)
-		end;
-		]]
-
 		ServiceSpecific.Filter = function(str, from, to)
 			return client.Remote.Get("Filter", str, (to and from) or service.Player, to or from)
 		end
@@ -639,7 +482,7 @@ return service.NewProxy({
 			if not (Variables.LocalContainer and Variables.LocalContainer.Parent) then
 				Variables.LocalContainer = service.New("Folder", {
 					Parent = workspace,
-          Archivable = false,
+					Archivable = false,
 					Name = `__ADONIS_LOCALCONTAINER_{service.HttpService:GenerateGUID(false)}`,
 				})
 			end
@@ -735,7 +578,7 @@ return service.NewProxy({
 		for _, f in runAfterInit do
 			Pcall(f, data)
 		end
-
+		
 		--// Load Plugins
 		log("~! Running plugins")
 		for _, module in Folder.Plugins:GetChildren() do
@@ -764,8 +607,9 @@ return service.NewProxy({
 		log("~! Return success")
 		return "SUCCESS"
 	end,
-	__metatable = if not Folder:FindFirstChild("ADONIS_DEBUGMODE_ENABLED") then "Adonis" else unique,
+	
+	__metatable = unique,
 	__tostring = function()
-		return "Adonis"
+		return "Astra"
 	end,
 })

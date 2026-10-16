@@ -135,13 +135,13 @@ return function(Vargs, GetEnv)
 			Filter = function(p: Player, args: {[number]: any})
 				local from, to = args[2], args[3]
 				if type(args[1]) == "string" and typeof(from) == "Instance" and from:IsA("Player") and typeof(to) == "Instance" and to:IsA("Player") then
-					return service.Filter(args[1], from, to)
+					return service.Filter(string.sub(args[1], 1, 1000), from, to)
 				end
 			end;
 
 			BroadcastFilter = function(p: Player, args: {[number]: any})
 				if type(args[1]) == "string" then
-					return service.BroadcastFilter(args[1], (typeof(args[2]) == "Instance" and args[2]:IsA("Player") and args[2]) or p)
+					return service.BroadcastFilter(string.sub(args[1], 1, 1000), (typeof(args[2]) == "Instance" and args[2]:IsA("Player") and args[2]) or p)
 				end
 			end;
 
@@ -411,12 +411,43 @@ return function(Vargs, GetEnv)
 				local playerData = Core.GetPlayer(p)
 				local binds = args[1]
 				local resp = "OK"
-				if type(binds)=="table" then
+
+				local MaxAliases = Variables.MaxPlayerAliases or 100
+				local MaxAliasNameLength = Variables.MaxAliasNameLength or 100
+				local MaxAliasCommandLength = Variables.MaxAliasCommandLength or 2000
+
+				local function isValidBinds(value)
+					if type(value) ~= "table" then
+						return false, "Invalid alias data."
+					end
+
+					local count = 0
+					for alias, data in value do
+						count += 1
+						if count > MaxAliases then
+							return false, `You have too many aliases (max {MaxAliases}).`
+						end
+						if type(alias) ~= "string" or #alias == 0 or #alias > MaxAliasNameLength then
+							return false, `Alias names must be 1-{MaxAliasNameLength} characters.`
+						end
+						if type(data) ~= "table" or type(data.Command) ~= "string" or #data.Command > MaxAliasCommandLength then
+							return false, `Alias "{tostring(alias)}"'s command is too long (max {MaxAliasCommandLength} characters).`
+						end
+					end
+
+					return true
+				end
+
+				local valid, reason = isValidBinds(binds)
+				if valid then
 					playerData.Aliases = binds
 					Core.SavePlayer(p,playerData)
 					resp = "Updated"
 				else
 					resp = "Error"
+					Remote.MakeGui(p, "Output", {
+						Message = `Failed to save aliases: {reason}`,
+					})
 				end
 				return resp
 			end;
@@ -1039,7 +1070,7 @@ return function(Vargs, GetEnv)
 					end
 
 					local title = string.format("Reply from %s (@%s)", p.DisplayName, p.Name)
-					local message = args[3]
+					local message = string.sub(tostring(args[3]), 1, 500)
 
 					local replyTicket = service.HttpService:GenerateGUID(false)
 					Variables.PMtickets[replyTicket] = p

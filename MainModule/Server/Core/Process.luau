@@ -260,6 +260,7 @@ return function(Vargs, GetEnv)
 		RateLimit = RateLimit,
 		newRateLimit = newRateLimit,
 		MsgStringLimit = 500, --// Max message string length to prevent long length chat spam server crashing (chat & command bar); Anything over will be truncated;
+		AdminMsgStringLimit = 5000,
 		MaxChatCharacterLimit = 250, --// Roblox chat character limit; The actual limit of the Roblox chat's textbox is 200 characters; I'm paranoid so I added 50 characters; Users should not be able to send a message larger than that;
 		RemoteMaxArgCount = 5, --// The maximum argument count Adonis will take from Remote (alter if your script requires more arguments)
 		RateLimits = {
@@ -414,8 +415,18 @@ return function(Vargs, GetEnv)
 			local hasAdmin = Admin.CheckAdmin(p)
 			local PlayerLimit = Variables.BatchCommandLimit.Player
 			local DonorLimit = Variables.BatchCommandLimit.Donor
-			local Limit = (hasDonor and PlayerLimit + DonorLimit) or PlayerLimit
+			local AdminLimit = Variables.BatchCommandLimit.Admin or 500
+			local Limit = if hasAdmin then AdminLimit elseif hasDonor then PlayerLimit + DonorLimit else PlayerLimit
 			local Commands = 0
+
+			local function truncateMsg()
+				local limit = hasAdmin and Process.AdminMsgStringLimit or Process.MsgStringLimit
+				if #msg > limit and type(p) == "userdata" and p:IsA("Player") then
+					msg = string.sub(msg, 1, limit)
+				end
+			end
+
+			truncateMsg()
 
 			for filter, func in pairs(server.Variables.CommandFilters) do
 				if not string.match(msg, filter) then
@@ -431,13 +442,9 @@ return function(Vargs, GetEnv)
 				end
 			end
 
-			if #msg > Process.MsgStringLimit and type(p) == "userdata" and p:IsA("Player") and not hasAdmin then
-				msg = string.sub(msg, 1, Process.MsgStringLimit)
-			end
+			truncateMsg()
 
 			for cmd in string.gmatch(msg, `[^{Settings.BatchKey}]+`) do
-				if hasAdmin then break end;
-
 				Commands += 1
 				if Commands > Limit then
 					Remote.MakeGui(p, 'Output', {
@@ -445,15 +452,6 @@ return function(Vargs, GetEnv)
 					})
 					return
 				end
-			end
-
-			if
-				#msg > Process.MsgStringLimit
-				and type(p) == "userdata"
-				and p:IsA("Player")
-				and not hasAdmin
-			then
-				msg = string.sub(msg, 1, Process.MsgStringLimit)
 			end
 
 			msg = Functions.Trim(msg)

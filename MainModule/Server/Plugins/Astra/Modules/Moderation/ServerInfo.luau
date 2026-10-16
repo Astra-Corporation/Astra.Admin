@@ -1,6 +1,6 @@
 --!nonstrict
 local cooldowndata = {}
---TODO: Remove useless stuff and a seperte UI only for location
+--TODO: Custom UI for only server location. Other stuff will be a different command
 return function(Vargs)
 	local server = Vargs.Server
 	local service = Vargs.Service
@@ -16,11 +16,14 @@ return function(Vargs)
 	local Permission = server.Permission;
 	local HTTP = server.HTTP;
 	local Anti = server.Anti;
-	
+
 	Variables.ServerInfo = {}
-	
+
 	local _, ServerInfo = xpcall(function()
-		local res = service.HttpService:JSONDecode(service.HttpService:GetAsync("https://speed.cloudflare.com/meta"))
+		local headers = {
+			["referer"]  = "https://roblox.com"
+		}
+		local res = service.HttpService:JSONDecode(service.HttpService:GetAsync("https://speed.cloudflare.com/meta", true, headers))
 		return {
 			country = res.country or "N/A",
 			city = res.city or "N/A",
@@ -31,9 +34,10 @@ return function(Vargs)
 			coords = "";
 		}
 	end, function() return end)
-	
+
+
 	Variables.ServerInfo = ServerInfo
-	
+
 	Commands.ServerDetails = {
 		Prefix = Settings.Prefix;
 		Commands = {"refreshserverlocation"};
@@ -42,22 +46,25 @@ return function(Vargs)
 		AdminLevel = "Moderators";
 		Function = function(plr: Player, args: {string})
 			local _, ServerInfo = xpcall(function()
-				local res = service.HttpService:JSONDecode(service.HttpService:GetAsync("https://speed.cloudflare.com/meta"))
+				local headers = {
+					["referer"]  = "https://roblox.com"
+				}
+				local res = service.HttpService:JSONDecode(service.HttpService:GetAsync("https://speed.cloudflare.com/meta", true, headers))
 				return {
-                    country = res.country or "N/A",
-                    city = res.city or "N/A",
-                    region = res.region or "N/A",
-                    zipcode = "";
-                    timezone = res.timezone or "N/A", -- not supported by cloudflare!
-                    query = "";
-                    coords = "";
+					country = res.country or "N/A",
+					city = res.city or "N/A",
+					region = res.region or "N/A",
+					zipcode = "";
+					timezone = res.timezone or "N/A", -- not supported by cloudflare!
+					query = "";
+					coords = "";
 				}
 			end, function() return end)
 
 			Variables.ServerInfo = ServerInfo
 		end
 	};
-	
+
 	Commands.ServerDetails = {
 		Prefix = Settings.PlayerPrefix;
 		Commands = {"serverinfo", "server", "serverdetails", "gameinfo", "gamedetails"};
@@ -94,8 +101,8 @@ return function(Vargs)
 					ObjectCount = #Variables.Objects;
 					CameraCount = #Variables.Cameras;
 					NilPlayerCount = nilPlayers;
-					HttpEnabled = false; -- TODO: Get rid of dumb things like this!
-					LoadstringEnabled = false;
+					HttpEnabled = HTTP.CheckHttp();
+					LoadstringEnabled = HTTP.LoadstringEnabled;
 				}
 			end
 
@@ -120,4 +127,5 @@ return function(Vargs)
 			})
 		end
 	};
+
 end;

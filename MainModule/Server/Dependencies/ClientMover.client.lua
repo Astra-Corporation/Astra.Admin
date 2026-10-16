@@ -232,7 +232,7 @@ if module and module:IsA("ModuleScript") then
 	print("Debug: Loading the client?")
 	local meta = require(module)
 	warn(`Got metatable: {meta}`)
-	if meta and type(meta) == "userdata" and tostring(meta) == "Adonis" then
+	if meta and type(meta) == "userdata" and tostring(meta) == "Astra" then
 		local ran,ret = pcall(meta,{
 			Module = module,
 			Start = start,

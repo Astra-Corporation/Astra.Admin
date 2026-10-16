@@ -27,14 +27,6 @@ return function(Vargs, GetEnv)
 			Logs.AddLog("Errors",v)
 		end;
 		
-		local StarlightEvent = service.ServerStorage:FindFirstChild("StarlightLogEvent");
-
-		if StarlightEvent then
-			StarlightEvent.Event:Connect(function(Data: string)
-				return Logs.AddLog(Logs.Starlight, { Text = "Starlight", Desc = Data })
-			end)
-		end
-		
 		Logs:AddLog("Script", "Logging Module Initialized");
 	end;
 
@@ -98,17 +90,9 @@ return function(Vargs, GetEnv)
 			if not log.Time and not log.NoTime then
 				log.Time = DateTime.now().UnixTimestamp
 			end
-			local s,r = pcall(function()
-				tab:AddToStartAndRemoveEndIfEnd(log, MaxLogs)
-			end)
-			
-			if not s then
-				warn(`AddToStartAndRemoveEndIfEnd failed`)
-				warn(tab, r)
-				warn(log)
-				print(misc)
-			end
-			
+
+			tab:AddToStartAndRemoveEndIfEnd(log, MaxLogs)
+
 			service.Events.LogAdded:Fire(LogName, log, tab)
 		end;
 
