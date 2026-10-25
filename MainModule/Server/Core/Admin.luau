@@ -527,7 +527,7 @@ return function(Vargs, GetEnv)
 		end,
 
 		IsLax = function(str)
-			for _, v in {"plr", "user", "player", "brickcolor"} do
+			for _, v in {"plr", "user", "player", "brickcolor", "time", "amount", "number", "count", "duration", "seconds"} do
 				if string.match(string.lower(str), v) then
 					return true
 				end

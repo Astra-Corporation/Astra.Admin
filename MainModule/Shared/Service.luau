@@ -430,7 +430,7 @@ return function(ErrorHandler, fenceSpecific, env)
 				local ran,newl = pcall(function()
 					return Service.TextService:FilterStringAsync(lines[i],from.UserId):GetNonChatStringForUserAsync(to.UserId)
 				end)
-				newl = (ran and newl) or lines[i] or ""
+				newl = (ran and newl) or (lines[i] == "" and "" or "[ filter error ]")
 				if i > 1 then
 					new = `{new}\n{newl}`
 				else
@@ -441,9 +441,7 @@ return function(ErrorHandler, fenceSpecific, env)
 		end;
 
 		LaxFilter = function(str,from,cmd)  	-- @Roblox; If this function violates the filtering rules please note that this is currently the only way
-			if tonumber(str) then				-- to avoid major filter related problems (like commands becoming unusable due to numbers or names being filtered)
-				return str						-- Please consider dropping the filter rules down a notch or improving on the existing filtering methods
-			elseif type(str) == "string" then	-- Also always feel free to message me with any concerns you have :)!
+			if type(str) == "string" then	-- Also always feel free to message me with any concerns you have :)!
 				if not utf8.len(str) then
 					return "Filter Error"
 				end
@@ -469,7 +467,7 @@ return function(ErrorHandler, fenceSpecific, env)
 			local lines = Service.ExtractLines(str)
 			for i = 1,#lines do
 				local ran,newl = pcall(function() return Service.TextService:FilterStringAsync(lines[i],from.UserId):GetNonChatStringForBroadcastAsync() end)
-				newl = (ran and newl) or lines[i] or ""
+				newl = (ran and newl) or (lines[i] == "" and "" or "[ filter error ]")
 				if i > 1 then
 					new = `{new}\n{newl}`
 				else

@@ -1,4 +1,7 @@
 return {
+	"[v3.1.2 - 2026-10-20]";
+    "Roblox new chat rule things";
+    "";
 	"[v3.1.1 - 2026-08-03]";
     "Security fixes";
     "Pushfield command now works again";

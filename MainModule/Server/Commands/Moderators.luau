@@ -75,7 +75,9 @@ return function(Vargs, env)
 			Description = "Sets the lock message unwhitelisted players see if :whitelist or :slock is on";
 			AdminLevel = "Moderators";
 			Function = function(plr: Player, args: {string})
-				Variables.LockMessage = assert(args[1], "Missing message (argument #1)")
+				assert(args[1], "Missing message (argument #1)")
+				assert((Functions.TextEditCooldown(plr, "setlockmessage", 60)), "You can only change the lock message once per minute.")
+				Variables.LockMessage = args[1]
 			end
 		};
 
@@ -213,6 +215,7 @@ return function(Vargs, env)
 						Remote.RemoveGui(v, "Notif")
 					end
 				else
+					assert((Functions.TextEditCooldown(plr, "setmessage", 60)), "You can only change this message once per minute.")
 					Variables.NotifMessage = args[1]
 					for _, v in service.GetPlayers() do
 						Remote.MakeGui(v, "Notif", {
@@ -6566,6 +6569,10 @@ return function(Vargs, env)
 				local Name = string.lower(Args[2]);
 				local LowerName = string.lower(Args[2]);
 				Name = if LowerName == "hide" then " " else Name;
+				if LowerName ~= "hide" then
+					local allowed, cd = Functions.TextEditCooldown(Caller, "name", 60)
+					assert(allowed, `You can only change a displayed name once per minute. Try again in {cd}s.`)
+				end
 
 				for _, Player in service.GetPlayers(Caller, Args[1]) do
 					local Character = Player.Character;

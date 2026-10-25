@@ -902,6 +902,20 @@ return function(Vargs, GetEnv)
 			return table.concat(out, "")
 		end;
 
+		TextEditCooldown = function(plr: Player, key: string, seconds: number?)
+			seconds = seconds or 60
+			Variables.TextEditCooldowns = Variables.TextEditCooldowns or {}
+			local store = Variables.TextEditCooldowns
+			local id = `{plr.UserId}:{key}`
+			local now = os.time()
+			local last = store[id]
+			if last and now - last < seconds then
+				return false, seconds - (now - last)
+			end
+			store[id] = now
+			return true, 0
+		end;
+
 		Hint = function(message, players, duration, title, image)
 			duration = duration or (#tostring(message) / 19 + 2.5)
 

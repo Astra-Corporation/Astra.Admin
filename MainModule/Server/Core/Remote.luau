@@ -1060,35 +1060,44 @@ return function(Vargs, GetEnv)
 			PrivateMessage = function(p: Player,args: {[number]: any})
 				if type(args[1]) ~= "string" then return end
 
-				--	'Reply from '..localplayer.Name,player,localplayer,ReplyBox.Text
+				--// Reply-only: valid server ticket required; target comes from the ticket, not client args.
 				local target = Variables.PMtickets[args[1]]
-				if target or Admin.CheckAdmin(p) then
-					if target then
-						Variables.PMtickets[args[1]] = nil;
-					else
-						target = args[2]
-					end
-
-					local title = string.format("Reply from %s (@%s)", p.DisplayName, p.Name)
-					local message = string.sub(tostring(args[3]), 1, 500)
-
-					local replyTicket = service.HttpService:GenerateGUID(false)
-					Variables.PMtickets[replyTicket] = p
-					Remote.MakeGui(target, "PrivateMessage", {
-						Title = title;
-						Player = p;
-						Message = service.Filter(message, p, target);
-						replyTicket = replyTicket;
-					})
-
-					Logs:AddLog(Logs.Script,{
-						Text = `{p.Name} replied to {target}`,
-						Desc = message,
-						Player = p;
-					})
-				else
-					Anti.Detected(p, "info", `Invalid PrivateMessage ticket! Got: {args[2]}`)
+				if not target then
+					Anti.Detected(p, "info", `Invalid PrivateMessage ticket! Got: {args[1]}`)
+					return
 				end
+				Variables.PMtickets[args[1]] = nil;
+
+				if typeof(target) ~= "Instance" or not target:IsA("Player") or not target.Parent then
+					return
+				end
+
+				if p.UserId ~= target.UserId then
+					local success, canUserChatData = pcall(service.TextChatService.CanUsersDirectChatAsync, service.TextChatService, p.UserId, {target.UserId})
+					if not success or #canUserChatData == 0 then
+						Functions.Hint("Unable to reply due to chat restrictions.", {p})
+						return
+					end
+				end
+
+				local title = string.format("Reply from %s (@%s)", p.DisplayName, p.Name)
+				local message = string.sub(tostring(args[3]), 1, 500)
+				local filtered = service.Filter(message, p, target)
+
+				local replyTicket = service.HttpService:GenerateGUID(false)
+				Variables.PMtickets[replyTicket] = p
+				Remote.MakeGui(target, "PrivateMessage", {
+					Title = title;
+					Player = p;
+					Message = filtered;
+					replyTicket = replyTicket;
+				})
+
+				Logs:AddLog(Logs.Script,{
+					Text = `{p.Name} replied to {target.Name}`,
+					Desc = filtered,
+					Player = p;
+				})
 			end;
 		};
 
